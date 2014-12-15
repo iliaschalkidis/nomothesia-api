@@ -1,4 +1,4 @@
-package com.di.nomothesia;
+package com.di.nomothesia.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
