@@ -3,6 +3,7 @@
 <%@ page session="false" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -22,10 +23,28 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+   
     <style>
-        ul.nav a:hover { color: dodgerblue !important;}
-        
+        .navbar-inverse { background-color: #E6E6E6}
+        .navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { background-color: #DBDBDB}
+        .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { background-color: #DBDBDB}
+        .dropdown-menu { background-color: #FFFFFF}
+        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-color: #428BCA}
+        .navbar-inverse { background-image: none; }
+        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-image: none; }
+        .navbar-inverse { border-color: #DBDBDB}
+        .navbar-inverse .navbar-brand { color: #0F0F0F}
+        .navbar-inverse .navbar-brand:hover { color: #4B45FF}
+        .navbar-inverse .navbar-nav>li>a { color: #3B3B3B}
+        .navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { color: #4B45FF}
+        .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { color: #4B45FF}
+        .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus { color: #4B45FF}
+        .dropdown-menu>li>a { color: #424242}
+        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { color: #FFFFFF}
+        .navbar-inverse .navbar-nav>.dropdown>a .caret { border-top-color: #999999}
+        .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-top-color: #FFFFFF}
+        .navbar-inverse .navbar-nav>.dropdown>a .caret { border-bottom-color: #999999}
+        .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #FFFFFF}
     </style>
     
     <!-- jQueryUI Calendar-->
@@ -44,9 +63,37 @@
     
   </head>
   <body>
-    <nav class="navbar navbar-default" role="navigation">
+      
+      <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" style="font-family:'Jura'; font-weight: bold;">Αρχική</a>
+                </li>
+                <li>
+                    <a href="#" style="font-family:'Jura'; font-weight: bold;" >Πληροφορίες</a>
+                </li>
+                <li>
+                    <a href="#" style="font-family:'Jura'; font-weight: bold;">Επικοινωνία</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    </header>
+      
+<!--      <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
+     Brand and toggle get grouped for better mobile display 
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
@@ -56,8 +103,9 @@
       </button>
         <a class="navbar-brand"  href="${contextPath}"><img height = "34" src="http://upload.wikimedia.org/wikipedia/el/archive/2/2b/20130811154128!Logo_uoa_blue.png"/></a><a class="navbar-brand" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙΑ</a>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
+    
+    
+     Collect the nav links, forms, and other content for toggling 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul style="margin: 0px 0px 12px" class="nav navbar-nav navbar">
           <li>
@@ -84,14 +132,14 @@
           
       </ul>
 
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+    </div> /.navbar-collapse 
+  </div> /.container-fluid 
+</nav>-->
 
 <div class="container">
 <div class="row">
     <div class="jumbotron">
-        <h1>Αναζήτηση</h1>
+        <h3>Αναζήτηση</h3>
         
             <form role="form">
                 <div class="form-group">
@@ -119,20 +167,10 @@
                 
                 <div class="form-group">
                     <label for="exampleInputPassword2">Ημερομηνία Κυκλοφορίας:</label>
-                    <input type="text" id="datepicker" size="30"/>   
+                    <input class="form-control" type="text" id="datepicker" size="30"/>   
                 </div>
                 
-                <div class="form-group">
-        <label for="exampleInputFile">File input</label>
-        <input type="file" id="exampleInputFile">
-        <p class="help-block">Example block-level help text here.</p>
-      </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox"> Check me out
-        </label>
-      </div>
-      <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default">Submit</button>
     </form>
         </div>
 </div>
