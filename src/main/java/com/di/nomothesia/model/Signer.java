@@ -1,20 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.di.nomothesia.model;
 
-/**
- *
- * @author Ilias
- */
 public class Signer {
     
     private String firstName;
     private String lastName;
     private String title;
-
+    
+    public Signer() {
+		title = "ĞÑÏÅÄÑÏÓ ÔÇÓ ÌĞÁÍÁÍÉÁÓ";
+		firstName = "ÁÍÔÙÍÇÓ";
+		lastName = "ÓÁÌÁÑÁÓ";
+                
+                System.out.println("Åßìáé ôï áíäñåßêåëï ìå üíïìá:" + title + lastName + firstName);
+    }
+    
+    //Setters-Getters for Signer
+    
     public String getFirstName() {
         return firstName;
     }
@@ -38,4 +40,5 @@ public class Signer {
     public void setTitle(String title) {
         this.title = title;
     }
+    
 }

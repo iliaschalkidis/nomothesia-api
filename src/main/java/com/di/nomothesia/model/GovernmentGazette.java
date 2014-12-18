@@ -1,20 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.di.nomothesia.model;
 
-/**
- *
- * @author Ilias
- */
+import java.util.ArrayList;
+
 public class GovernmentGazette {
     
     private String issue;
     private String year;
     private String id;
-
+    
+    public GovernmentGazette() {
+                issue = "Μνημόνιο ή Τανκς";
+                year = "2014";
+                id = "23";
+                
+                System.out.println("Είμαι η εφημερίδα:" + year + issue + id);
+    }
+    
+    //Setters-Getters for GovernmentGazette
     public String getIssue() {
         return issue;
     }
@@ -38,6 +41,5 @@ public class GovernmentGazette {
     public void setId(String id) {
         this.id = id;
     }
-    
-    
+      
 }
