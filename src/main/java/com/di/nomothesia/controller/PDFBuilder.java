@@ -5,7 +5,9 @@
  */
 package com.di.nomothesia.controller;
 
+import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.model.Signer;
 import com.di.nomothesia.service.AbstractITextPdfView;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -14,6 +16,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,10 +36,22 @@ public class PDFBuilder extends AbstractITextPdfView {
                 Font font = new Font(bf, 24);
                 font.setColor(BaseColor.BLACK);
                 
+                //doc.setMargins(36, 36, 108, 180);
 		LegalDocument legald = new LegalDocument();
+                Signer signer = new Signer();
+                Article art = new Article();
                 Paragraph paragraph = new Paragraph("≈ÀÀ«Õ… « ƒ«Ãœ —¡‘…¡", font);
                 paragraph.setAlignment(Element.ALIGN_CENTER);
 		doc.add(paragraph);
+                int i,j,k,l;
+                List<Article> arthra = (List<Article>)legald.getArticles();
+                doc.add(new Paragraph(signer.getFirstName()+signer.getLastName(), font));
+                String as = "" +art.getParagraphs().get(1).getId();
+                doc.add(new Paragraph(as, font));
+                for (i = 0; i<arthra.size(); i++) {
+                    doc.add(new Paragraph(arthra.get(i).getTitle(), font));
+                }
+        
                 
 //                for (int i = 0; i<legald.getArticles().size(); i++) {
 //                    
