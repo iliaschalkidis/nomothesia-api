@@ -5,9 +5,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
-
 <html lang="en">
-  <head>
+<head>
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,124 +17,113 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <link href='http://fonts.googleapis.com/css?family=Jura&subset=latin,greek' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Comfortaa&subset=latin,greek' rel='stylesheet' type='text/css'>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-   
-    <style>
-        .navbar-inverse { background-color: #E6E6E6}
-        .navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { background-color: #DBDBDB}
-        .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { background-color: #DBDBDB}
-        .dropdown-menu { background-color: #FFFFFF}
-        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-color: #428BCA}
-        .navbar-inverse { background-image: none; }
-        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-image: none; }
-        .navbar-inverse { border-color: #DBDBDB}
-        .navbar-inverse .navbar-brand { color: #0F0F0F}
-        .navbar-inverse .navbar-brand:hover { color: #4B45FF}
-        .navbar-inverse .navbar-nav>li>a { color: #3B3B3B}
-        .navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { color: #4B45FF}
-        .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { color: #4B45FF}
-        .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus { color: #4B45FF}
-        .dropdown-menu>li>a { color: #424242}
-        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { color: #FFFFFF}
-        .navbar-inverse .navbar-nav>.dropdown>a .caret { border-top-color: #999999}
-        .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-top-color: #FFFFFF}
-        .navbar-inverse .navbar-nav>.dropdown>a .caret { border-bottom-color: #999999}
-        .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #FFFFFF}
-    </style>
+    
+    <!-- Για οταν δουλεψει το remote CSS-->
+    <!-- <link href="/css/navbar.css" rel="stylesheet" type="text/css"/> -->
     
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>  
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
-
-   <script>
-	$(function(){
-	  $.datepicker.setDefaults(
-	    $.extend($.datepicker.regional[''])
-	  );
-	  $('#datepicker').datepicker();
-	});
-	</script>
+    <script>
+        $(function(){
+            $.datepicker.setDefaults(
+	    $.extend($.datepicker.regional['']));
+            $('#datepicker').datepicker();
+        });
+    </script>
     
-  </head>
-  <body>
-      
-      <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-    <div class="container">
-        <div class="navbar-header">
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+    <style>
+        #custom-bootstrap-menu.navbar-default .navbar-brand {
+            color: rgba(0, 0, 0, 1);
+        }
+
+        #custom-bootstrap-menu.navbar-default {
+            font-size: 14px;
+            background-color: rgba(214, 219, 227, 0.91);
+            background: -webkit-linear-gradient(top, rgba(248, 248, 248, 1) 0%, rgba(214, 219, 227, 0.91) 100%);
+            background: linear-gradient(to bottom, rgba(248, 248, 248, 1) 0%, rgba(214, 219, 227, 0.91) 100%);
+            border-width: 0px;
+            border-radius: 3px;
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
+            color: rgba(18, 16, 16, 0.65);
+            background-color: rgba(214, 219, 227, 1);
+            background: -webkit-linear-gradient(top, rgba(248, 248, 248, 0) 0%, rgba(214, 219, 227, 1) 100%);
+            background: linear-gradient(to bottom, rgba(248, 248, 248, 0) 0%, rgba(214, 219, 227, 1) 100%);
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
+        #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
+            color: rgba(23, 128, 214, 1);
+            background-color: rgba(129, 138, 148, 0.47);
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-nav>.active>a,
+        #custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:hover,
+        #custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:focus {
+            color: rgba(23, 128, 214, 1);
+            background-color: rgba(129, 138, 148, 0.48);
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-toggle {
+            border-color: #818a94;
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-toggle:hover,
+        #custom-bootstrap-menu.navbar-default .navbar-toggle:focus {
+            background-color: #818a94;
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-toggle .icon-bar {
+            background-color: #818a94;
+        }
+        
+        #custom-bootstrap-menu.navbar-default .navbar-toggle:hover .icon-bar,
+        #custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
+            background-color: #d6dbe3;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand"  href="#" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+        
+            <div class="collapse navbar-collapse navbar-menubuilder">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <a href="#" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
+                    </li>
+                    <li>
+                        <a href="#" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                    </li>
+                    <li>
+                        <a href="#" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="#" style="font-family:'Jura'; font-weight: bold;">Αρχική</a>
-                </li>
-                <li>
-                    <a href="#" style="font-family:'Jura'; font-weight: bold;" >Πληροφορίες</a>
-                </li>
-                <li>
-                    <a href="#" style="font-family:'Jura'; font-weight: bold;">Επικοινωνία</a>
-                </li>
-            </ul>
-        </nav>
     </div>
-    </header>
       
-<!--      <nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-     Brand and toggle get grouped for better mobile display 
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-        <a class="navbar-brand"  href="${contextPath}"><img height = "34" src="http://upload.wikimedia.org/wikipedia/el/archive/2/2b/20130811154128!Logo_uoa_blue.png"/></a><a class="navbar-brand" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙΑ</a>
-    </div>
-    
-    
-     Collect the nav links, forms, and other content for toggling 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul style="margin: 0px 0px 12px" class="nav navbar-nav navbar">
-          <li>
-          <a style="width" href="#">ΑΡΧΙΚΗ</a>
-          </li>
-          <li>
-          <a href="#">ΠΟΙΟΙ ΕΙΜΑΣΤΕ</a>
-          </li>
-          <li>
-          <a href="#">ΕΠΙΚΟΙΝΩΝΙΑ</a>
-          </li>
-          
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-          <li>
-          <a href="#">ΑΡΧΙΚΗ</a>
-          </li>
-          <li>
-          <a href="#">ΠΟΙΟΙ ΕΙΜΑΣΤΕ</a>
-          </li>
-          <li>
-          <a href="#">ΕΠΙΚΟΙΝΩΝΙΑ</a>
-          </li>
-          
-      </ul>
-
-    </div> /.navbar-collapse 
-  </div> /.container-fluid 
-</nav>-->
 
 <div class="container">
 <div class="row">
