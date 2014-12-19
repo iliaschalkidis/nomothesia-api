@@ -12,13 +12,13 @@ public class Article implements Fragment{
     List<Paragraph> paragraphs;
     
     public Article() {
-                ArrayList<Paragraph> par = new ArrayList<Paragraph>();
-                par.add(new Paragraph());
-		URI = "legislation/paragraph/skata";
-                Title = "ΣΚΑΤΑ";
-                id = 54;
-                
-                System.out.println("Είμαι το άρθρο:" + URI + id + Title);
+                this.paragraphs = new ArrayList<Paragraph>();
+//                par.add(new Paragraph());
+//		URI = "legislation/paragraph/skata";
+//                Title = "ΣΚΑΤΑ";
+//                id = 54;
+//                
+//                System.out.println("Είμαι το άρθρο:" + URI + id + Title);
     }
     
     //Setters-Getters for Article

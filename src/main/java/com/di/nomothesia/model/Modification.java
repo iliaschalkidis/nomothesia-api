@@ -10,10 +10,10 @@ public class Modification {
     private String Type;
     
     public Modification() {
-                URI = "legislation/mod/skata";
-                Type = "αλλαγή";
-                
-                System.out.println("Είμαι η μόντα:" + URI + Type);
+//                URI = "legislation/mod/skata";
+//                Type = "αλλαγή";
+//                
+//                System.out.println("Είμαι η μόντα:" + URI + Type);
     }
     
     //Setters-Getters for Modification

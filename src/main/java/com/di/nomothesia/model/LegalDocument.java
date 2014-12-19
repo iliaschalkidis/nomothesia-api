@@ -12,27 +12,27 @@ public class LegalDocument {
     private List<Citation> citations;
     private String title;
     private String URI;
-    private Date publicationDate;
+    private String publicationDate;
     private GovernmentGazette FEK;
     private String decisionType;
     private String year;
     private String id;
     
     public LegalDocument() {
-                ArrayList<Article> art = new ArrayList<Article>();
-                art.add(new Article());
-		ArrayList<Signer> sin = new ArrayList<Signer>();
-                sin.add(new Signer());
-                ArrayList<Citation> cit = new ArrayList<Citation>();
-                cit.add(new Citation());
-                title = "Ο ΤΕΛΕΥΤΑΙΟΣ ΤΩΝ ΤΡΟΪΚΑΝΩΝ";
-                URI = "legislation/legaldocument/skata";
-                FEK = new GovernmentGazette();
-                decisionType = "ελλας-ελλας";
-                year = "2014";
-                id = "56";
-                
-                System.out.println("Είμαι το νομικό έγγραφο:" + title + id + URI + decisionType + year);
+                articles = new ArrayList<Article>();
+                //art.add(new Article());
+		signers = new ArrayList<Signer>();
+                //sin.add(new Signer());
+                citations = new ArrayList<Citation>();
+                //cit.add(new Citation());
+//                title = "Ο ΤΕΛΕΥΤΑΙΟΣ ΤΩΝ ΤΡΟΪΚΑΝΩΝ";
+//                URI = "legislation/legaldocument/skata";
+//                FEK = new GovernmentGazette();
+//                decisionType = "ελλας-ελλας";
+//                year = "2014";
+//                id = "56";
+//                
+//                System.out.println("Είμαι το νομικό έγγραφο:" + title + id + URI + decisionType + year);
     }
     
     //Setters-Getters for LegalDocument
@@ -77,11 +77,11 @@ public class LegalDocument {
         this.URI = URI;
     }
 
-    public Date getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(Date publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 

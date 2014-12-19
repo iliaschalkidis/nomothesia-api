@@ -10,18 +10,19 @@ public class Paragraph implements Fragment{
     private Modification modification;
     private List<Case> caseList;
     private String table;
+    private String URI;
     private int id;
     
     public Paragraph() {
-                ArrayList<Passage> pass = new ArrayList<Passage>();
-                pass.add(new Passage());
-		ArrayList<Case> cas = new ArrayList<Case>();
-                cas.add(new Case());
-                modification = new Modification();
-                table = "trapezi";
-                id = 34;
-                
-                System.out.println("Είμαι η παράγραφος:" + table + id);
+                this.passages = new ArrayList<Passage>();
+//                pass.add(new Passage());
+                this.caseList = new ArrayList<Case>();
+//                cas.add(new Case());
+//                modification = new Modification();
+//                table = "trapezi";
+//                id = 34;
+//                
+//                System.out.println("Είμαι η παράγραφος:" + table + id);
     }
     
     //Setters-Getters for Paragraph
@@ -56,6 +57,14 @@ public class Paragraph implements Fragment{
 
     public void setTable(String table) {
         this.table = table;
+    }
+    
+    public String getURI() {
+        return URI;
+    }
+
+    public void setURI(String uri) {
+        this.URI = uri;
     }
 
     public int getId() {

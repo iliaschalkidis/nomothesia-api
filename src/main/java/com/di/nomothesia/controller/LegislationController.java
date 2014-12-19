@@ -1,5 +1,7 @@
 package com.di.nomothesia.controller;
 
+import com.di.nomothesia.dao.LegalDocumentDAO;
+import com.di.nomothesia.dao.LegalDocumentDAOImpl;
 import com.di.nomothesia.model.LegalDocument;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,11 +29,10 @@ public class LegislationController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/legislation/{typeoflegislation}/{year}/{id}", method = RequestMethod.GET)
-	public String presentLegalDocument(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		
+	@RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
+	public String presentLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
+		LegalDocumentDAO ld = new LegalDocumentDAOImpl();
+                ld.getById(type, year, id);
 		return "home";
 	}
         
