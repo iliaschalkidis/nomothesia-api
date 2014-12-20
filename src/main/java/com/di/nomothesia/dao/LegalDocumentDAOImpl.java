@@ -91,8 +91,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     //iterate the result set
                     while (result.hasNext()) {
                             BindingSet bindingSet = result.next(); 
-                            legald.setTitle(bindingSet.getValue("title").toString());
-                            legald.setPublicationDate(bindingSet.getValue("date").toString());
+                            legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString()));
+                            legald.setPublicationDate(trimDoubleQuotes(bindingSet.getValue("date").toString()));
                    }
                 }
                 finally {
@@ -198,7 +198,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 Passage passage = new Passage();
                                 passage.setId(count3+2);
                                 passage.setURI(bindingSet.getValue("part").toString());
-                                passage.setText(bindingSet.getValue("text").toString());
+                                String text = bindingSet.getValue("text").toString();
+                                passage.setText(trimDoubleQuotes(text));
                                 System.out.println(passage.getURI());
                                 legald.getArticles().get(count).getParagraphs().get(count2).getPassages().add(passage);
                                 count3 ++;
@@ -208,7 +209,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 case1.setId(count4+2);
                                 case1.setURI(bindingSet.getValue("part").toString());
                                 Passage passage = new Passage();
-                                passage.setText(bindingSet.getValue("text").toString());
+                                String text = bindingSet.getValue("text").toString();
+                                passage.setText(trimDoubleQuotes(text));
                                 System.out.println(case1.getURI());
                                 case1.getPassages().add(passage);
                                 //case1.setText(bindingSet.getValue("text").toString());
@@ -259,4 +261,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public static String trimDoubleQuotes(String text) {
+        int textLength = text.length();
+        if (textLength >= 2 && text.charAt(0) == '"' && text.charAt(textLength - 1) == '"') {
+            return text.substring(1, textLength - 1);
+        }
+        return text;
+    }
 }
