@@ -80,9 +80,9 @@
             <div class="col-md-3">  
                 <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
                     <div align="center"><h4>ΓΕΝΙΚΑ ΣΤΟΙΧΕΙΑ</h4></div><br/>
-                    ΚΩΔΙΚΟΣ: Νόμος/2012/54 <br/>
+                    ΚΩΔΙΚΟΣ: ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
                     ΗΜΕΡΟΜΗΝΙΑ: ${legaldoc.getPublicationDate()} <br/>
-                    ΦΕΚ: A'/2011/123 <br/>
+                    ΦΕΚ: A'/${legaldoc.getYear()}/123 <br/>
                     ΥΠΟΓΡΑΦΟΝΤΕΣ:<br/> 
                     Αντώνης Σαμαράς <br/>
                     ΕΤΙΚΕΤΕΣ: <br/>
@@ -130,6 +130,33 @@
                                 </c:forEach>
                             </c:forEach>
                             </ol>
+                            <c:if test="${not empty paragraph.getModification()}">
+                                <c:choose>
+                                <c:when test="${paragraph.getModification().getType() == 'Case'}">
+                                    "<c:forEach var="passage3" items="${paragraph.getModification().getFragment().getPassages()}" varStatus="loop">
+                                    ${passage3.getText()}
+                                    </c:forEach>"
+                                </c:when>
+                                <c:when test="${paragraph.getModification().getType() == 'Passage'}">
+                                    "${paragraph.getModification().getFragment().getText()}"
+                                </c:when>
+                                <c:when test="${paragraph.getModification().getType() == 'Paragraph'}">
+                                    "<c:forEach var="passage4" items="${paragraph.getModification().getFragment().getPassages()}" varStatus="loop">
+                                    ${passage4.getText()}
+                                    </c:forEach>
+                                    <c:if test="${paragraph.getModification().getFragment().getCaseList().size() > 0}">
+                                    <ol style="list-style-type: lower-greek;">    
+                                    <c:forEach var="case2" items="${paragraph.getModification().getFragment().getCaseList()}" varStatus="loop">
+                                        <c:forEach var="passage2" items="${case2.getPassages()}" varStatus="loop">
+                                        <li>${passage2.getText()}</li>
+                                        </c:forEach>
+                                    </c:forEach>
+                                    </ol>
+                                    </c:if>"
+                                    
+                                </c:when>
+                                </c:choose>
+                            </c:if>
                             </div></li>
                     </c:forEach>
                     </ol>

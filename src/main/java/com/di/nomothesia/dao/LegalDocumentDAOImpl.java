@@ -38,6 +38,15 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
     public LegalDocument getMetadataById(String decisionType, String year, String id) {
         
         LegalDocument legald = new LegalDocument();
+        legald.setId(id);
+        legald.setYear(year);
+        if(decisionType.equals("pd")){
+            legald.setDecisionType("(пд) пяоедяийо диатацла");
+        }
+        else if(decisionType.equals("law")){
+            legald.setDecisionType("молос");
+        }
+        legald.setURI("http://legislation.di.uoa.gr/"+ decisionType + "/" + year + "/" + id);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -173,6 +182,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     int count2 = -1;
                     int count3 = -1;
                     int count4 = -1;
+                    int mod = 0;
+                    Paragraph paragraph = null;
                     while (result.hasNext()) {
                             BindingSet bindingSet = result.next(); 
                             if(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Article")){
@@ -180,19 +191,33 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 article.setId(count+2);
                                 article.setURI(bindingSet.getValue("part").toString());
                                 System.out.println(article.getURI());
+                                System.out.println("NEW ARTICLE");
                                 legald.getArticles().add(article);
                                 count ++;
                                 count2 = -1;
                                 count3 = -1;
                                 count4 = -1;
+                                mod = 0;
                             }
                             else if(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Paragraph")){
-                                Paragraph paragraph = new Paragraph();
+                                paragraph = new Paragraph();
                                 paragraph.setId(count2+2);
                                 paragraph.setURI(bindingSet.getValue("part").toString());
                                 System.out.println(paragraph.getURI());
-                                legald.getArticles().get(count).getParagraphs().add(paragraph);
-                                count2++;
+                                if((mod==0)||(mod==2)){
+                                    System.out.println("NEW PARAGRAPH");
+                                    legald.getArticles().get(count).getParagraphs().add(paragraph);
+                                    count2++;
+                                    count3 = -1;
+                                    count4 = -1;
+                                    mod = 0;
+                                }
+                                else{
+                                    System.out.println("MODIFICATION PARAGRAPH");
+                                    mod = 2;
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Paragraph");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                }
                             }
                             else if(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Passage")){
                                 Passage passage = new Passage();
@@ -201,7 +226,21 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 String text = bindingSet.getValue("text").toString();
                                 passage.setText(trimDoubleQuotes(text));
                                 System.out.println(passage.getURI());
-                                legald.getArticles().get(count).getParagraphs().get(count2).getPassages().add(passage);
+                                if((mod==0)|| (!passage.getURI().contains("modification"))){
+                                    System.out.println("NEW PASSAGE");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getPassages().add(passage);
+                                }
+                                else if(mod==1){
+                                     System.out.println("MODIFICATION PASSAGE");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Passage");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(passage);
+                                    mod =0;
+                                }
+                                else{
+                                    System.out.println("PARAGRAPH MODIFICATION PASSAGE");
+                                    paragraph.getPassages().add(passage);
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                }
                                 count3 ++;
                             }
                             else if(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Case")){
@@ -214,8 +253,31 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 System.out.println(case1.getURI());
                                 case1.getPassages().add(passage);
                                 //case1.setText(bindingSet.getValue("text").toString());
-                                legald.getArticles().get(count).getParagraphs().get(count2).getCaseList().add(case1);
+                                if(mod==0){
+                                    System.out.println("NEW CASE");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getCaseList().add(case1);
+                                }
+                                else if(mod==1){
+                                    System.out.println("MODIFICATION CASE");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Case");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(case1);
+                                    mod=0;
+                                }
+                                else{
+                                    System.out.println("PARAGPAPH MODIFICATION CASE");
+                                    paragraph.getCaseList().add(case1);
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                }
                                 count4 ++;
+                            }
+                            else if((bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Edit")) || (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Creation")) ||(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Deletion"))){
+                                Modification modification = new Modification();
+                                modification.setURI(bindingSet.getValue("part").toString());
+                                System.out.println(modification.getURI());
+                                System.out.println("MODIFICATION");
+                                modification.setType(bindingSet.getValue("type").toString());
+                                legald.getArticles().get(count).getParagraphs().get(count2).setModification(modification);
+                                mod = 1;
                             }
 
                    }
@@ -233,10 +295,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
            // handle exception
         }
         
+         System.out.println("=========================================================================================");
          for (int i = 0; i<legald.getArticles().size(); i++) {
             for (int j = 0; j<legald.getArticles().get(i).getParagraphs().size(); j++) {
 
-                String paragraph = "" + legald.getArticles().get(i).getParagraphs().get(j).getId();
+                String paragraph = "\n" + legald.getArticles().get(i).getParagraphs().get(j).getId();
                 for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getPassages().size(); k++) {
                     paragraph += legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText();
                 }
@@ -246,11 +309,39 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().size(); l++) {
                         paragraph += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText();
                     }
+                    paragraph +="\n";
+                }
+                
+                if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null){
+                    if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")){
+                        Paragraph p = (Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+                        paragraph += "\n\"";
+                        for (int k = 0; k<p.getPassages().size(); k++) {
+                            paragraph += p.getPassages().get(k).getText();
+                        }
+
+                        for (int k = 0; k< p.getCaseList().size(); k++) {
+                            paragraph += p.getCaseList().get(k).getId();
+                            for (int l = 0; l<p.getCaseList().get(k).getPassages().size(); l++) {
+                                paragraph += p.getCaseList().get(k).getPassages().get(l).getText();
+                            }
+                        }
+                        paragraph +="\n";
+                    }
+                    else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")){
+                        Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+                        for (int l = 0; l<c.getPassages().size(); l++) {
+                            paragraph += c.getPassages().get(l).getText();
+                        }
+                    }
+                    paragraph += "\"\n";
                 }
                 System.out.println(paragraph);
             }
 
         }
+        System.out.println("=========================================================================================");
+
          
         return legald;
 

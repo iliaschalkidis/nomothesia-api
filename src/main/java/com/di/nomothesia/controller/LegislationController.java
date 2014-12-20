@@ -29,7 +29,7 @@ public class LegislationController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/{type}/{year}/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
 	public String presentLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegalDocumentDAO ld = new LegalDocumentDAOImpl();
                 LegalDocument legaldoc = ld.getById(type, year, id);

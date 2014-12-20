@@ -1,11 +1,9 @@
 
 package com.di.nomothesia.model;
 
-import java.util.ArrayList;
-
 public class Modification {
     
-    //private Fragment fragment;
+    private Fragment fragment;
     private String URI;
     private String Type;
     
@@ -18,13 +16,13 @@ public class Modification {
     
     //Setters-Getters for Modification
 
-//    public Fragment getFragment() {
-//        return fragment;
-//    }
-//
-//    public void setFragment(Fragment fragment) {
-//        this.fragment = fragment;
-//    }
+    public Fragment getFragment() {
+        return fragment;
+    }
+
+    public void setFragment(Fragment fragment) {
+        this.fragment = fragment;
+    }
 
     public String getURI() {
         return URI;
