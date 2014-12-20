@@ -70,6 +70,8 @@ public class LegislationController {
 //				"September 26th 2012", 28.73F));
 
 		// return a view which will be resolved by an excel view resolver
+                LegalDocumentDAO ld = new LegalDocumentDAOImpl();
+                legal = ld.getById("pd", "2011","54");
 		return new ModelAndView("pdfView", "legaldocument", legal);
 	}
 	

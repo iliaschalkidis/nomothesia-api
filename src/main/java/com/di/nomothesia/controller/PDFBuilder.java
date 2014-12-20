@@ -7,6 +7,7 @@ package com.di.nomothesia.controller;
 
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.model.Passage;
 import com.di.nomothesia.model.Signer;
 import com.di.nomothesia.service.AbstractITextPdfView;
 import com.itextpdf.text.BaseColor;
@@ -16,6 +17,8 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -30,48 +33,49 @@ public class PDFBuilder extends AbstractITextPdfView {
 	@Override
 	protected void buildPdfDocument(Map<String, Object> model, Document doc, PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// get data model which is passed by the Spring container
-		//LegalDocument legald = (LegalDocument) model.get("legaldocument");
+		LegalDocument legald = (LegalDocument) model.get("legaldocument");
                 BaseFont bf = BaseFont.createFont("c:/windows/fonts/times.ttf",BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                 bf.setSubset(true);
                 Font font = new Font(bf, 24);
+                Font font2 = new Font(bf, 12);
                 font.setColor(BaseColor.BLACK);
                 
-                //doc.setMargins(36, 36, 108, 180);
-		LegalDocument legald = new LegalDocument();
-                Signer signer = new Signer();
-                Article art = new Article();
+                doc.setMargins(36, 36, 108, 180);
                 Paragraph paragraph = new Paragraph("≈ÀÀ«Õ… « ƒ«Ãœ —¡‘…¡", font);
                 paragraph.setAlignment(Element.ALIGN_CENTER);
 		doc.add(paragraph);
-                int i,j,k,l;
-                List<Article> arthra = (List<Article>)legald.getArticles();
-                doc.add(new Paragraph(signer.getFirstName()+signer.getLastName(), font));
-                String as = "" +art.getParagraphs().get(1).getId();
-                doc.add(new Paragraph(as, font));
-                for (i = 0; i<arthra.size(); i++) {
-                    doc.add(new Paragraph(arthra.get(i).getTitle(), font));
-                }
-        
                 
-//                for (int i = 0; i<legald.getArticles().size(); i++) {
-//                    
-//                    for (int j = 0; j<legald.getArticles().get(i).getParagraphs().size(); j++) {
-//                        
-//                        String paragraph = "" + legald.getArticles().get(i).getParagraphs().get(j).getId();
-//                        for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getPassages().size(); k++) {
-//                            paragraph += legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText();
-//                        }
-//                        
-//                        for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size(); k++) {
-//                            paragraph += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getId();
-//                            for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().size(); l++) {
-//                                paragraph += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText();
-//                            }
-//                        }
-//                        doc.add(new Paragraph(paragraph));
-//                    }
-//                    
-//                }
+                doc.add(new Paragraph(legald.getTitle(),font));
+                doc.add(new Paragraph(legald.getPublicationDate(),font));
+                for (int i = 0; i<legald.getArticles().size(); i++) {
+                    String par = "¢ÒËÒÔ " + legald.getArticles().get(i).getId() + "\n\n";
+
+                    for (int j = 0; j<legald.getArticles().get(i).getParagraphs().size(); j++) {
+                        par += "" + legald.getArticles().get(i).getParagraphs().get(j).getId() + ". ";
+                        for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getPassages().size(); k++) {
+                            String a = legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText();
+                            a = trimDoubleQuotes(a);
+                            par += a;
+                            
+                        }
+                        par += "\n";
+                        for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size(); k++) {
+                            par += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getId();
+                            for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().size(); l++) {
+                                String b = legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText();
+                                b = trimDoubleQuotes(b);
+                                par += b;
+                                par += "\n";
+                            }
+                        }
+                        par += "\n\n";
+                        Paragraph paragraph2 = new Paragraph(par,font2);
+                        paragraph2.setAlignment(Element.ALIGN_JUSTIFIED);
+                        doc.add(paragraph2);
+                        par ="";
+                    }
+                    
+                }
 		
 		//PdfPTable table = new PdfPTable(5);
 		//table.setWidthPercentage(100.0f);
@@ -119,5 +123,13 @@ public class PDFBuilder extends AbstractITextPdfView {
 		//doc.add(table);
 		
 	}
+        
+        public static String trimDoubleQuotes(String text) {
+            int textLength = text.length();
+            if (textLength >= 2 && text.charAt(0) == '"' && text.charAt(textLength - 1) == '"') {
+                return text.substring(1, textLength - 1);
+            }
+            return text;
+        }
 
 }

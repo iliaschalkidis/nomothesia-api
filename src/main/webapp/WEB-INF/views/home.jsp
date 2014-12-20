@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/zigaria.png" >
+    <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
     <title>NOMOΘΕΣΙΑ</title>
     
     <!-- Bootstrap -->
@@ -40,7 +40,7 @@
     <!-- Navigation Bar -->
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
         <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/ekpa.png"</img></a>
+            <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
             <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
@@ -131,12 +131,21 @@
                         </tr>
                         <tr>
                             <td>
-                                <a href="${pageContext.servletContext.contextPath}/search" type="submit" class="btn btn-primary btn-lg">Σύνθετη Αναζήτηση</a>
+                               
                             </td>
                             <td></td>
                             <td style="text-align: right;">
-                                <button type="submit" class="btn btn-primary btn-lg">Αναζήτηση</button>
+                                    <button type="submit" class="btn btn-primary btn-lg">Αναζήτηση</button>
+                                    
                             </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right; margin-top: 5px;">
+                                <a href="${pageContext.servletContext.contextPath}/search">Σύνθετη Αναζήτηση</a 
+                            </td>
+                            
                         </tr>
                     </table>    
                 </form>
