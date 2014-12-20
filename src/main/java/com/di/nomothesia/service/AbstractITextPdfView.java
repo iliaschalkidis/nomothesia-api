@@ -4,6 +4,12 @@ package com.di.nomothesia.service;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -38,7 +44,31 @@ public abstract class AbstractITextPdfView extends AbstractView {
             document.open();
             buildPdfDocument(model, document, writer, request, response);
             document.close();
+            
+            //Add Page Number
+            PdfReader reader = new PdfReader(baos.toByteArray());
+            reader.makeRemoteNamedDestinationsLocal();
+            baos = new ByteArrayOutputStream();
+            PdfStamper stamper = new PdfStamper(reader, baos);
+            BaseFont bf = BaseFont.createFont("c:/windows/fonts/tahoma.ttf",BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            PdfContentByte cb;
 
+            int n = reader.getNumberOfPages();
+
+            for (int i = 1; i <= n; i++) {
+                
+                cb = stamper.getOverContent(i);
+                float x = cb.getPdfDocument().getPageSize().getWidth() / 2;
+                cb.beginText();
+                cb.setFontAndSize(bf, 12);
+
+                cb.showTextAligned(PdfContentByte.ALIGN_CENTER,"" + i, x, 5, 0);
+
+                cb.endText();
+            }
+            
+            stamper.close();
+            
             // Flush to HTTP response.
             writeToResponse(response, baos);
     }
