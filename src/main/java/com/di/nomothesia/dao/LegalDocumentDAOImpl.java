@@ -7,10 +7,12 @@ package com.di.nomothesia.dao;
 
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.Case;
+import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.model.Paragraph;
 import com.di.nomothesia.model.Passage;
+import com.di.nomothesia.model.Signer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -84,13 +86,23 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                     "\n" +
-                    "SELECT ?title ?date\n" +
+                    "SELECT ?title ?date ?gaztitle ?signername ?signertitle\n" +
                     "WHERE{\n" +
                     " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                     " dc:title ?title.\n" +
                     " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                     " dc:created ?date.\n" +
+                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " leg:gazette ?gazette.\n" +
+                    " ?gazette dc:title ?gaztitle.\n" +
+                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " dc:created ?date.\n" +
+                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " leg:signer ?signer.\n" +
+                    " ?signer foaf:name ?signername.\n" +
+                    " ?signer foaf:title ?signertitle.\n" +
                     "}";
                   
                   System.out.println(queryString);
@@ -101,8 +113,13 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     //iterate the result set
                     while (result.hasNext()) {
                             BindingSet bindingSet = result.next(); 
+                            Signer sign = new Signer();
                             legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString()));
                             legald.setPublicationDate(trimDoubleQuotes(bindingSet.getValue("date").toString()));
+                            legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
+                            sign.setFullName(trimDoubleQuotes(bindingSet.getValue("signername").toString()));
+                            sign.setTitle(trimDoubleQuotes(bindingSet.getValue("signertitle").toString()));
+                            legald.getSigners().add(sign);
                    }
                 }
                 finally {
@@ -117,7 +134,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
         catch (OpenRDFException e) {
            // handle exception
         }
-
+       
+        System.out.println(legald.getFEK());
+        for(int i=0; i < legald.getSigners().size(); i++){
+            System.out.println(legald.getSigners().get(i).getFullName() + " - " +legald.getSigners().get(i).getTitle());
+        }
         return legald;
 
     }
@@ -350,7 +371,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
     }
     
     @Override
-    public String sparqlQuery(String query) {
+    public EndpointResult sparqlQuery(EndpointResult endpointResult) {
         
         String results = "";
        
@@ -368,6 +389,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
             repositoryID = props.getProperty("SesameRepositoryID");
 
         } catch (IOException e) {
+            System.out.println("1");
+            endpointResult.setMessage(e.toString());
             e.printStackTrace();
         }
 
@@ -376,7 +399,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
         try {
             repo.initialize();
         } catch (RepositoryException ex) {
-            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("2");
+            endpointResult.setMessage(ex.toString());
         }
         
         TupleQueryResult result;
@@ -384,8 +408,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
            RepositoryConnection con = repo.getConnection();
            try {
                   
-                  System.out.println(query);
-                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, query);
+                  System.out.println(endpointResult.getQuery());
+                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, endpointResult.getQuery());
                   result = tupleQuery.evaluate();
 
                   try {
@@ -421,10 +445,14 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
            }
         }
         catch (OpenRDFException e) {
+            System.out.println("3");
+           endpointResult.setMessage(e.toString());
            // handle exception
         }
 
-        return results;
+        endpointResult.setResults(results);
+        
+        return endpointResult;
 
     }
 

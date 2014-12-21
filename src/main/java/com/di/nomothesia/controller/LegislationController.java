@@ -2,7 +2,9 @@ package com.di.nomothesia.controller;
 
 import com.di.nomothesia.dao.LegalDocumentDAO;
 import com.di.nomothesia.dao.LegalDocumentDAOImpl;
+import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.service.LegislationService;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,8 +35,8 @@ public class LegislationController {
 	 */
 	@RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
 	public String presentLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
-		LegalDocumentDAO ld = new LegalDocumentDAOImpl();
-                LegalDocument legaldoc = ld.getById(type, year, id);
+		LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getById(type, year, id);
                 model.addAttribute("legaldoc", legaldoc);
 		return "basiclegislation";
 	}
@@ -64,9 +66,19 @@ public class LegislationController {
         @RequestMapping(value = "/legislation/endpoint", method = RequestMethod.GET)
 	public String endpoint(@RequestParam Map<String,String> params, Model model) {
 		if(params.get("query") != null){
-                    LegalDocumentDAO ld = new LegalDocumentDAOImpl();
-                    String results = ld.sparqlQuery(params.get("query"));
-                    model.addAttribute("results", results);
+                    LegislationService lds = new LegislationService();
+                    EndpointResult eprs = lds.sparqlQuery(params.get("query"));
+                    model.addAttribute("endpointResults", eprs);
+                }
+		return "endpoint";
+	}
+        
+        @RequestMapping(value = "/legislation/endpoint/query/{id}", method = RequestMethod.GET)
+	public String endpoint( @PathVariable String id, Model model) {
+		if(id != null){
+                    LegislationService lds = new LegislationService();
+                    EndpointResult eprs = lds.sparqlQuery(id);
+                    model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";
 	}
@@ -76,10 +88,8 @@ public class LegislationController {
 	 */
 	@RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
-                LegalDocument legal = new LegalDocument();
-
-                LegalDocumentDAO ld = new LegalDocumentDAOImpl();
-                legal = ld.getById(type,year,id);
+                LegislationService lds = new LegislationService();
+                LegalDocument legal = lds.getById(type,year,id);
 		return new ModelAndView("pdfView", "legaldocument", legal);
 	}
 	

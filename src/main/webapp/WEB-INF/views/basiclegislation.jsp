@@ -80,12 +80,14 @@
             <div class="col-md-3">  
                 <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
                     <div align="center"><h4>ΓΕΝΙΚΑ ΣΤΟΙΧΕΙΑ</h4></div><br/>
-                    ΚΩΔΙΚΟΣ: ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
-                    ΗΜΕΡΟΜΗΝΙΑ: ${legaldoc.getPublicationDate()} <br/>
-                    ΦΕΚ: A'/${legaldoc.getYear()}/123 <br/>
-                    ΥΠΟΓΡΑΦΟΝΤΕΣ:<br/> 
-                    Αντώνης Σαμαράς <br/>
-                    ΕΤΙΚΕΤΕΣ: <br/>
+                    <u>ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
+                    <u>ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
+                    <u>ΦΕΚ:</u> ${legaldoc.getFEK()}<br/>
+                    <u>ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/> 
+                    <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop">
+                        ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
+                    </c:forEach>
+                    <u>ΕΤΙΚΕΤΕΣ:</u> <br/>
                     Περιβάλλον &amp; Φυσικοί Πόροι
                     
                 </div>

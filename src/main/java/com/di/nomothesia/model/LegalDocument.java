@@ -13,7 +13,7 @@ public class LegalDocument {
     private String title;
     private String URI;
     private String publicationDate;
-    private GovernmentGazette FEK;
+    private String FEK;
     private String decisionType;
     private String year;
     private String id;
@@ -85,11 +85,11 @@ public class LegalDocument {
         this.publicationDate = publicationDate;
     }
 
-    public GovernmentGazette getFEK() {
+    public String getFEK() {
         return FEK;
     }
 
-    public void setFEK(GovernmentGazette FEK) {
+    public void setFEK(String FEK) {
         this.FEK = FEK;
     }
 

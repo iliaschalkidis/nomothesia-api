@@ -3,35 +3,22 @@ package com.di.nomothesia.model;
 
 public class Signer {
     
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String title;
     
     public Signer() {
-		title = "ΠΡΟΕΔΡΟΣ ΤΗΣ ΜΠΑΝΑΝΙΑΣ";
-		firstName = "ΑΝΤΩΝΗΣ";
-		lastName = "ΣΑΜΑΡΑΣ";
-                
-                System.out.println("Είμαι το ανδρείκελο με όνομα:" + title + lastName + firstName);
     }
     
     //Setters-Getters for Signer
     
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getTitle() {
         return title;
