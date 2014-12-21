@@ -93,7 +93,7 @@
                     <a class="btn btn-success btn-lg" href="downloadPDF" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-danger btn-lg" href="${pageContext.servletContext.contextPath}/downloadPDF" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to PDF</a>
+                    <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
                     <a class="btn btn-primary btn-lg" href="downloadPDF" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to RDF</a>

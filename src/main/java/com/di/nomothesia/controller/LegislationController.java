@@ -40,8 +40,14 @@ public class LegislationController {
 	}
         
         @RequestMapping(value = "/legislation/{typeoflegislation}/{year}/{id}/data.xml", method = RequestMethod.GET)
-	public String presentXML(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+	public String exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
+		
+		
+		return "home";
+	}
+        
+        @RequestMapping(value = "/legislation/{typeoflegislation}/{year}/{id}/data.rdf", method = RequestMethod.GET)
+	public String exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
 		
 		
 		return "home";
@@ -68,23 +74,12 @@ public class LegislationController {
         /**
 	 * Handle request to download a PDF document 
 	 */
-	@RequestMapping(value = "/downloadPDF", method = RequestMethod.GET)
-	public ModelAndView downloadExcel() {
-		// create some sample data
+	@RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
+	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegalDocument legal = new LegalDocument();
-//		List<Book> listBooks = new ArrayList<Book>();
-//		listBooks.add(new Book("Spring in Action είναι μαλάκας", "Craig Walls", "1935182358",
-//				"June 29th 2011", 31.98F));
-//		listBooks.add(new Book("Spring in Practice", "Willie Wheeler, Joshua White",
-//				"1935182056", "May 16th 2013", 31.95F));
-//		listBooks.add(new Book("Pro Spring 3",
-//				"Clarence Ho, Rob Harrop", "1430241071", "April 18th 2012", 31.85F));
-//		listBooks.add(new Book("Spring Integration in Action", "Mark Fisher", "1935182439",
-//				"September 26th 2012", 28.73F));
 
-		// return a view which will be resolved by an excel view resolver
                 LegalDocumentDAO ld = new LegalDocumentDAOImpl();
-                legal = ld.getById("pd", "2011","54");
+                legal = ld.getById(type,year,id);
 		return new ModelAndView("pdfView", "legaldocument", legal);
 	}
 	
