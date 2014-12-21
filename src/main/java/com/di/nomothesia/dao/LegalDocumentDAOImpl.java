@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openrdf.OpenRDFException;
@@ -120,6 +121,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
         return legald;
 
     }
+    
     @Override
     public LegalDocument getById(String decisionType, String year, String id) {
         
@@ -344,6 +346,85 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
 
          
         return legald;
+
+    }
+    
+    @Override
+    public String sparqlQuery(String query) {
+        
+        String results = "";
+       
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         try {
+           RepositoryConnection con = repo.getConnection();
+           try {
+                  
+                  System.out.println(query);
+                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, query);
+                  result = tupleQuery.evaluate();
+
+                  try {
+                    //iterate the result set
+                    
+                    List<String> bindingNames = result.getBindingNames();
+                    results += "<tr>";
+                    for (String bindingName : bindingNames) {
+                            results += "<td>" + bindingName + "</td>";
+                    }
+                    results += "</tr>";
+                    while (result.hasNext()) {
+                           BindingSet bindingSet = result.next();
+                           results += "<tr>";
+                        for (String bindingName : bindingNames) {
+                            if(bindingSet.getValue(bindingName)!=null){
+                                results += "<td>" + bindingSet.getValue(bindingName).toString() + "</td>";
+                            }
+                            else{
+                                results += "<td></td>";
+                            }
+                        }
+                           results += "</tr>";
+                   }
+                }
+                finally {
+                        result.close();
+                }
+                 
+           }
+           finally {
+              con.close();
+           }
+        }
+        catch (OpenRDFException e) {
+           // handle exception
+        }
+
+        return results;
 
     }
 
