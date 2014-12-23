@@ -1,8 +1,6 @@
 
 package com.di.nomothesia.model;
 
-import java.util.ArrayList;
-
 public class GovernmentGazette {
     
     private String issue;
@@ -18,6 +16,7 @@ public class GovernmentGazette {
     }
     
     //Setters-Getters for GovernmentGazette
+    
     public String getIssue() {
         return issue;
     }

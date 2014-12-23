@@ -1,19 +1,19 @@
 package com.di.nomothesia.controller;
 
-import com.di.nomothesia.dao.LegalDocumentDAO;
-import com.di.nomothesia.dao.LegalDocumentDAOImpl;
 import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.service.LegislationService;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.transform.TransformerException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,19 +41,22 @@ public class LegislationController {
 		return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{typeoflegislation}/{year}/{id}/data.xml", method = RequestMethod.GET)
-	public String exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
-		
-		
-		return "home";
-	}
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        public ResponseEntity<String> exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException {
+            LegislationService lds = new LegislationService();
+            LegalDocument legal = lds.getById(type,year,id);
+            XMLBuilder xmlbuild = new XMLBuilder();
+            String xml = xmlbuild.XMLbuilder(legal);
+            return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
+}
+        
         
         @RequestMapping(value = "/legislation/{typeoflegislation}/{year}/{id}/data.rdf", method = RequestMethod.GET)
-	public String exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
-		
-		
-		return "home";
-	}
+	public String exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws JAXBException {
+		 
+            return "home";
+	
+        }
         
         @RequestMapping(value = "/legislation/search", method = RequestMethod.GET)
 	public String search(Locale locale, Model model) {

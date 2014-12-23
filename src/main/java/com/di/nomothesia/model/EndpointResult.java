@@ -30,6 +30,5 @@ public class EndpointResult {
     public void setMessage(String message) {
         this.message = message;
     }
-    
-    
+        
 }

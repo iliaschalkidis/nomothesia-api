@@ -14,15 +14,16 @@ public class Paragraph implements Fragment{
     private int id;
     
     public Paragraph() {
-                this.passages = new ArrayList<Passage>();
-//                pass.add(new Passage());
-                this.caseList = new ArrayList<Case>();
-//                cas.add(new Case());
-//                modification = new Modification();
-//                table = "trapezi";
-//                id = 34;
-//                
-//                System.out.println("Είμαι η παράγραφος:" + table + id);
+        
+        this.passages = new ArrayList<Passage>();
+        //pass.add(new Passage());
+        this.caseList = new ArrayList<Case>();
+        //cas.add(new Case());
+        //modification = new Modification();
+        //table = "trapezi";
+        //id = 34;
+
+        //System.out.println("Είμαι η παράγραφος:" + table + id);
     }
     
     //Setters-Getters for Paragraph

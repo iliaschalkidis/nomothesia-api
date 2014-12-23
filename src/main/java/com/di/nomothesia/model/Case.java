@@ -12,14 +12,15 @@ public class Case implements Fragment{
     //private List<Case> caseList;
 
     public Case() {
-                passages = new ArrayList<Passage>();
-//                pas.add(new Passage());
-//		//ArrayList<Case> casel = new ArrayList<Case>();
-//                //casel.add(new Case());
-//                URI = "legislation/case/skata";
-//                id = 84;
-//                
-//                System.out.println("Είμαι η περίπτωση:" + URI + id);
+        
+        passages = new ArrayList<Passage>();
+        //pas.add(new Passage());
+        //ArrayList<Case> casel = new ArrayList<Case>();
+        //casel.add(new Case());
+        //URI = "legislation/case/skata";
+        //id = 84;
+
+        //System.out.println("Είμαι η περίπτωση:" + URI + id);
     }
     
     //Setters-Getters for Case
@@ -27,7 +28,7 @@ public class Case implements Fragment{
     public String getURI() {
         return URI;
     }
-
+    
     public void setURI(String URI) {
         this.URI = URI;
     }
@@ -55,5 +56,6 @@ public class Case implements Fragment{
 //    public void setCaseList(List<Case> caseList) {
 //        this.caseList = caseList;
 //    }
-//    
+// 
+    
 }

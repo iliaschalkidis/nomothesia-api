@@ -2,7 +2,7 @@
 package com.di.nomothesia.model;
 
 public class Citation {
-        
+  
     private String description;
     private String URI;
     
@@ -10,7 +10,7 @@ public class Citation {
 		URI = "legislation/citation/skata";
 		description = "ΔΣΦΣΗΦ Η ΗΦΔΞΣΦ ΞΗ ΚΗΦ ΚΞΗ ΚΣΔ";
 		
-                System.out.println("Είμαι η παράθεση:" + URI + description);
+                //System.out.println("Είμαι η παράθεση:" + URI + description);
     }
     
     //Setters-Getters for Citation
@@ -18,15 +18,15 @@ public class Citation {
     public String getDescription() {
         return description;
     }
-
+    
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     public String getURI() {
         return URI;
     }
-
+    
     public void setURI(String URI) {
         this.URI = URI;
     }

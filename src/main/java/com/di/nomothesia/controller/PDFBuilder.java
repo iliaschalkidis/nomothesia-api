@@ -42,13 +42,15 @@ public class PDFBuilder extends AbstractITextPdfView {
                 doc.add(new Paragraph("\n\n\n\n\n\n\n\n"));
                 
                 //Fonts
-                BaseFont bf = BaseFont.createFont("c:/windows/fonts/tahoma.ttf",BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                BaseFont bf = BaseFont.createFont("c:/windows/fonts/tahoma.ttf",BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 bf.setSubset(true);
-                Font fontTitle = new Font(bf, 18);
+                Font fontTitle = new Font(bf, 18,Font.BOLD);
                 Font fontText = new Font(bf, 12);
                 Font fontArticle = new Font(bf, 12,Font.BOLD);
                 Font fontDate = new Font(bf, 12);
-                Font fontType = new Font(bf, 20);
+                Font fontType = new Font(bf, 20,Font.BOLD);
+                //Font fontSigner = new Font(bf, 13);
+                Font fontSignerf = new Font(bf, 11);
                 
                 //Type
                 String tid = legald.getId();
@@ -68,6 +70,31 @@ public class PDFBuilder extends AbstractITextPdfView {
                 titl.setAlignment(Element.ALIGN_CENTER);
                 doc.add(titl);
                 doc.add(new Paragraph("\n"));
+                
+                //Writers
+//                doc.add(new Paragraph("\n"));
+//                String signer = "";
+//                if (legald.getSigners().size()<2) {
+//                    signer += "Ο ";
+//                }
+//                else {
+//                    signer += "ΟΙ ";
+//                }
+//                for (int i = 0; i<legald.getSigners().size(); i++) {
+//                    if (i == legald.getSigners().size()-1) {
+//                        signer += legald.getSigners().get(i).getTitle();
+//                        //signer = trimDoubleQuotes(signer);
+//                    }
+//                    else {
+//                        signer += legald.getSigners().get(i).getTitle();
+//                        //signer = trimDoubleQuotes(signer);
+//                        signer += " /";
+//                    }
+//                }
+//                Paragraph sign = new Paragraph(signer, fontSigner);
+//                sign.setAlignment(Element.ALIGN_CENTER);
+//                doc.add(sign);
+//                doc.add(new Paragraph("\n"));
                 
                 //Citation
                 String citation = "Έχοντας υπόψη: \n\n";
@@ -215,7 +242,22 @@ public class PDFBuilder extends AbstractITextPdfView {
                 dat.setAlignment(Element.ALIGN_CENTER);
                 doc.add(dat);
                 doc.add(new Paragraph("\n"));
-		
+                
+                //Signers Full
+                for (int i = 0; i<legald.getSigners().size(); i++) {
+                    String signerfull = "";
+                    signerfull += "Ο ";
+                    signerfull += legald.getSigners().get(i).getTitle();
+                    //signerfull = trimDoubleQuotes(signer);
+                    signerfull += "\n";
+                    signerfull += legald.getSigners().get(i).getFullName();
+                    //signerfull = trimDoubleQuotes(signerfull);
+                    signerfull += "\n\n\n";
+                    Paragraph signfull = new Paragraph(signerfull, fontSignerf);
+                    signfull.setAlignment(Element.ALIGN_CENTER);
+                    doc.add(signfull);
+                }
+        
 	}
         
         public static String trimDoubleQuotes(String text) {
