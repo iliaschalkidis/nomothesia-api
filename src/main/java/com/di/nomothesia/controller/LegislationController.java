@@ -51,10 +51,11 @@ public class LegislationController {
 }
         
         
-        @RequestMapping(value = "/legislation/{typeoflegislation}/{year}/{id}/data.rdf", method = RequestMethod.GET)
-	public String exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws JAXBException {
-		 
-            return "home";
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
+	public ResponseEntity<String> exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws JAXBException {
+            LegislationService lds = new LegislationService();
+            String rdfResult = lds.getRDFById(type,year,id);
+            return new ResponseEntity<String>(rdfResult,new HttpHeaders(),HttpStatus.CREATED);
 	
         }
         

@@ -13,8 +13,10 @@ import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.model.Paragraph;
 import com.di.nomothesia.model.Passage;
 import com.di.nomothesia.model.Signer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -30,6 +32,10 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.http.HTTPRepository;
+import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFWriter;
+import org.openrdf.rio.Rio;
+import org.openrdf.rio.rdfxml.RDFXMLWriter;
 
 /**
  *
@@ -368,6 +374,68 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
          
         return legald;
 
+    }
+    
+    @Override
+    public String getRDFById(String decisionType, String year, String id) {
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String result = "";
+         try {
+           RepositoryConnection con = repo.getConnection();
+           try {
+                  String queryString = "DESCRIBE <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">";
+                  
+                  System.out.println(queryString);
+                  try {
+                       // use SPARQL query
+                        RDFXMLWriter writer = new RDFXMLWriter(out);
+                        con.prepareGraphQuery(QueryLanguage.SPARQL,queryString).evaluate(writer); 
+                        out.writeTo(System.out);
+                        result = out.toString("ISO-8859-1");
+                  }
+                  catch (IOException ex) {
+                       Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                  }                  
+                  finally{
+                  }
+                  
+                }
+                finally {
+                        con.close();
+                }
+                 
+           }
+           catch (OpenRDFException e) {
+           // handle exception
+           }
+         
+         return result;
     }
     
     @Override

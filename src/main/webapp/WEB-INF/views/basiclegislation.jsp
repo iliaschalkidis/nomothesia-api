@@ -98,7 +98,7 @@
                     <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-primary btn-lg" href="downloadPDF" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to RDF</a>
+                    <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to RDF</a>
                 </div>
             </div>
             <div class="col-md-9">

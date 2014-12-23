@@ -12,4 +12,5 @@ public interface LegalDocumentDAO {
     public LegalDocument getMetadataById(String decisionType, String year, String id);
     public List<Modification> getAllModifications(String decisionType, String year, String id);
     public EndpointResult sparqlQuery(EndpointResult endpointResult);
+    public String getRDFById(String decisionType, String year, String id);
 }

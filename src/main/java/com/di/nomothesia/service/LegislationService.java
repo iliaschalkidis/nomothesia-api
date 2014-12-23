@@ -95,5 +95,15 @@ public class LegislationService {
         }
         return legalDocumentDAO.sparqlQuery(eprs);
     }
+
+    public String getRDFById(String type, String year, String id) {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        return legalDocumentDAO.getRDFById(type, year, id);
+    }
     
 }
