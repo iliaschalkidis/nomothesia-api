@@ -41,12 +41,23 @@ public class LegislationController {
 		return "basiclegislation";
 	}
         
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}/{type2}/{id2}", method = RequestMethod.GET)
+	public String presentLegalFragment(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, @PathVariable String type2, @PathVariable String id2, Model model) {
+		LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getById(type, year, id);
+                model.addAttribute("legaldoc", legaldoc);
+                model.addAttribute("type1", type1);
+                model.addAttribute("id1", id1);
+                model.addAttribute("type2", type2);
+                model.addAttribute("id2", id2);
+		return "basiclegislation";
+	}
+        
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
-        public ResponseEntity<String> exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException {
+        public ResponseEntity<String> exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException{
             LegislationService lds = new LegislationService();
-            LegalDocument legal = lds.getById(type,year,id);
-            XMLBuilder xmlbuild = new XMLBuilder();
-            String xml = xmlbuild.XMLbuilder(legal);
+            String xml = lds.getXMLById(type,year,id);
+            
             return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
 }
         
@@ -55,6 +66,7 @@ public class LegislationController {
 	public ResponseEntity<String> exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws JAXBException {
             LegislationService lds = new LegislationService();
             String rdfResult = lds.getRDFById(type,year,id);
+            
             return new ResponseEntity<String>(rdfResult,new HttpHeaders(),HttpStatus.CREATED);
 	
         }

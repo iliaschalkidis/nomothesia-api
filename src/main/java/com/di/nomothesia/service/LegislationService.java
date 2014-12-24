@@ -5,9 +5,11 @@
  */
 package com.di.nomothesia.service;
 
+import com.di.nomothesia.controller.XMLBuilder;
 import com.di.nomothesia.dao.LegalDocumentDAO;
 import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.LegalDocument;
+import javax.xml.transform.TransformerException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -104,6 +106,19 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         return legalDocumentDAO.getRDFById(type, year, id);
+    }
+
+    public String getXMLById(String type, String year, String id) throws TransformerException {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id);
+        
+        XMLBuilder xmlbuild = new XMLBuilder();
+        return  xmlbuild.XMLbuilder(legald);
     }
     
 }

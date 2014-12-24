@@ -117,11 +117,12 @@
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="home">
                 <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
+                    <div id="article-${article.getId()}">
                     <span style="text-align: center; font-size: 12px;"><h4>Άρθρο ${article.getId()}</h4></span>
                     <br/>
                     <ol>
                     <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
-                        <li><div style="text-align: justify;">
+                        <li><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
                             <c:forEach var="passage" items="${paragraph.getPassages()}" varStatus="loop">
                                 ${passage.getText()}
                             </c:forEach>
@@ -162,15 +163,28 @@
                             </div></li>
                     </c:forEach>
                     </ol>
+                    </div>
                 </c:forEach>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="profile">...</div>
-                <div role="tabpanel" class="tab-pane" id="messages">...</div>
+                <div role="tabpanel" class="tab-pane" id="messages">
+                    <ul>
+                    <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
+                        <li><a href="${article.getURI()}" >Άρθρο ${article.getId()}</a>
+                    <ul>
+                        <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
+                            <li><a href="${paragraph.getURI()}">Παράγραφος ${paragraph.getId()}</a></li>
+                        </c:forEach>
+                    </ul></li>
+                    </c:forEach>
+                    </ul>
+                </div>
                 <div role="tabpanel" class="tab-pane" id="settings">...</div>
                 </div>
             </div>
         </div>
         </div>
+        <div class="row"  style="height:400px;">&#160;&#160;</div>
         <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
             <h5>Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
@@ -184,6 +198,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script>
+            $(function(){
+               $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
+                return false;
+            });
+    </script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
       <script>
@@ -197,5 +217,6 @@
             $('#myTab a:last').tab('show') // Select last tab
             $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
       </script>
+      
 </body>
 </html>
