@@ -3,6 +3,7 @@ package com.di.nomothesia.controller;
 import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.service.LegislationService;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -34,9 +35,19 @@ public class LegislationController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
-	public String presentLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
+	public String presentOriginalLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id);
+                model.addAttribute("legaldoc", legaldoc);
+                List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
+                model.addAttribute("legalmods", legalmods);
+		return "basiclegislation";
+	}
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted", method = RequestMethod.GET)
+	public String presentUpdatedLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
+		LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getUpdatedById(type, year, id);
                 model.addAttribute("legaldoc", legaldoc);
 		return "basiclegislation";
 	}
@@ -72,11 +83,11 @@ public class LegislationController {
         }
         
         @RequestMapping(value = "/legislation/search", method = RequestMethod.GET)
-	public String search(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		
-		return "home";
+	public String search(@RequestParam Map<String,String> params, Model model) {
+		LegislationService lds = new LegislationService();
+		List<LegalDocument> LDs = lds.searchLegislation(params);
+                model.addAttribute("legalDocuments", LDs);
+		return "search";
 	}
         
         @RequestMapping(value = "/legislation/endpoint", method = RequestMethod.GET)

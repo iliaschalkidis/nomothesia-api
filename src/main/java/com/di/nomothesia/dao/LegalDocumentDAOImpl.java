@@ -8,6 +8,7 @@ package com.di.nomothesia.dao;
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.Case;
 import com.di.nomothesia.model.EndpointResult;
+import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.model.Paragraph;
@@ -17,7 +18,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
@@ -525,8 +528,288 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
     }
 
     @Override
-    public List<Modification> getAllModifications(String decisionType, String year, String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Modification> getModifications(String decisionType, String year, String id, String date) {
+        
+        
+        List<Modification> modifications = new ArrayList<Modification>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         try {
+           RepositoryConnection con = repo.getConnection();
+           try {
+                  String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                    "\n" +
+                    "SELECT ?mod ?type ?patient ?part ?type2 ?text\n" +
+                    "WHERE{\n" +
+                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " metalex:realizedBy  ?version.\n" +
+                    " ?version metalex:matterOf ?mod.\n" +
+                    " ?mod rdf:type ?type.\n" +
+                    " ?mod metalex:patient ?patient.\n" +
+                    " ?mod metalex:part+ ?part.\n" +
+                    " ?part rdf:type ?type2.\n" +
+                    " ?mod  metalex:legislativeCompetenceGround ?work.\n" ;
+                  
+                  if(date !=null){
+                    queryString += " ?work dc:created ?date.\n" +
+                    "OPTIONAL{\n" +
+                    " ?part leg:text ?text.\n" +
+                    "}\n" +
+                    "ORDER BY ?mod ?part";
+                  }
+                  else{
+                    queryString += " ?work dc:created ?date.\n" +
+                    "OPTIONAL{\n" +
+                    " ?part leg:text ?text.\n" +
+                    "}\n" +
+                    "ORDER BY ?mod ?part"; 
+                  }
+                  
+                  System.out.println(queryString);
+                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                  result = tupleQuery.evaluate();
+
+                  try {
+                    //iterate the result set
+                    int counter = -1;
+                    int count = -1;
+                    int count2 = -1;
+                    int count3 = -1;
+                    int count4 = -1;
+                    int frag = 0;
+                    Fragment fragment = null;
+                    String current = "";
+                    Modification mod = null;
+                    while (result.hasNext()) {
+                            BindingSet bindingSet = result.next();
+                            if (!bindingSet.getValue("type").toString().equals(current)){
+                                if(mod != null){
+                                  mod.setFragment(fragment);
+                                  modifications.add(mod);
+                                }
+                                mod = new Modification();
+                                mod.setURI(bindingSet.getValue("mod").toString());
+                                mod.setType(bindingSet.getValue("type").toString());
+                                mod.setPatient(bindingSet.getValue("patient").toString());
+                                frag = 0;
+                            }
+                            
+                            if(bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Article")){
+                                Article article = new Article();
+                                article.setId(count+2);
+                                article.setURI(bindingSet.getValue("part").toString());
+                                System.out.println(article.getURI());
+                                System.out.println("NEW ARTICLE");
+                                count2 = -1;
+                                count3 = -1;
+                                count4 = -1;
+                                fragment = article;
+                                frag = 1;
+                            }
+                            else if(bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Paragraph")){
+                                Paragraph paragraph = new Paragraph();
+                                paragraph.setId(count2+2);
+                                paragraph.setURI(bindingSet.getValue("part").toString());
+                                System.out.println(paragraph.getURI());
+                                System.out.println("NEW PARAGRAPH");
+                                if(frag == 0){
+                                    fragment = paragraph;
+                                    frag = 2;
+                                }
+                                else{
+                                    Article article = (Article) fragment;
+                                    article.getParagraphs().add(paragraph);
+                                    fragment = article;
+                                }
+                                count2++;
+                                count3 = -1;
+                                count4 = -1;
+                            }
+                            else if(bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Passage")){
+                                Passage passage = new Passage();
+                                passage.setId(count3+2);
+                                passage.setURI(bindingSet.getValue("part").toString());
+                                String text = bindingSet.getValue("text").toString();
+                                passage.setText(trimDoubleQuotes(text));
+                                System.out.println(passage.getURI());
+                                System.out.println("NEW PASSAGE");
+                                if(frag == 0){
+                                    fragment = passage;
+                                }
+                                else if (frag == 1){
+                                    Article article = (Article) fragment;
+                                    article.getParagraphs().get(count2).getPassages().add(passage);
+                                    fragment = article;
+                                }
+                                else{
+                                    Paragraph paragraph = (Paragraph) fragment;
+                                    paragraph.getPassages().add(passage);
+                                    fragment = paragraph;
+                                }
+                                count3 ++;
+                            }
+                            else if(bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Case")){
+                                Case case1 = new Case();
+                                case1.setId(count4+2);
+                                case1.setURI(bindingSet.getValue("part").toString());
+                                Passage passage = new Passage();
+                                String text = bindingSet.getValue("text").toString();
+                                passage.setText(trimDoubleQuotes(text));
+                                System.out.println(case1.getURI());
+                                case1.getPassages().add(passage);
+                                System.out.println("NEW CASE");
+                                if(frag == 0){
+                                    fragment = passage;
+                                }
+                                else if (frag == 1){
+                                    Article article = (Article) fragment;
+                                    article.getParagraphs().get(count2).getCaseList().add(case1);
+                                    fragment = article;
+                                }
+                                else{
+                                    Paragraph paragraph = (Paragraph) fragment;
+                                    paragraph.getCaseList().add(case1);
+                                    fragment = paragraph;
+                                }
+                                count4 ++;
+                            }
+
+                   }
+                }
+                finally {
+                        result.close();
+                }
+                 
+           }
+           finally {
+              con.close();
+           }
+        }
+        catch (OpenRDFException e) {
+           // handle exception
+        }
+        
+        
+        return modifications;
+    }
+    
+    @Override
+    public List<LegalDocument> getAllModifications(String decisionType, String year, String id) {
+        
+        List<LegalDocument> legalds = new ArrayList<LegalDocument>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         try {
+           RepositoryConnection con = repo.getConnection();
+           try {
+                  String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                    "\n" +
+                    "SELECT ?work ?title ?date ?gaztitle\n" +
+                    "WHERE{\n" +
+                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " metalex:realizedBy  ?version.\n" +
+                    " ?version metalex:matterOf ?mod.\n" +
+                    " ?mod  metalex:legislativeCompetenceGround ?work.\n" +
+                    " ?work dc:title ?title.\n" +
+                    " ?work dc:created ?date.\n" +
+                    " ?work leg:gazette ?gazette.\n" +
+                    " ?gazette dc:title ?gaztitle.\n" +
+                    "}" + 
+                    "GROUP BY ?work ?title ?date ?gaztitle\n" +
+                    "ORDER BY ?date\n";
+
+                  
+                  System.out.println(queryString);
+                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                  result = tupleQuery.evaluate();
+
+                  try {
+                    //iterate the result set
+                    while (result.hasNext()) {
+                            BindingSet bindingSet = result.next();
+                            LegalDocument legald = new LegalDocument();
+                            legald.setURI(bindingSet.getValue("work").toString());
+                            legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString()));
+                            legald.setPublicationDate(trimDoubleQuotes(bindingSet.getValue("date").toString()));
+                            legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
+                            legalds.add(legald);
+                   }
+                }
+                finally {
+                        result.close();
+                }
+                 
+           }
+           finally {
+              con.close();
+           }
+        }
+        catch (OpenRDFException e) {
+           // handle exception
+        }
+        
+        
+        return legalds;
     }
     
     public static String trimDoubleQuotes(String text) {
@@ -535,5 +818,158 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
             return text.substring(1, textLength - 1);
         }
         return text;
+    }
+
+    @Override
+    public List<LegalDocument> search(Map<String, String> params) {
+        
+        List<LegalDocument> LDs = new ArrayList<LegalDocument>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         try {
+           RepositoryConnection con = repo.getConnection();
+           try {
+                  String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                    "\n" +
+                    "SELECT ?title ?type ?date\n" +
+                    "WHERE{\n" +
+                    " ?legaldocument rdf:type metalex:BibliographicWork.\n" +
+                    " ?legaldocument dc:title ?title.\n";
+                  
+                  if(params.get("date")!=null){
+                     queryString += "?legaldocument dc:created "+ params.get("date") +".\n";
+                  }
+                  else{
+                     queryString += "?legaldocument dc:created ?date.\n";
+                  }
+                  
+                  if(params.get("id")!=null){
+                     queryString += "?legaldocument leg:legislationID \""+ params.get("id") +"\".\n";
+                  }
+                  else{
+                      queryString += "?legaldocument leg:legislationID ?id";
+                  }
+                  
+                  if(params.get("type")!=null){
+                      String type =  params.get("type");
+                      if(type.equals("con")){
+                          
+                      }
+                      else if(type.equals("pd")){
+                          
+                      }
+                      else if(type.equals("law")){
+                          
+                      }
+                      else if(type.equals("amc")){
+                          
+                      }
+                      else if(type.equals("md")){
+                          
+                      }
+                  }
+                  
+                  
+                  System.out.println(queryString);
+                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                  result = tupleQuery.evaluate();
+
+                try {
+                    //iterate the result set
+                   while (result.hasNext()) {
+                       BindingSet bindingSet = result.next();
+                       LegalDocument ld = new LegalDocument();
+                       if(params.get("date")!=null){
+                           String date = params.get("date");
+                           ld.setPublicationDate(date);
+                           String[] year = date.split("-");
+                           ld.setYear(year[0]);
+                       }
+                       else{
+                           String date = bindingSet.getValue("date").toString();
+                           date = trimDoubleQuotes(date);
+                           ld.setPublicationDate(date);
+                           String[] year = date.split("-");
+                           ld.setYear(year[0]);
+                       }
+                       if(params.get("id")!=null){
+                           String id = params.get("id");
+                           ld.setPublicationDate(trimDoubleQuotes(id));
+                       }
+                       else{
+                           String id = bindingSet.getValue("id").toString();
+                           ld.setPublicationDate(trimDoubleQuotes(id));
+                       }
+                       if(params.get("type")!=null){
+                           String type = params.get("type");
+                           if(type.equals("con")){
+                               ld.setDecisionType("сумтацла");
+                          }
+                          else if(type.equals("pd")){
+                              ld.setDecisionType("(пд) пяоедяийо диатацла");
+                          }
+                          else if(type.equals("law")){
+                              ld.setDecisionType("молос");
+                          }
+                          else if(type.equals("amc")){
+                              ld.setDecisionType("(пус) пяанг упоуяцийоу сулбоукиоу");
+                          }
+                          else if(type.equals("md")){
+                              ld.setDecisionType("(уа) упоуяцийг апожасг");
+                          }
+                       }
+                       else{
+                         
+                       }
+                       
+                       String title = bindingSet.getValue("title").toString();
+                       ld.setPublicationDate(trimDoubleQuotes(title));
+                       LDs.add(ld);
+                   }
+                }
+                finally {
+                        result.close();
+                }
+
+           }
+           finally {
+              con.close();
+           }
+        }
+        catch (OpenRDFException e) {
+           // handle exception
+        }
+        
+        return LDs;
     }
 }

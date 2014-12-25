@@ -9,6 +9,9 @@ import com.di.nomothesia.controller.XMLBuilder;
 import com.di.nomothesia.dao.LegalDocumentDAO;
 import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.model.Modification;
+import java.util.List;
+import java.util.Map;
 import javax.xml.transform.TransformerException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -25,7 +28,19 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Get Legal Document
         return legalDocumentDAO.getById(decisionType, year, id);
+    }
+    
+     public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id){
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        //Get Legal Document
+        return legalDocumentDAO.getAllModifications(decisionType, year, id);
     }
 
     public EndpointResult sparqlQuery(String query) {
@@ -35,6 +50,7 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Set query
         EndpointResult eprs = new EndpointResult();
         if(query.equals("1")){
             eprs.setQuery("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -95,6 +111,8 @@ public class LegislationService {
         else{
             eprs.setQuery(query);
         }
+        
+        //Get Query Result
         return legalDocumentDAO.sparqlQuery(eprs);
     }
 
@@ -105,6 +123,7 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Get RDF Metadata
         return legalDocumentDAO.getRDFById(type, year, id);
     }
 
@@ -115,10 +134,40 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Get Legal Document
         LegalDocument legald = legalDocumentDAO.getById(type, year, id);
         
+        // Build XML
         XMLBuilder xmlbuild = new XMLBuilder();
         return  xmlbuild.XMLbuilder(legald);
+    }
+
+    public List<LegalDocument> searchLegislation(Map<String, String> params) {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        return legalDocumentDAO.search(params);
+    }
+
+    public LegalDocument getUpdatedById(String type, String year, String id) {
+         //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        //Get Legal Document
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id);
+        
+        //Get all Modifications
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null);
+        
+        //Apply Modifications
+        
+        return legald;
     }
     
 }

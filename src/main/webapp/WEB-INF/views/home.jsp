@@ -80,25 +80,25 @@
             <div class="col-md-6">
             <div class="row" style="padding:10px;">
             <div class="jumbotron" style="padding: 20px 20px 20px 20px;">
-                <form role="form">
+                <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
                     <table width="100%">
                         <tr >
                             <td width="45%">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Λέξεις Κλειδιά:</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε επιθυμητή έκφραση...">
+                                    <input type="text" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε επιθυμητή έκφραση...">
                                 </div>
                             </td>
                             <td width="5%"></td>
                             <td width="45%">
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Τύπος Νομοθεσίας:</label>
-                                    <select class="form-control" name="leg_type">
-                                        <option value="1">Σύνταγμα</option>
-                                        <option value="2">Νόμος</option>
-                                        <option value="3">Προεδρικό Διάταγμα (ΠΔ)</option>
-                                        <option value="4">Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</option>
-                                        <option value="5">Υπουργική Απόφαση (ΥΑ)</option>
+                                    <select class="form-control" name="type">
+                                        <option value="con">Σύνταγμα</option>
+                                        <option value="law">Νόμος</option>
+                                        <option value="pd">Προεδρικό Διάταγμα (ΠΔ)</option>
+                                        <option value="amc">Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</option>
+                                        <option value="md">Υπουργική Απόφαση (ΥΑ)</option>
                                     </select>
                                 </div>
                             </td>
@@ -122,7 +122,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputPassword2">Ημερομηνία Κυκλοφορίας:</label>
                                     <div class='input-group date' >
-                                        <input type='text'  id='datepicker' class="form-control" />
+                                        <input type='text'  name="date" id='datepicker' class="form-control" />
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div> 
@@ -175,9 +175,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><a href="pd/2013/40" >Ηλεκτρονική κατάθεση δικογράφων, ηλεκτρονική χορήγηση σχετικών πιστοποιητικών και λοιπών εγγράφων στο Συμβούλιο της Επικρατείας και στα Τακτικά Διοικητικά Δικαστήρια</a></td>
-                                <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2013/40</td>
-                                <td>2013-03-22</td>
+                                <td><a href="${pageContext.servletContext.contextPath}/legislation/pd/2012/10" >Τροποποίηση του υπ’ αριθμ. 54/2011 Προεδρικού Διατάγματος «Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής Προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)» (Α΄ 135)</a></td>
+                                <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2012/10</td>
+                                <td>2012-01-30</td>
                             </tr>
                         </tbody>
                         </table>   
@@ -194,19 +194,14 @@
                         </thead>
                         <tbody>
                              <tr>
-                                <td><a href="pd/2011/54" >Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)</a></td>
+                                <td><a href="${pageContext.servletContext.contextPath}/legislation/pd/2011/54" >Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)</a></td>
                                 <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2011/54</td>
                                 <td>2011-05-20</td>
                             </tr>
                             <tr>
-                                <td><a href="pd/2012/10" >Τροποποίηση του υπ’ αριθμ. 54/2011 Προεδρικού Διατάγματος «Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής Προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)» (Α΄ 135)</a></td>
+                                <td><a href="${pageContext.servletContext.contextPath}/legislation/pd/2012/10" >Τροποποίηση του υπ’ αριθμ. 54/2011 Προεδρικού Διατάγματος «Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής Προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)» (Α΄ 135)</a></td>
                                 <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2012/10</td>
                                 <td>2012-01-30</td>
-                            </tr>
-                            <tr>
-                                <td><a href="pd/2013/40" >Ηλεκτρονική κατάθεση δικογράφων, ηλεκτρονική χορήγηση σχετικών πιστοποιητικών και λοιπών εγγράφων στο Συμβούλιο της Επικρατείας και στα Τακτικά Διοικητικά Δικαστήρια</a></td>
-                                <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2013/40</td>
-                                <td>2013-03-22</td>
                             </tr>
                         </tbody>
                         </table>   

@@ -102,6 +102,7 @@
                 </div>
             </div>
             <div class="col-md-9">
+            <a href="#" class="scrollToTop"><img src="${pageContext.servletContext.contextPath}/resources/images/newup.png"/></a>
             <span style="text-align: center;"><h4>${legaldoc.getTitle()}</h4></span>
             <div role="tabpanel">
 
@@ -179,7 +180,32 @@
                     </c:forEach>
                     </ul>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="settings">...</div>
+                <div role="tabpanel" class="tab-pane" id="settings">
+                    <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
+                        <thead>
+                            <td>Ημερομηνία</td>
+                            <td>Τίτλος</td>
+                            <td>ΦΕΚ</td>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>${legaldoc.getPublicationDate()}</td>
+                            <td>${legaldoc.getTitle()}</td>
+                            <td>${legaldoc.getFEK()}</td>
+                        </tr>
+                    <c:if test="${not empty legalmods}">
+                    <c:forEach var="version" items="${legalmods}" varStatus="loop">
+                        <tr>
+                            <td>${version.getPublicationDate()}</td>
+                            <td>${version.getTitle()}</td>
+                            <td>${version.getFEK()}</td>
+                        </tr>
+                    </c:forEach>
+                    </c:if>
+                        </tbody>
+                    </table>
+                    
+                </div>
                 </div>
             </div>
         </div>
@@ -198,15 +224,35 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <script>
+    <!--<script>
             $(function(){
                $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
                 return false;
             });
+    </script>-->
+    <script>
+        $(document).ready(function(){
+	
+            //Check to see if the window is top if not then display button
+            $(window).scroll(function(){
+                    if ($(this).scrollTop() > 100) {
+                            $('.scrollToTop').fadeIn();
+                    } else {
+                            $('.scrollToTop').fadeOut();
+                    }
+            });
+
+            //Click event to scroll to top
+            $('.scrollToTop').click(function(){
+                    $('html, body').animate({scrollTop : 0},800);
+                    return false;
+            });
+
+        });
     </script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-      <script>
+    
+    <script>
           $('#myTab a').click(function (e) {
               e.preventDefault()
               $(this).tab('show')

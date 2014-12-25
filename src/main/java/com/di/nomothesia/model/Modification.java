@@ -6,6 +6,16 @@ public class Modification {
     private Fragment fragment;
     private String URI;
     private String Type;
+    private String patient;
+
+
+    public String getPatient() {
+        return patient;
+    }
+
+    public void setPatient(String patient) {
+        this.patient = patient;
+    }
     
     public Modification() {
         
