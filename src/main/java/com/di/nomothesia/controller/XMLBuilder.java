@@ -5,7 +5,9 @@
  */
 package com.di.nomothesia.controller;
 
+import com.di.nomothesia.model.Case;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.model.Paragraph;
 import java.io.StringWriter;
 import java.io.Writer;
 import javax.xml.parsers.DocumentBuilder;
@@ -64,7 +66,7 @@ public class XMLBuilder  {
             type.setTextContent(legald.getDecisionType());
             Metadata.appendChild(type);
             
-            Element pdate = doc.createElementNS("http://dublincore.org/documents/dcmi-terms/","dc:date");
+            Element pdate = doc.createElementNS("http://dublincore.org/documents/dcmi-terms/","dc:created");
             pdate.setTextContent(legald.getPublicationDate());
             Metadata.appendChild(pdate);
             
@@ -83,8 +85,7 @@ public class XMLBuilder  {
             Element  dcident = doc.createElementNS("http://dublincore.org/documents/dcmi-terms/","dc:identifier");
             dcident.setTextContent(legald.getURI());
             Metadata.appendChild(dcident);
-            
-            
+           
             //Signers Branch
             Element signers = doc.createElement("ListOfSigners");
             rootElement.appendChild(signers);
@@ -171,17 +172,6 @@ public class XMLBuilder  {
                     //parTable.setTextContent(legald.getArticles().get(i).getParagraphs().get(j).getTable());
                     //paragraph.appendChild(parTable);
                     
-                    //paragraph modification
-                    if (legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
-                        
-                        Element modification = doc.createElement("Modification");
-                        modification.setAttribute("documentURI", legald.getArticles().get(i).getParagraphs().get(j).getModification().getURI());
-                        paragraph.appendChild(modification);
-                        Element modType = doc.createElement("type");
-                        modType.setTextContent(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType());
-                        modification.appendChild(modType);
-                    }
-                    
                     Element list = doc.createElement("List");
                     
                     for(int n = 0;n<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size();n++) {
@@ -243,9 +233,89 @@ public class XMLBuilder  {
                     
                     }
                     
+                    if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
+                        
+                        //modification
+                        Element modification = doc.createElement("Modification");
+                        modification.setAttribute("documentURI", legald.getArticles().get(i).getParagraphs().get(j).getModification().getURI());
+                        paragraph.appendChild(modification);
+                        
+                        //modification type
+                        //Element modType = doc.createElement("type");
+                        //modType.setTextContent(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType());
+                        //modification.appendChild(modType);
+                        
+                        if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")) {
+                            
+                            Paragraph p = (Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+                            Element paragraphin = doc.createElement("Paragraph");
+                            paragraphin.setAttribute("id", "" + p.getId());
+                            paragraphin.setAttribute("documentURI", p.getURI());
+                            modification.appendChild(paragraphin);
+                            
+                            for (int m = 0; m<p.getPassages().size(); m++) {
+                                
+                                Element passage = doc.createElement("Passage");
+                                passage.setAttribute("id", "" + p.getPassages().get(m).getId());
+                                passage.setAttribute("documentURI", p.getPassages().get(m).getURI());
+                                Element pasText = doc.createElement("text");
+                                pasText.setTextContent(p.getPassages().get(m).getText());
+                                passage.appendChild(pasText);
+                                
+                                paragraphin.appendChild(passage);
+                            
+                            }
+
+                            for (int m = 0; m< p.getCaseList().size(); m++) {
+                            
+                                for (int l = 0; l<p.getCaseList().get(m).getPassages().size(); l++) {
+                                    
+                                    Element passage = doc.createElement("Passage");
+                                    passage.setAttribute("id", "" + p.getCaseList().get(m).getPassages().get(l).getId());
+                                    passage.setAttribute("documentURI", p.getCaseList().get(m).getPassages().get(l).getURI());
+                                    Element pasText = doc.createElement("text");
+                                    pasText.setTextContent(p.getCaseList().get(m).getPassages().get(l).getText());
+                                    passage.appendChild(pasText);
+                                
+                                    paragraphin.appendChild(passage);
+                                
+                                }
+                            
+                            }
+                            
+                            paragraph.appendChild(modification); 
+                        
+                        }
+                        else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")) {
+                            
+                            Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+                            Element paragraphin = doc.createElement("Case");
+                            paragraphin.setAttribute("id", "" + c.getId());
+                            paragraphin.setAttribute("documentURI", c.getURI());
+                            modification.appendChild(paragraphin);
+                            
+                            for (int l = 0; l<c.getPassages().size(); l++) {
+                                
+                                Element passage = doc.createElement("Passage");
+                                passage.setAttribute("id", "" + c.getPassages().get(l).getId());
+                                passage.setAttribute("documentURI", c.getPassages().get(l).getURI());
+                                Element pasText = doc.createElement("text");
+                                pasText.setTextContent(c.getPassages().get(l).getText());
+                                passage.appendChild(pasText);
+
+                                paragraphin.appendChild(passage);
+                            
+                            }
+                            
+                                paragraph.appendChild(modification); 
+                        
+                        }
+                    
+                    }
+                    
                     article.appendChild(paragraph);
                 
-                }
+                }   
             
             }
                  
@@ -265,11 +335,13 @@ public class XMLBuilder  {
             //lsSerializer.getDomConfig().setParameter("format-pretty-print", true);
             //xml = lsSerializer.writeToString(doc); 
 
-      } catch (ParserConfigurationException pce) {
+        } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
-      }
+        }
+        
         return xml;
         
     }
 
 }
+
