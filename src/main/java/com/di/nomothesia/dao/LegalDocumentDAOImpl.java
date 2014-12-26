@@ -275,6 +275,19 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 }
                                 count3 ++;
                             }
+                            else if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Table")){
+                                String table = bindingSet.getValue("text").toString();
+                                System.out.println(bindingSet.getValue("part").toString());
+                                if((mod==0)|| (!table.contains("modification"))){
+                                    System.out.println("NEW TABLE");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).setTable(trimDoubleQuotes(table));
+                                }
+                                else{
+                                    System.out.println("MODIFICATION TABLE");
+                                    paragraph.setTable(table);
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                }
+                            }
                             else if(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Case")){
                                 Case case1 = new Case();
                                 case1.setId(count4+2);
@@ -584,15 +597,15 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     queryString += " ?work dc:created ?date.\n" +
                     "OPTIONAL{\n" +
                     " ?part leg:text ?text.\n" +
-                    "}\n" +
-                    "ORDER BY ?mod ?part";
+                    "}}\n" +
+                    "ORDER BY ?mod";
                   }
                   else{
                     queryString += " ?work dc:created ?date.\n" +
                     "OPTIONAL{\n" +
                     " ?part leg:text ?text.\n" +
-                    "}\n" +
-                    "ORDER BY ?mod ?part"; 
+                    "}}\n" +
+                    "ORDER BY ?mod "; 
                   }
                   
                   System.out.println(queryString);
@@ -612,7 +625,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     Modification mod = null;
                     while (result.hasNext()) {
                             BindingSet bindingSet = result.next();
-                            if (!bindingSet.getValue("type").toString().equals(current)){
+                            if (!bindingSet.getValue("mod").toString().equals(current)){
                                 if(mod != null){
                                   mod.setFragment(fragment);
                                   modifications.add(mod);
@@ -621,6 +634,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 mod.setURI(bindingSet.getValue("mod").toString());
                                 mod.setType(bindingSet.getValue("type").toString());
                                 mod.setPatient(bindingSet.getValue("patient").toString());
+                                current = bindingSet.getValue("mod").toString();
                                 frag = 0;
                             }
                             
@@ -689,7 +703,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 case1.getPassages().add(passage);
                                 System.out.println("NEW CASE");
                                 if(frag == 0){
-                                    fragment = passage;
+                                    fragment = case1;
                                 }
                                 else if (frag == 1){
                                     Article article = (Article) fragment;
@@ -705,6 +719,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                             }
 
                    }
+                   if(mod != null){
+                      mod.setFragment(fragment);
+                      modifications.add(mod);
+                    }
                 }
                 finally {
                         result.close();
@@ -719,7 +737,33 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
            // handle exception
         }
         
-        
+        for(int i =0; i< modifications.size(); i++){
+            System.out.println(modifications.get(i).getURI());
+            System.out.println(modifications.get(i).getType());
+            System.out.println(modifications.get(i).getPatient());
+//            if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")){
+//                Paragraph p = (Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+//                paragraph += "\n\"";
+//                for (int k = 0; k<p.getPassages().size(); k++) {
+//                    paragraph += p.getPassages().get(k).getText();
+//                }
+//
+//                for (int k = 0; k< p.getCaseList().size(); k++) {
+//                    paragraph += p.getCaseList().get(k).getId();
+//                    for (int l = 0; l<p.getCaseList().get(k).getPassages().size(); l++) {
+//                        paragraph += p.getCaseList().get(k).getPassages().get(l).getText();
+//                    }
+//                }
+//                paragraph +="\n";
+//            }
+//            else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")){
+//                Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+//                for (int l = 0; l<c.getPassages().size(); l++) {
+//                    paragraph += c.getPassages().get(l).getText();
+//                }
+//            }
+        }
+         
         return modifications;
     }
     
@@ -788,11 +832,13 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     while (result.hasNext()) {
                             BindingSet bindingSet = result.next();
                             LegalDocument legald = new LegalDocument();
-                            legald.setURI(bindingSet.getValue("work").toString());
-                            legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString()));
-                            legald.setPublicationDate(trimDoubleQuotes(bindingSet.getValue("date").toString()));
-                            legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
-                            legalds.add(legald);
+                            if(bindingSet.getValue("work")!=null){
+                                legald.setURI(bindingSet.getValue("work").toString());
+                                legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString()));
+                                legald.setPublicationDate(trimDoubleQuotes(bindingSet.getValue("date").toString()));
+                                legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
+                                legalds.add(legald);
+                            }
                    }
                 }
                 finally {

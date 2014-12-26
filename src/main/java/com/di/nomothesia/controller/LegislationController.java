@@ -34,7 +34,7 @@ public class LegislationController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted", method = RequestMethod.GET)
 	public String presentOriginalLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id);
@@ -44,11 +44,13 @@ public class LegislationController {
 		return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted", method = RequestMethod.GET)
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
 	public String presentUpdatedLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getUpdatedById(type, year, id);
                 model.addAttribute("legaldoc", legaldoc);
+                List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
+                model.addAttribute("legalmods", legalmods);
 		return "basiclegislation";
 	}
         
@@ -64,7 +66,7 @@ public class LegislationController {
 		return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.xml", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException{
             LegislationService lds = new LegislationService();
             String xml = lds.getXMLById(type,year,id);
@@ -73,8 +75,26 @@ public class LegislationController {
 }
         
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
 	public ResponseEntity<String> exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws JAXBException {
+            LegislationService lds = new LegislationService();
+            String rdfResult = lds.getRDFById(type,year,id);
+            
+            return new ResponseEntity<String>(rdfResult,new HttpHeaders(),HttpStatus.CREATED);
+	
+        }
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        public ResponseEntity<String> exportUpdatedToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException{
+            LegislationService lds = new LegislationService();
+            String xml = lds.getUpdatedXMLById(type,year,id);
+            
+            return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
+}
+        
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
+	public ResponseEntity<String> exportUpdatedToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws JAXBException {
             LegislationService lds = new LegislationService();
             String rdfResult = lds.getRDFById(type,year,id);
             
@@ -113,10 +133,17 @@ public class LegislationController {
         /**
 	 * Handle request to download a PDF document 
 	 */
-	@RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
+	@RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegislationService lds = new LegislationService();
                 LegalDocument legal = lds.getById(type,year,id);
+		return new ModelAndView("pdfView", "legaldocument", legal);
+	}
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
+	public ModelAndView exportUpdatedToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
+                LegislationService lds = new LegislationService();
+                LegalDocument legal = lds.getUpdatedById(type,year,id);
 		return new ModelAndView("pdfView", "legaldocument", legal);
 	}
 	

@@ -166,8 +166,30 @@ public class LegislationService {
         List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null);
         
         //Apply Modifications
+        legald.applyModifications(mods);
         
         return legald;
+    }
+
+    public String getUpdatedXMLById(String type, String year, String id) throws TransformerException {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        //Get Legal Document
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id);
+        
+        //Get all Modifications
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null);
+        
+        //Apply Modifications
+        legald.applyModifications(mods);
+        
+        // Build XML
+        XMLBuilder xmlbuild = new XMLBuilder();
+        return  xmlbuild.XMLbuilder(legald);
     }
     
 }

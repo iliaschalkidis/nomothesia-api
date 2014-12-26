@@ -41,6 +41,7 @@ public class Article implements Fragment{
         this.id = id;
     }
     
+    @Override
     public String getURI() {
         return URI;
     }

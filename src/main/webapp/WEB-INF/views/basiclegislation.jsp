@@ -92,6 +92,9 @@
                     
                 </div>
                 <div align="center" style="padding:10px;">
+                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Enacted Version</a>
+                </div>
+                <div align="center" style="padding:10px;">
                     <a class="btn btn-success btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
@@ -134,6 +137,9 @@
                                 </c:forEach>
                             </c:forEach>
                             </ol>
+                            <c:if test="${not empty paragraph.getTable()}">
+                                <br/>${paragraph.getTable()}
+                            </c:if>
                             <c:if test="${not empty paragraph.getModification()}">
                                 <c:choose>
                                 <c:when test="${paragraph.getModification().getType() == 'Case'}">
@@ -161,10 +167,11 @@
                                 </c:when>
                                 </c:choose>
                             </c:if>
-                            </div></li>
+                            </div></li><br/>
                     </c:forEach>
                     </ol>
                     </div>
+                    <br/>
                 </c:forEach>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="profile">...</div>
