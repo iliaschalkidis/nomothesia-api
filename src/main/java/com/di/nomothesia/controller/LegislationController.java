@@ -104,9 +104,11 @@ public class LegislationController {
         
         @RequestMapping(value = "/legislation/search", method = RequestMethod.GET)
 	public String search(@RequestParam Map<String,String> params, Model model) {
-		LegislationService lds = new LegislationService();
-		List<LegalDocument> LDs = lds.searchLegislation(params);
-                model.addAttribute("legalDocuments", LDs);
+		if(params != null){
+                    LegislationService lds = new LegislationService();
+                    List<LegalDocument> LDs = lds.searchLegislation(params);
+                    model.addAttribute("legalDocuments", LDs);
+                }
 		return "search";
 	}
         

@@ -94,6 +94,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Τύπος Νομοθεσίας:</label>
                                     <select class="form-control" name="type">
+                                        <option value="">-</option>
                                         <option value="con">Σύνταγμα</option>
                                         <option value="law">Νόμος</option>
                                         <option value="pd">Προεδρικό Διάταγμα (ΠΔ)</option>
@@ -109,7 +110,7 @@
                                     <label for="exampleInputPassword2">Αριθμός Κυκλοφορίας:</label>
                                     <div class="row">
                                     <div class="col-md-5">
-                                    <input class="form-control" value="2014" type="number" name="year" min="1976" max="2015" step="1">
+                                    <input class="form-control" value="" type="number" name="year" min="1976" max="2015" step="1">
                                     </div>
                                     <div class="col-md-1" style="font-size: 25px;">/</div>
                                     <div class="col-md-5"> 

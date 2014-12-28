@@ -123,6 +123,9 @@
                 <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
                     <div id="article-${article.getId()}">
                     <span style="text-align: center; font-size: 12px;"><h4>Άρθρο ${article.getId()}</h4></span>
+                    <c:if test="${not empty article.getTitle()}">
+                    <span style="text-align: center; font-size: 12px;"><h4>${article.getTitle()}</h4></span>
+                    </c:if>
                     <br/>
                     <ol>
                     <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">

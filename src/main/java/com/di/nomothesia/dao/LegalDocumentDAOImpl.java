@@ -193,14 +193,13 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
-                    "SELECT ?part ?text ?type\n" +
+                    "SELECT ?part ?text ?type ?title\n" +
                     "WHERE{\n" +
                     "  <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                     " metalex:part+  ?part.\n" +
                     " ?part rdf:type ?type.\n" +
-                    "OPTIONAL{\n" +
-                    " ?part leg:text ?text.\n" +
-                    "}\n" +
+                    "OPTIONAL{ ?part leg:text ?text.}.\n" +
+                    "OPTIONAL{ ?part dc:title ?title.}.\n" +
                     "}" +
                     "ORDER BY ?part";
                   
@@ -222,6 +221,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 Article article = new Article();
                                 article.setId(count+2);
                                 article.setURI(bindingSet.getValue("part").toString());
+                                if(bindingSet.getValue("title")!=null){
+                                    String title = bindingSet.getValue("title").toString();
+                                    article.setTitle(trimDoubleQuotes(title));
+                                }
                                 System.out.println(article.getURI());
                                 System.out.println("NEW ARTICLE");
                                 legald.getArticles().add(article);
@@ -907,45 +910,47 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
-                    "SELECT ?title ?type ?date\n" +
+                    "SELECT ?title ?type ?date ?id\n" +
                     "WHERE{\n" +
-                    " ?legaldocument rdf:type metalex:BibliographicWork.\n" +
                     " ?legaldocument dc:title ?title.\n";
                   
-                  if(params.get("date")!=null){
-                     queryString += "?legaldocument dc:created "+ params.get("date") +".\n";
+                  if((params.get("date")==null) || (params.get("date").equals(""))){
+                      queryString += "?legaldocument dc:created ?date.\n";
                   }
                   else{
-                     queryString += "?legaldocument dc:created ?date.\n";
+                      queryString += "?legaldocument dc:created "+ params.get("date") +".\n";
                   }
                   
-                  if(params.get("id")!=null){
-                     queryString += "?legaldocument leg:legislationID \""+ params.get("id") +"\".\n";
+                  if((params.get("id")==null) || (params.get("id").equals(""))){
+                      queryString += "?legaldocument leg:legislationID ?id.\n";
                   }
                   else{
-                      queryString += "?legaldocument leg:legislationID ?id";
+                      queryString += "?legaldocument leg:legislationID \""+ params.get("id") +"\".\n";
                   }
                   
-                  if(params.get("type")!=null){
+                  if((params.get("type")==null) || (params.get("type").equals(""))){
+                      queryString += " ?legaldocument rdf:type ?type.\n";
+                  }
+                  else{
                       String type =  params.get("type");
                       if(type.equals("con")){
-                          
+                          queryString += " ?legaldocument rdf:type leg:Constitution.\n";
                       }
                       else if(type.equals("pd")){
-                          
+                          queryString += " ?legaldocument rdf:type leg:PresidentialDecree.\n";
                       }
                       else if(type.equals("law")){
-                          
+                          queryString += " ?legaldocument rdf:type leg:Law.\n";
                       }
                       else if(type.equals("amc")){
-                          
+                          queryString += " ?legaldocument rdf:type leg:ActOfMinisterialCabinet.\n";
                       }
                       else if(type.equals("md")){
-                          
+                          queryString += " ?legaldocument rdf:type leg:MinisterialDecision.\n";
                       }
                   }
                   
-                  
+                  queryString += "}";
                   System.out.println(queryString);
                   TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                   result = tupleQuery.evaluate();
@@ -955,51 +960,68 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                    while (result.hasNext()) {
                        BindingSet bindingSet = result.next();
                        LegalDocument ld = new LegalDocument();
-                       if(params.get("date")!=null){
-                           String date = params.get("date");
-                           ld.setPublicationDate(date);
-                           String[] year = date.split("-");
-                           ld.setYear(year[0]);
-                       }
-                       else{
+                       if((params.get("date")==null) || (params.get("date").equals(""))){
                            String date = bindingSet.getValue("date").toString();
                            date = trimDoubleQuotes(date);
                            ld.setPublicationDate(date);
                            String[] year = date.split("-");
                            ld.setYear(year[0]);
                        }
-                       if(params.get("id")!=null){
-                           String id = params.get("id");
-                           ld.setPublicationDate(trimDoubleQuotes(id));
+                       else{
+                           String date = params.get("date");
+                           ld.setPublicationDate(date);
+                           String[] year = date.split("-");
+                           ld.setYear(year[0]);
+                       }
+                       if((params.get("id")==null) || (params.get("id").equals(""))){
+                           String[] ids = bindingSet.getValue("id").toString().split("^^");
+                           String id = ids[0].replace("^^","");
+                           id = trimDoubleQuotes(id);
+                           ld.setId(id);
                        }
                        else{
-                           String id = bindingSet.getValue("id").toString();
-                           ld.setPublicationDate(trimDoubleQuotes(id));
+                           String id = params.get("id");
+                           ld.setId(trimDoubleQuotes(id));
                        }
-                       if(params.get("type")!=null){
+                       if((params.get("type")==null) || (params.get("type").equals(""))){
+                           String type = bindingSet.getValue("type").toString();
+                           if(type.equals("http://legislation.di.uoa.gr/ontology/Constitution")){
+                               ld.setDecisionType("сумтацла");
+                           }
+                           else if(type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")){
+                               ld.setDecisionType("пяоедяийо диатацла (пд)");
+                           }
+                           else if(type.equals("http://legislation.di.uoa.gr/ontology/Law")){
+                               ld.setDecisionType("молос");
+                           }
+                           else if(type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")){
+                               ld.setDecisionType("(пус) пяанг упоуяцийоу сулбоукиоу");
+                           }
+                           else if(type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")){
+                               ld.setDecisionType("(уа) упоуяцийг апожасг");
+                           }
+                       }
+                       else{
                            String type = params.get("type");
                            if(type.equals("con")){
                                ld.setDecisionType("сумтацла");
-                          }
-                          else if(type.equals("pd")){
-                              ld.setDecisionType("(пд) пяоедяийо диатацла");
-                          }
-                          else if(type.equals("law")){
-                              ld.setDecisionType("молос");
-                          }
-                          else if(type.equals("amc")){
-                              ld.setDecisionType("(пус) пяанг упоуяцийоу сулбоукиоу");
-                          }
-                          else if(type.equals("md")){
-                              ld.setDecisionType("(уа) упоуяцийг апожасг");
-                          }
-                       }
-                       else{
-                         
+                           }
+                           else if(type.equals("pd")){
+                               ld.setDecisionType("пяоедяийо диатацла (пд)");
+                           }
+                           else if(type.equals("law")){
+                               ld.setDecisionType("молос");
+                           }
+                           else if(type.equals("amc")){
+                               ld.setDecisionType("(пус) пяанг упоуяцийоу сулбоукиоу");
+                           }
+                           else if(type.equals("md")){
+                               ld.setDecisionType("(уа) упоуяцийг апожасг");
+                           }
                        }
                        
                        String title = bindingSet.getValue("title").toString();
-                       ld.setPublicationDate(trimDoubleQuotes(title));
+                       ld.setTitle(trimDoubleQuotes(title));
                        LDs.add(ld);
                    }
                 }
