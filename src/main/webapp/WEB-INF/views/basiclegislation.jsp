@@ -135,9 +135,20 @@
                             </c:forEach>
                             <ol style="list-style-type: lower-greek;">    
                             <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
+                                <li>
                                 <c:forEach var="passage2" items="${case1.getPassages()}" varStatus="loop">
-                                <li>${passage2.getText()}</li>
+                                ${passage2.getText()}
                                 </c:forEach>
+                                <c:if test="${not empty case1.getCaseList()}">
+                                    <ol style="list-style-type: lower-greek;">
+                                <c:forEach var="case2" items="${case1.getCaseList()}" varStatus="loop">
+                                    <c:forEach var="passage3" items="${case2.getPassages()}" varStatus="loop">
+                                    <li>${passage3.getText()}</li>
+                                    </c:forEach>
+                                </c:forEach>
+                                    </ol>
+                                </c:if>
+                                </li>
                             </c:forEach>
                             </ol>
                             <c:if test="${not empty paragraph.getTable()}">
@@ -234,12 +245,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <!--<script>
+    <script>
             $(function(){
                $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
                 return false;
             });
-    </script>-->
+    </script>
     <script>
         $(document).ready(function(){
 	

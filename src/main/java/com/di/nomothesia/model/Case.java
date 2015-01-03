@@ -9,13 +9,13 @@ public class Case implements Fragment{
     private String URI;
     private int id;
     private List<Passage> passages;
-    //private List<Case> caseList;
+    private List<Case> caseList;
 
     public Case() {
         
         passages = new ArrayList<Passage>();
         //pas.add(new Passage());
-        //ArrayList<Case> casel = new ArrayList<Case>();
+        caseList = new ArrayList<Case>();
         //casel.add(new Case());
         //URI = "legislation/case/skata";
         //id = 84;
@@ -50,13 +50,13 @@ public class Case implements Fragment{
         this.passages = passages;
     }
 
-//    public List<Case> getCaseList() {
-//        return caseList;
-//    }
-//
-//    public void setCaseList(List<Case> caseList) {
-//        this.caseList = caseList;
-//    }
-// 
+    public List<Case> getCaseList() {
+        return caseList;
+    }
+
+    public void setCaseList(List<Case> caseList) {
+        this.caseList = caseList;
+    }
+ 
     
 }

@@ -300,23 +300,30 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                 passage.setText(trimDoubleQuotes(text));
                                 System.out.println(case1.getURI());
                                 case1.getPassages().add(passage);
+                                String[] cases = case1.getURI().split("case");
                                 //case1.setText(bindingSet.getValue("text").toString());
-                                if(mod==0){
+                                if (cases.length > 2){
+                                    System.out.println("NEW CASE");
+                                    legald.getArticles().get(count).getParagraphs().get(count2).getCaseList().get(count4).getCaseList().add(case1);
+                                }
+                                else if(mod==0){
                                     System.out.println("NEW CASE");
                                     legald.getArticles().get(count).getParagraphs().get(count2).getCaseList().add(case1);
+                                    count4 ++;
                                 }
                                 else if(mod==1){
                                     System.out.println("MODIFICATION CASE");
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Case");
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(case1);
                                     mod=0;
+                                    count4 ++;
                                 }
                                 else{
                                     System.out.println("PARAGPAPH MODIFICATION CASE");
                                     paragraph.getCaseList().add(case1);
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                    count4 ++;
                                 }
-                                count4 ++;
                             }
                             else if((bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Edit")) || (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Creation")) ||(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Deletion"))){
                                 Modification modification = new Modification();
