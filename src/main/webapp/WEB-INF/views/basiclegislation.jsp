@@ -29,10 +29,68 @@
     
     <!-- Load CSS -->
     <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
-    
+    <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-social.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
     
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <!--<script>
+            $(function(){
+               $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
+                return false;
+            });
+    </script>-->
+    <script>
+        $(document).ready(function(){
+	
+            //Check to see if the window is top if not then display button
+            $(window).scroll(function(){
+                    if ($(this).scrollTop() > 100) {
+                            $('.scrollToTop').fadeIn();
+                    } else {
+                            $('.scrollToTop').fadeOut();
+                    }
+            });
+
+            //Click event to scroll to top
+            $('.scrollToTop').click(function(){
+                    $('html, body').animate({scrollTop : 0},800);
+                    return false;
+            });
+
+        });
+    </script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    
+    <script>
+          $('#myTab a').click(function (e) {
+              e.preventDefault()
+              $(this).tab('show')
+            })
+            
+            $('#myTab a[href="#profile"]').tab('show') // Select tab by name
+            $('#myTab a:first').tab('show') // Select first tab
+            $('#myTab a:last').tab('show') // Select last tab
+            $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
+      </script>
+    
+    <!--<div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <script type="text/javascript">
+    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+    </script>-->
 </head>
 
 <body>
@@ -105,6 +163,10 @@
                 </div>
             </div>
             <div class="col-md-9">
+                <ul style="margin: 0; padding: 0; list-style-type: none; text-align: right;">
+                    <li style="display: inline;"><a class="btn btn-social btn-xs btn-facebook"><i class="fa fa-facebook"></i>Share</a><!--<div class="fb-share-button" data-href="https://legislation.di.uoa.gr" data-layout="button_count"></div>--></li>
+                    <li style="display: inline;"><a class="btn btn-social btn-xs btn-twitter"><i class="fa fa-twitter"></i>Tweet</a><!--<a class="twitter-share-button" href="https://twitter.com/share" data-related="twitterdev" data-count="horizontal">Tweet</a>--></li>
+                </ul>
             <a href="#" class="scrollToTop"><img src="${pageContext.servletContext.contextPath}/resources/images/newup.png"/></a>
             <span style="text-align: center;"><h4>${legaldoc.getTitle()}</h4></span>
             <div role="tabpanel">
@@ -236,54 +298,6 @@
             <h5>Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
     </div>
-    
-
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <script>
-            $(function(){
-               $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
-                return false;
-            });
-    </script>
-    <script>
-        $(document).ready(function(){
-	
-            //Check to see if the window is top if not then display button
-            $(window).scroll(function(){
-                    if ($(this).scrollTop() > 100) {
-                            $('.scrollToTop').fadeIn();
-                    } else {
-                            $('.scrollToTop').fadeOut();
-                    }
-            });
-
-            //Click event to scroll to top
-            $('.scrollToTop').click(function(){
-                    $('html, body').animate({scrollTop : 0},800);
-                    return false;
-            });
-
-        });
-    </script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-    
-    <script>
-          $('#myTab a').click(function (e) {
-              e.preventDefault()
-              $(this).tab('show')
-            })
-            
-            $('#myTab a[href="#profile"]').tab('show') // Select tab by name
-            $('#myTab a:first').tab('show') // Select first tab
-            $('#myTab a:last').tab('show') // Select last tab
-            $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
-      </script>
-      
+  
 </body>
 </html>

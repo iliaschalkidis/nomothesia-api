@@ -123,6 +123,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     while (result.hasNext()) {
                             BindingSet bindingSet = result.next(); 
                             Signer sign = new Signer();
+                            legald.setURI("http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id);
                             legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString()));
                             legald.setPublicationDate(trimDoubleQuotes(bindingSet.getValue("date").toString()));
                             legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
@@ -917,7 +918,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
-                    "SELECT ?title ?type ?date ?id\n" +
+                    "SELECT ?legaldocument ?title ?type ?date ?id\n" +
                     "WHERE{\n" +
                     " ?legaldocument dc:title ?title.\n";
                   
@@ -1029,6 +1030,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                        
                        String title = bindingSet.getValue("title").toString();
                        ld.setTitle(trimDoubleQuotes(title));
+                       String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
+                       ld.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
                        LDs.add(ld);
                    }
                 }

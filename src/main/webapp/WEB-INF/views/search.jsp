@@ -310,7 +310,7 @@
                 $('#example').dataTable({
        aaSorting: [[ 2, "desc" ]],
        bSortable: true,
-      "iDisplayLength": 4,
+      "iDisplayLength": 5,
        aoColumnDefs: [
             { "aTargets": [ 0 ], "bSortable": true },
             { "aTargets": [ 1 ], "bSortable": true },
