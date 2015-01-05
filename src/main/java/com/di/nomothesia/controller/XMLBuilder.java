@@ -145,10 +145,12 @@ public class XMLBuilder  {
                 article.setAttribute("documentURI", legald.getArticles().get(i).getURI());
                 rootElement.appendChild(article);
                 
-                //NOT IMPLEMNTED YET
-                //Element artTitle = doc.createElement("Title");
-                //artTitle.setTextContent(legald.getArticles().get(i).getTitle());
-                //article.appendChild(artTitle);
+                //article title
+                if (legald.getArticles().get(i).getTitle() != null) {
+                    Element artTitle = doc.createElement("Title");
+                    artTitle.setTextContent(legald.getArticles().get(i).getTitle());
+                    article.appendChild(artTitle);
+                }
                 
                 //article id
                 //Element artId = doc.createElement("Id");
@@ -209,6 +211,40 @@ public class XMLBuilder  {
 
                             pcase.appendChild(cpassage);
                     
+                        }
+                        
+                        //case in case
+                        if (legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList() != null) {
+                            
+                            Element list2 = doc.createElement("List");
+                            
+                            for(int p = 0;p<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().size();p++) {
+                        
+                                //paragraph case list
+                                pcase.appendChild(list2);
+                                Element pcase2 = doc.createElement("Case");
+                                pcase2.setAttribute("id", "" + legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().get(p).getId());
+                                pcase2.setAttribute("documentURI", legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().get(p).getURI());
+                                list2.appendChild(pcase2);
+                        
+                                //case passages
+                                for (int r = 0;r<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().get(p).getPassages().size();r++) {
+                        
+                                    //case passages
+                                    Element cpassage2 = doc.createElement("Passage");
+                                    cpassage2.setAttribute("id", "" + legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().get(p).getPassages().get(r).getId());
+                                    cpassage2.setAttribute("documentURI", legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().get(p).getPassages().get(r).getURI());
+
+                                    //case passage text
+                                    Element casText2 = doc.createElement("text");
+                                    casText2.setTextContent("" + legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(n).getCaseList().get(p).getPassages().get(r).getText());
+                                    cpassage2.appendChild(casText2);
+
+                                    pcase2.appendChild(cpassage2);
+                    
+                                }
+                        
+                            }
                         }
                     
                     }

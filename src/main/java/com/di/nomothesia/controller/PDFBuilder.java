@@ -135,11 +135,14 @@ public class PDFBuilder extends AbstractITextPdfView {
                     Paragraph article = new Paragraph(par2, fontArticle);
                     article.setAlignment(Element.ALIGN_CENTER);
                     doc.add(article);
+                    
                     //Title
-                    //String par3 = legald.getArticles().get(i).getTitle() + "\n";
-                    //Paragraph articlet = new Paragraph(par3, fontArticle);
-                    //article.setAlignment(Element.ALIGN_CENTER);
-                    //doc.add(articlet);
+                    if (legald.getArticles().get(i).getTitle() != null) {
+                        String par3 = legald.getArticles().get(i).getTitle() + "\n";
+                        Paragraph articlet = new Paragraph(par3, fontArticle);
+                        articlet.setAlignment(Element.ALIGN_CENTER);
+                        doc.add(articlet);
+                    }
                     
                     //For all Paragraphs
                     for (int j = 0; j<legald.getArticles().get(i).getParagraphs().size(); j++) {
@@ -175,8 +178,35 @@ public class PDFBuilder extends AbstractITextPdfView {
                                 par += "\n";
                             
                             }
+                            
+                            //Case in case
+                            if (legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList() != null) {
+                                
+                                char letter2 = 'á';
+                                
+                                for (int p = 0; p<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().size(); p++) {
+
+                                    //Case id
+                                    par += "      " + letter2+". ";
+                                    letter2++;
+                                    //par += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getId();
+
+                                    //get Case Passage
+                                    for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().size(); l++) {
+
+                                        String c = legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).getText();
+                                        c = trimDoubleQuotes(c);
+                                        par += c;
+                                        par += "\n";
+
+                                    }
+
+                                }
+                            }
                         
                         }
+                        
+                        letter = 'á';
                         
                         //If document has modifications
                         if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
