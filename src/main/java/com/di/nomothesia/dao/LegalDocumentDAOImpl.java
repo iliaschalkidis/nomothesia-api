@@ -5,11 +5,7 @@
  */
 package com.di.nomothesia.dao;
 
-import com.di.nomothesia.comparators.ArticleComparator;
-import com.di.nomothesia.comparators.CaseComparator;
-import com.di.nomothesia.comparators.CitationComparator;
-import com.di.nomothesia.comparators.ParagraphComparator;
-import com.di.nomothesia.comparators.PassageComparator;
+import com.di.nomothesia.comparators.LegalDocumentSort;
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.Case;
 import com.di.nomothesia.model.EndpointResult;
@@ -23,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -267,7 +262,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                     legald.getArticles().get(count).getParagraphs().get(count2).getPassages().add(passage);
                                 }
                                 else if(mod==1){
-                                    System.out.println("MODIFICATION PASSAGE");
+                                     System.out.println("MODIFICATION PASSAGE");
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Passage");
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(passage);
                                     mod =0;
@@ -278,7 +273,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
                                 }
                                 count3 ++;
-                                
                             }
                             else if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Table")){
                                 String table = bindingSet.getValue("text").toString();
@@ -326,7 +320,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
                                     count4 ++;
                                 }
-                                
                             }
                             else if((bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Edit")) || (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Creation")) ||(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Deletion"))){
                                 Modification modification = new Modification();
@@ -400,41 +393,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
         }
         System.out.println("=========================================================================================");
         
-        Collections.sort(legald.getArticles(), new ArticleComparator());
-        //Collections.sort(legald.getCitations(), new CitationComparator());
-        
-        //for all articles
-        for (int i=0;i<legald.getArticles().size();i++) {
-            
-            Collections.sort(legald.getArticles().get(i).getParagraphs(), new ParagraphComparator());
-            
-            //for all pargraphs
-            for (int j=0;j<legald.getArticles().get(i).getParagraphs().size();j++) {
-                
-                Collections.sort(legald.getArticles().get(i).getParagraphs().get(j).getPassages(), new PassageComparator());
-                
-                if (legald.getArticles().get(i).getParagraphs().get(j).getCaseList() != null) {
-                    
-                    Collections.sort(legald.getArticles().get(i).getParagraphs().get(j).getCaseList(), new CaseComparator());
-                    
-                    //for all cases
-                    for(int k=0;k<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size();k++) {
-                    
-                        if (legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages() != null) {
-                        
-                             //Collections.sort(legald.getArticles().get(i).getParagraphs().get(j).getCaseList()get(k).getPassages(), new PassageComparator());
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-        return legald;
+        //sort containts of legald before displayiing it
+        LegalDocumentSort srt = new LegalDocumentSort();
+        return srt.sortld(legald);
 
     }
     
