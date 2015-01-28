@@ -1,16 +1,23 @@
 
 package com.di.nomothesia.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Citation {
   
     private String description;
     private String URI;
+    List<String> targetURIs;
+    private int id;
     
     public Citation() {
-		URI = "legislation/citation/skata";
-		description = "ÄÓÖÓÇÖ Ç ÇÖÄÎÓÖ ÎÇ ÊÇÖ ÊÎÇ ÊÓÄ";
-		
-                //System.out.println("Åßìáé ç ğáñÜèåóç:" + URI + description);
+        
+        this.targetURIs = new ArrayList<String>();
+        //URI = "legislation/citation/skata";
+        //description = "ÄÓÖÓÇÖ Ç ÇÖÄÎÓÖ ÎÇ ÊÇÖ ÊÎÇ ÊÓÄ";
+        //System.out.println("Åßìáé ç ğáñÜèåóç:" + URI + description);
+    
     }
     
     //Setters-Getters for Citation
@@ -29,6 +36,22 @@ public class Citation {
     
     public void setURI(String URI) {
         this.URI = URI;
+    }
+    
+    public List<String> gettargetURIs() {
+        return targetURIs;
+    }
+    
+    public void settargetURIs(List<String> targetURIs) {
+        this.targetURIs = targetURIs;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

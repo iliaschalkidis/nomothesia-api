@@ -8,6 +8,7 @@ package com.di.nomothesia.dao;
 import com.di.nomothesia.comparators.LegalDocumentSort;
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.Case;
+import com.di.nomothesia.model.Citation;
 import com.di.nomothesia.model.EndpointResult;
 import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.LegalDocument;
@@ -149,9 +150,128 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
     }
     
     @Override
-    public LegalDocument getById(String decisionType, String year, String id) {
+    public LegalDocument getCitationsById(String decisionType, String year, String id) {
         
         LegalDocument legald = this.getMetadataById(decisionType, year, id);
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         try {
+           RepositoryConnection con = repo.getConnection();
+            try {
+                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+                    "\n" +
+                    "SELECT ?citation ?cittext ?cituri\n" +
+                    "WHERE{\n" +
+                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +"> metalex:part ?citation.\n" +
+                    " ?citation a metalex:BibliographicCitation.\n" +
+                    " OPTIONAL {?citation metalex:cites ?cituri.}\n" +
+                    " ?citation leg:context ?cittext.\n" +
+                    "}";
+                  
+                System.out.println(queryString);
+                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                result = tupleQuery.evaluate();
+
+                try {
+                      
+                    int cid = 1;
+                    String old = "old";
+                    String current = "current";
+                    
+                    //iterate the result set
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+                        current = trimDoubleQuotes(bindingSet.getValue("citation").toString());
+                            
+                        if (current.equals(old)) {
+                                
+                            if (bindingSet.getValue("cituri") != null) {
+                                Citation cit = new Citation();
+                                cit = legald.getCitations().get(cid-2);
+                                cit.gettargetURIs().add(trimDoubleQuotes(bindingSet.getValue("cituri").toString()));
+                                old = current;
+                            }
+                                
+                        }
+                        else {
+                                
+                            Citation cit = new Citation();
+                            cit.setURI(trimDoubleQuotes(bindingSet.getValue("citation").toString()));
+
+                            if (bindingSet.getValue("cituri") != null) {
+                                cit.gettargetURIs().add(trimDoubleQuotes(bindingSet.getValue("cituri").toString()));
+                            }
+
+                            cit.setDescription(trimDoubleQuotes(bindingSet.getValue("cittext").toString()));
+                            cit.setId(cid);
+                            cid++;
+                            legald.getCitations().add(cit);
+                            old = current;
+
+                        }    
+                    }
+                }
+                finally {
+                    result.close();
+                }    
+            }
+            finally {
+                con.close();
+            }
+        }
+        catch (OpenRDFException e) {
+           // handle exception
+        }
+         
+        System.out.println("========================================================================================="); 
+        for(int i=0; i < legald.getCitations().size(); i++){
+            System.out.println(legald.getCitations().get(i).getDescription() + "\n" + legald.getCitations().get(i).getURI() + "\n");
+            for(int j=0; j < legald.getCitations().get(i).gettargetURIs().size(); j++){
+                System.out.println(legald.getCitations().get(i).gettargetURIs().get(j) + "\n");
+            }
+        }
+        System.out.println("=========================================================================================");
+        
+        return legald;
+
+    }
+    
+    @Override
+    public LegalDocument getById(String decisionType, String year, String id) {
+        
+        LegalDocument legald = this.getCitationsById(decisionType, year, id);
         String sesameServer ="";
         String repositoryID ="";
         

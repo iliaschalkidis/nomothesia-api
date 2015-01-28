@@ -46,6 +46,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                 bf.setSubset(true);
                 Font fontTitle = new Font(bf, 18,Font.BOLD);
                 Font fontText = new Font(bf, 12);
+                Font citationText = new Font(bf, 10);
                 Font fontArticle = new Font(bf, 12,Font.BOLD);
                 Font fontDate = new Font(bf, 12);
                 Font fontType = new Font(bf, 20,Font.BOLD);
@@ -96,30 +97,25 @@ public class PDFBuilder extends AbstractITextPdfView {
 //                doc.add(sign);
 //                doc.add(new Paragraph("\n"));
                 
-                //Citation
+                //Citations
                 String citation = "Έχοντας υπόψη: \n\n";
                 Paragraph cit1 = new Paragraph(citation, fontText);
                 cit1.setAlignment(Element.ALIGN_LEFT);
-                String citation2 = "1. Τις διατάξεις:\n" +
-                    " \t α. Της παρ. 1 του άρθρου 5 του Ν. 679/1977, «Περί "+
-                    "αυξήσεως θέσεων προσωπικού του Υπουργείου Δημο" +
-                    "σίων Έργων και ρυθμίσεως συναφών θεμάτων» (Α΄ 245) "+
-                    "όπως τα δύο τελευταία εδάφια της παραγράφου αυτής " +
-                    "τροποποιήθηκαν και συμπληρώθηκαν με την παρ. 1, του " +
-                    "άρθρου 23 του Ν. 1418/1984 (Α΄ 23).\n" +
-                    " \t β. Του άρθρου 8 του Ν. 679/1977 (Α΄ 245), όπως αυτές " +
-                    "τροποποιήθηκαν και συμπληρώθηκαν με τις παραγρά" +
-                    "φους 2 και 3 του άρθρου 5 του Ν. 2229/1994 (Α΄ 138), " +
-                    "σύμφωνα με τις οποίες θα καλυφθεί η προκαλούμενη " +
-                    "από το διάταγμα δαπάνη.\n\n";
-                Paragraph cit2 = new Paragraph(citation2, fontText);
+                String citation2 = "";
+                
+                for (int i=0; i<legald.getCitations().size();i++){
+                    citation2 += legald.getCitations().get(i).getId() + ". " + legald.getCitations().get(i).getDescription() + "\n\n";
+                }
+                
+                Paragraph cit2 = new Paragraph(citation2, citationText);
                 cit2.setAlignment(Element.ALIGN_JUSTIFIED);
-                String citation3 = "Αποφασίζουμε: \n";
-                Paragraph cit3 = new Paragraph(citation3, fontText);
-                cit3.setAlignment(Element.ALIGN_CENTER);
+                
+                //String citation3 = "Αποφασίζουμε: \n";
+                //Paragraph cit3 = new Paragraph(citation3, fontText);
+                //cit3.setAlignment(Element.ALIGN_CENTER);
                 doc.add(cit1);
                 doc.add(cit2);
-                doc.add(cit3);
+                //doc.add(cit3);
                 doc.add(new Paragraph("\n"));
                 
                 //Main Text

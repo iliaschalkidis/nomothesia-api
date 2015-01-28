@@ -110,13 +110,45 @@ public class XMLBuilder  {
             }
             
             //Citation Branch
-            Element introduction = doc.createElement("Introduction");
-            rootElement.appendChild(introduction);
+            if (legald.getCitations() != null){
+                
+                Element introduction = doc.createElement("Introduction");
+                rootElement.appendChild(introduction);
             
-            Element citation = doc.createElement("Citation");
-            //NOT IMPLEMENTED YET
-            //citation.setTextContent(legald.);
-            introduction.appendChild(citation);
+                Element citations = doc.createElement("Citations");
+                introduction.appendChild(citations);
+                
+                //for every ciation
+                for (int i=0;i<legald.getCitations().size();i++) {
+                    
+                    Element citation = doc.createElement("Citation");
+                    citation.setAttribute("id", "" + legald.getCitations().get(i).getId());
+                    citation.setAttribute("documentURI", legald.getCitations().get(i).getURI());
+                    
+                    Element citText = doc.createElement("text");
+                    citText.setTextContent(legald.getCitations().get(i).getDescription());
+                    citation.appendChild(citText);
+                    
+                    //if citaiton cites target
+                    if(legald.getCitations().get(i).gettargetURIs().size() != 0) {
+                        
+                        Element cites = doc.createElement("Cites");
+                        citation.appendChild(cites);
+                        
+                        //for every targetURI
+                        for (int j=0;j<legald.getCitations().get(i).gettargetURIs().size();j++) {
+                            Element target = doc.createElement("TargetURI");
+                            target.setTextContent(legald.getCitations().get(i).gettargetURIs().get(j));
+                            cites.appendChild(target);
+                        }   
+                    
+                    }
+                    
+                    citations.appendChild(citation);
+                
+                }
+            
+            }
             
             //Body Branch
             //NOT IMPLEMENTED YET

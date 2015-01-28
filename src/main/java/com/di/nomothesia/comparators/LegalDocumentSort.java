@@ -16,6 +16,7 @@ public class LegalDocumentSort {
     
     public LegalDocument sortld (LegalDocument legald) {
         
+        Collections.sort(legald.getCitations(), new CitationComparator());
         Collections.sort(legald.getArticles(), new ArticleComparator());
         
         //for all articles
