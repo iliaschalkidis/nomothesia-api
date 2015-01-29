@@ -250,7 +250,30 @@
                     <br/>
                 </c:forEach>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="profile">...</div>
+                  <div role="tabpanel" class="tab-pane" id="profile">
+                      <br/>Έχοντας υπόψη:<br/><br/>
+                      <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
+                        <thead>
+                            <td>Παραπομπή</td>
+                            <td>Σύνδεσμοι</td>
+                        </thead>
+                        <tbody>
+                            <c:if test="${not empty legaldoc.getCitations()}">
+                            <c:forEach var="citation" items="${legaldoc.getCitations()}" varStatus="loop">
+                                <tr>
+                                    <td>${citation.getDescription()}</td>
+                                    <td>
+                                    <c:forEach var="link" items="${citation.gettargetURIs()}" varStatus="loop">
+                                        <a href="${link}">${loop.index + 1}</a>
+                                    </c:forEach>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </c:if>
+                        </tbody>
+                      </table>
+                      
+                  </div>
                 <div role="tabpanel" class="tab-pane" id="messages">
                     <ul>
                     <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
