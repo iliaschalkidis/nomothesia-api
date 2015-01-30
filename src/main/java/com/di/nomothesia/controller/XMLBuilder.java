@@ -130,7 +130,7 @@ public class XMLBuilder  {
                     citation.appendChild(citText);
                     
                     //if citaiton cites target
-                    if(legald.getCitations().get(i).gettargetURIs().size() != 0) {
+                    if(!legald.getCitations().get(i).gettargetURIs().isEmpty()) {
                         
                         Element cites = doc.createElement("Cites");
                         citation.appendChild(cites);

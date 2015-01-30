@@ -515,7 +515,144 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
         
         //sort containts of legald before displayiing it
         LegalDocumentSort srt = new LegalDocumentSort();
+        getHTMLById(decisionType, year, id, legald);
         return srt.sortld(legald);
+
+    }
+    
+    
+    @Override
+    public LegalDocument getHTMLById(String decisionType, String year, String id, LegalDocument legald) {
+        
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         try {
+           RepositoryConnection con = repo.getConnection();
+           try {
+                  String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                    "\n" +
+                    "SELECT ?part ?text ?uri\n" +
+                    "WHERE{\n" +
+                    "  <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " metalex:part+  ?part.\n" +
+                    "OPTIONAL {?part a leg:Passage.}.\n" +
+                    "OPTIONAL {?part a leg:Case.}.\n" +
+                    " ?part leg:text ?text.\n" +
+                    " ?part metalex:cites ?uri.\n" +
+                    "}";
+                  
+                  System.out.println(queryString);
+                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                  result = tupleQuery.evaluate();
+
+                  try {
+                      
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+
+                        for(int i=0;i<legald.getArticles().size();i++) {
+
+                            for (int j=0;j<legald.getArticles().get(i).getParagraphs().size();j++) {
+
+                                //get Cases
+                                for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size(); k++) {
+
+                                    //get Case Passage
+                                    for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().size(); l++) {
+
+                                        if(trimDoubleQuotes(bindingSet.getValue("part").toString()).equals(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getURI())){
+                                            String text="";
+                                            text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
+                                            text += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText() + "</a>";
+                                            legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).setText(text);
+                                        }
+
+                                    }
+
+                                    //get Case in Case
+                                    if (legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList() != null) {
+
+                                        for (int p = 0; p<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().size(); p++) {
+
+                                            for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().size(); l++) {
+
+                                                if(trimDoubleQuotes(bindingSet.getValue("part").toString()).equals(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getURI())){
+                                                    String text="";
+                                                    text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
+                                                    text += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).getText() + "</a>";
+                                                    legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).setText(text);
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }       
+
+                                }
+                                
+                                //Article Passages
+                                for (int k=0;k<legald.getArticles().get(i).getParagraphs().get(j).getPassages().size();k++) {
+                                    
+                                    if(trimDoubleQuotes(bindingSet.getValue("part").toString()).equals(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getURI())){
+                                       String text="";
+                                       text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
+                                       text += legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText() + "</a>";
+                                       legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).setText(text);
+                                    }
+                                    
+                                }
+
+                            }
+
+                        }
+                            
+                    }
+                }
+                finally {
+                        result.close();
+                }
+                 
+           }
+           finally {
+              con.close();
+           }
+        }
+        catch (OpenRDFException e) {
+        // handle exception
+        }
+        return legald;
 
     }
     

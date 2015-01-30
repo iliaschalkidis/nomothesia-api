@@ -110,12 +110,12 @@ public class PDFBuilder extends AbstractITextPdfView {
                 Paragraph cit2 = new Paragraph(citation2, citationText);
                 cit2.setAlignment(Element.ALIGN_JUSTIFIED);
                 
-                //String citation3 = "Αποφασίζουμε: \n";
-                //Paragraph cit3 = new Paragraph(citation3, fontText);
-                //cit3.setAlignment(Element.ALIGN_CENTER);
+                String citation3 = "Αποφασίζουμε: \n";
+                Paragraph cit3 = new Paragraph(citation3, fontText);
+                cit3.setAlignment(Element.ALIGN_CENTER);
                 doc.add(cit1);
                 doc.add(cit2);
-                //doc.add(cit3);
+                doc.add(cit3);
                 doc.add(new Paragraph("\n"));
                 
                 //Main Text
