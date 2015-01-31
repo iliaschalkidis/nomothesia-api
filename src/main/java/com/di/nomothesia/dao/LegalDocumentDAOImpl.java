@@ -316,6 +316,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     " ?part rdf:type ?type.\n" +
                     "OPTIONAL{ ?part leg:text ?text.}.\n" +
                     "OPTIONAL{ ?part dc:title ?title.}.\n" +
+                    "FILTER NOT EXISTS {FILTER(langMatches(lang(?text), \"html\"))}" +
                     "}" +
                     "ORDER BY ?part";
                   
@@ -568,6 +569,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     "OPTIONAL {?part a leg:Passage.}.\n" +
                     "OPTIONAL {?part a leg:Case.}.\n" +
                     " ?part leg:text ?text.\n" +
+                    "FILTER(langMatches(lang(?text), \"html\"))" +      
                     " ?part metalex:cites ?uri.\n" +
                     "}";
                   
@@ -580,11 +582,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
                     while (result.hasNext()) {
                         
                         BindingSet bindingSet = result.next();
-
+                       
                         for(int i=0;i<legald.getArticles().size();i++) {
-
+                            
                             for (int j=0;j<legald.getArticles().get(i).getParagraphs().size();j++) {
-
+                                    
                                 //get Cases
                                 for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size(); k++) {
 
@@ -593,9 +595,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
 
                                         if(trimDoubleQuotes(bindingSet.getValue("part").toString()).equals(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getURI())){
                                             String text="";
-                                            text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
-                                            text += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText() + "</a>";
-                                            legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).setText(text);
+                                            //text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
+                                            //text += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText() + "</a>";
+                                            text = bindingSet.getValue("text").toString();
+                                            text = text.replaceAll("@html", "");
+                                            legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).setText(trimDoubleQuotes(text));
                                         }
 
                                     }
@@ -609,9 +613,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
 
                                                 if(trimDoubleQuotes(bindingSet.getValue("part").toString()).equals(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getURI())){
                                                     String text="";
-                                                    text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
-                                                    text += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).getText() + "</a>";
-                                                    legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).setText(text);
+                                                    //text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
+                                                    //text += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).getText() + "</a>";
+                                                    text = bindingSet.getValue("text").toString();
+                                                    text = text.replaceAll("@html", "");
+                                                    legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().get(l).setText(trimDoubleQuotes(text));
                                                 }
 
                                             }
@@ -620,25 +626,28 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO{
 
                                     }       
 
-                                }
+                                }                            
                                 
                                 //Article Passages
                                 for (int k=0;k<legald.getArticles().get(i).getParagraphs().get(j).getPassages().size();k++) {
                                     
                                     if(trimDoubleQuotes(bindingSet.getValue("part").toString()).equals(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getURI())){
                                        String text="";
-                                       text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
-                                       text += legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText() + "</a>";
-                                       legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).setText(text);
+                                       //text += "<a href="+ trimDoubleQuotes(bindingSet.getValue("uri").toString()) +">";
+                                       //text += legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText() + "</a>";
+                                       text = bindingSet.getValue("text").toString();
+                                       text = text.replaceAll("@html", "");
+                                       legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).setText(trimDoubleQuotes(text));
                                     }
                                     
                                 }
-
+                                    
                             }
 
                         }
-                            
-                    }
+                        
+                    }   
+                        
                 }
                 finally {
                         result.close();
