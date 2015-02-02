@@ -29,7 +29,7 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        return legalDocumentDAO.getById(decisionType, year, id);
+        return legalDocumentDAO.getById(decisionType, year, id, 1);
     }
     
      public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id){
@@ -135,7 +135,7 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id);
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, 1);
         
         // Build XML
         XMLBuilder xmlbuild = new XMLBuilder();
@@ -160,10 +160,10 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id);
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, 1);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null);
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, 1);
         
         //Apply Modifications
         legald.applyModifications(mods);
@@ -179,10 +179,10 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id);
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, 1);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null);
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, 1);
         
         //Apply Modifications
         legald.applyModifications(mods);
