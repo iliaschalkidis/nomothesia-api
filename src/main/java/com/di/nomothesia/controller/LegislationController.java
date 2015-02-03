@@ -31,13 +31,10 @@ public class LegislationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
 	@RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted", method = RequestMethod.GET)
 	public String presentOriginalLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getById(type, year, id);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 model.addAttribute("legaldoc", legaldoc);
                 List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
@@ -47,7 +44,7 @@ public class LegislationController {
         @RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
 	public String presentUpdatedLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getUpdatedById(type, year, id);
+                LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, null);
                 model.addAttribute("legaldoc", legaldoc);
                 List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
@@ -57,7 +54,7 @@ public class LegislationController {
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}/{type2}/{id2}", method = RequestMethod.GET)
 	public String presentLegalFragment(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, @PathVariable String type2, @PathVariable String id2, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getById(type, year, id);
+                LegalDocument legaldoc = lds.getById(type, year, id , 1);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("type1", type1);
                 model.addAttribute("id1", id1);
@@ -66,13 +63,53 @@ public class LegislationController {
 		return "basiclegislation";
 	}
         
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}", method = RequestMethod.GET)
+        public String presentModificationByDate(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Model model) {
+		LegislationService lds = new LegislationService();
+                String date = "";
+                date += yyyy + "-" + mm + "-" + dd;
+                LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, date);
+                model.addAttribute("legaldoc", legaldoc);
+                List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
+                model.addAttribute("legalmods", legalmods);
+		return "basiclegislation";
+	}
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        public ResponseEntity<String> exportDateToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd) throws TransformerException{
+            LegislationService lds = new LegislationService();
+            String date = "";
+            date += yyyy + "-" + mm + "-" + dd;
+            String xml = lds.getUpdatedXMLByIdDate(type,year,id,2,date);
+            
+            return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
+        }
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.rdf", method = RequestMethod.GET, produces={"application/xml"})
+        public ResponseEntity<String> exportDateToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd) throws JAXBException {
+            LegislationService lds = new LegislationService();
+            String rdfResult = lds.getRDFById(type,year,id);
+            
+            return new ResponseEntity<String>(rdfResult,new HttpHeaders(),HttpStatus.CREATED);
+	
+        }
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.pdf", method = RequestMethod.GET, produces={"application/xml"})
+        public ModelAndView exportDateToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd) {
+                LegislationService lds = new LegislationService();
+                String date = "";
+                date += yyyy + "-" + mm + "-" + dd;
+                LegalDocument legal = lds.getUpdatedById(type,year,id,2,date);
+		return new ModelAndView("pdfView", "legaldocument", legal);
+	}
+        
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.xml", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException{
             LegislationService lds = new LegislationService();
-            String xml = lds.getXMLById(type,year,id);
+            String xml = lds.getXMLById(type,year,id,2);
             
             return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
-}
+        }
         
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
@@ -84,13 +121,20 @@ public class LegislationController {
 	
         }
         
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.pdf", method = RequestMethod.GET)
+	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
+                LegislationService lds = new LegislationService();
+                LegalDocument legal = lds.getById(type,year,id,2);
+		return new ModelAndView("pdfView", "legaldocument", legal);
+	}
+        
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportUpdatedToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id) throws TransformerException{
             LegislationService lds = new LegislationService();
-            String xml = lds.getUpdatedXMLById(type,year,id);
+            String xml = lds.getUpdatedXMLById(type,year,id,2);
             
             return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
-}
+        }
         
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
@@ -101,6 +145,13 @@ public class LegislationController {
             return new ResponseEntity<String>(rdfResult,new HttpHeaders(),HttpStatus.CREATED);
 	
         }
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
+	public ModelAndView exportUpdatedToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
+                LegislationService lds = new LegislationService();
+                LegalDocument legal = lds.getUpdatedById(type,year,id,2,null);
+		return new ModelAndView("pdfView", "legaldocument", legal);
+	}
         
         @RequestMapping(value = "/legislation/search", method = RequestMethod.GET)
 	public String search(@RequestParam Map<String,String> params, Model model) {
@@ -130,23 +181,6 @@ public class LegislationController {
                     model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";
-	}
-        
-        /**
-	 * Handle request to download a PDF document 
-	 */
-	@RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.pdf", method = RequestMethod.GET)
-	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
-                LegislationService lds = new LegislationService();
-                LegalDocument legal = lds.getById(type,year,id);
-		return new ModelAndView("pdfView", "legaldocument", legal);
-	}
-        
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
-	public ModelAndView exportUpdatedToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
-                LegislationService lds = new LegislationService();
-                LegalDocument legal = lds.getUpdatedById(type,year,id);
-		return new ModelAndView("pdfView", "legaldocument", legal);
 	}
 	
 }

@@ -21,7 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class LegislationService {
     
-    public LegalDocument getById(String decisionType, String year, String id){
+    public LegalDocument getById(String decisionType, String year, String id, int request){
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -29,7 +29,7 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        return legalDocumentDAO.getById(decisionType, year, id, 1);
+        return legalDocumentDAO.getById(decisionType, year, id, request);
     }
     
      public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id){
@@ -127,7 +127,7 @@ public class LegislationService {
         return legalDocumentDAO.getRDFById(type, year, id);
     }
 
-    public String getXMLById(String type, String year, String id) throws TransformerException {
+    public String getXMLById(String type, String year, String id, int request) throws TransformerException {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -135,7 +135,7 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, 1);
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
         
         // Build XML
         XMLBuilder xmlbuild = new XMLBuilder();
@@ -152,7 +152,7 @@ public class LegislationService {
         return legalDocumentDAO.search(params);
     }
 
-    public LegalDocument getUpdatedById(String type, String year, String id) {
+    public LegalDocument getUpdatedById(String type, String year, String id, int request, String date) {
          //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -160,10 +160,10 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, 1);
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, 1);
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
         
         //Apply Modifications
         legald.applyModifications(mods);
@@ -171,7 +171,7 @@ public class LegislationService {
         return legald;
     }
 
-    public String getUpdatedXMLById(String type, String year, String id) throws TransformerException {
+    public String getUpdatedXMLById(String type, String year, String id, int request) throws TransformerException {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -179,10 +179,31 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, 1);
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, 1);
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, request);
+        
+        //Apply Modifications
+        legald.applyModifications(mods);
+        
+        // Build XML
+        XMLBuilder xmlbuild = new XMLBuilder();
+        return  xmlbuild.XMLbuilder(legald);
+    }
+    
+    public String getUpdatedXMLByIdDate(String type, String year, String id, int request, String date) throws TransformerException {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        //Get Legal Document
+        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
+        
+        //Get all Modifications
+        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
         
         //Apply Modifications
         legald.applyModifications(mods);

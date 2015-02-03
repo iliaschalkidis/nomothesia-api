@@ -305,7 +305,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     @Override
     public LegalDocument getById(String decisionType, String year, String id, int req) {
         
-        LegalDocument legald = this.getCitationsById(decisionType, year, id, 1);
+        LegalDocument legald = this.getCitationsById(decisionType, year, id, req);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -956,6 +956,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         if (req == 1) {
                             queryString += " ?work dc:created ?date.\n" +
+                            "FILTER (?date <= \""+ date +"\"^^xsd:date)\n" +
                             "OPTIONAL{\n" +
                             " ?part leg:text ?text.\n" +
                             "}.}\n" +
@@ -963,6 +964,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         }
                         else if (req == 2) {
                             queryString += " ?work dc:created ?date.\n" +
+                            "FILTER (?date <= \""+ date +"\"^^xsd:date)\n" +        
                             "FILTER NOT EXISTS {FILTER(langMatches(lang(?text), \"html\"))}\n" +
                             "OPTIONAL{\n" +
                             " ?part leg:text ?text.\n" +
