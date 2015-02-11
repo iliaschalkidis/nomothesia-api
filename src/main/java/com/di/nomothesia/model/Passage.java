@@ -8,12 +8,7 @@ public class Passage implements Fragment {
     private int id;
     
     public Passage() {
-        
-        //URI = "legislation/passage/skata";
-        //text = "буудко то кокуодобкуо ткодбкдоко";
-        //id = 2;
 
-        //System.out.println("≈ямбй фп ед№цйп:" + URI + text + id);
     }
     
     //Setters-Getters for Passage

@@ -9,6 +9,7 @@ public class LegalDocument {
     private List<Article> articles;
     private List<Signer> signers;
     private List<Citation> citations;
+    private List<String> tags;
     
     private String title;
     private String URI;
@@ -26,14 +27,8 @@ public class LegalDocument {
         //sin.add(new Signer());
         citations = new ArrayList<Citation>();
         //cit.add(new Citation());
-        //title = "Ο ΤΕΛΕΥΤΑΙΟΣ ΤΩΝ ΤΡΟΪΚΑΝΩΝ";
-        //URI = "legislation/legaldocument/skata";
-        //FEK = new GovernmentGazette();
-        //decisionType = "ελλας-ελλας";
-        //year = "2014";
-        //id = "56";
+        this.tags = new ArrayList<String>();
 
-        //System.out.println("Είμαι το νομικό έγγραφο:" + title + id + URI + decisionType + year);
     }
     
     //Setters-Getters for LegalDocument
@@ -116,6 +111,14 @@ public class LegalDocument {
 
     public void setId(String id) {
         this.id = id;
+    }
+    
+    public List<String> getTags() {
+        return tags;
+    }
+    
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public void applyModifications(List<Modification> mods) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.di.nomothesia.service;
 
 import com.di.nomothesia.controller.XMLBuilder;
@@ -15,13 +10,9 @@ import java.util.Map;
 import javax.xml.transform.TransformerException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- *
- * @author Ilias
- */
 public class LegislationService {
     
-    public LegalDocument getById(String decisionType, String year, String id, int request){
+    public LegalDocument getById(String decisionType, String year, String id, int request) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -32,7 +23,7 @@ public class LegislationService {
         return legalDocumentDAO.getById(decisionType, year, id, request);
     }
     
-     public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id){
+    public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -52,7 +43,7 @@ public class LegislationService {
         
         //Set query
         EndpointResult eprs = new EndpointResult();
-        if(query.equals("1")){
+        if(query.equals("1")) {
             eprs.setQuery("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                     "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
@@ -71,7 +62,7 @@ public class LegislationService {
                     
             );
         }
-        else if(query.equals("2")){
+        else if(query.equals("2")) {
             eprs.setQuery("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                     "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
@@ -89,7 +80,7 @@ public class LegislationService {
             );
             
         }
-        else if(query.equals("3")){
+        else if(query.equals("3")) {
             eprs.setQuery("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                     "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +

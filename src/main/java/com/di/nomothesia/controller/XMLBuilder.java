@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.di.nomothesia.controller;
 
 import com.di.nomothesia.model.Case;
@@ -24,10 +19,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- *
- * @author Panagiotis
- */
 public class XMLBuilder  {
         
     public String XMLbuilder (LegalDocument legald) throws TransformerConfigurationException, TransformerException {
@@ -86,6 +77,25 @@ public class XMLBuilder  {
             Element  dcident = doc.createElementNS("http://dublincore.org/documents/dcmi-terms/","dc:identifier");
             dcident.setTextContent(legald.getURI());
             Metadata.appendChild(dcident);
+            
+            //Tags Branch
+            if (legald.getTags().size()>1) {
+                
+                Element tags = doc.createElement("Tags");
+                Metadata.appendChild(tags);
+                
+                //for every tag
+                for (int i=0;i<legald.getTags().size();i++) {
+                    
+                    Element tag = doc.createElement("Tag");
+                    tag.setAttribute("id", "" + (i+1));
+                    tag.setTextContent(legald.getTags().get(i));
+                    
+                    tags.appendChild(tag);
+                
+                }
+            
+            }
            
             //Signers Branch
             Element signers = doc.createElement("ListOfSigners");

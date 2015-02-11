@@ -16,7 +16,6 @@ public interface LegalDocumentDAO {
     public List<LegalDocument> getAllModifications(String decisionType, String year, String id);
     public EndpointResult sparqlQuery(EndpointResult endpointResult);
     public String getRDFById(String decisionType, String year, String id);
-    //public LegalDocument getHTMLById(String decisionType, String year, String id, LegalDocument legald);
     public List<LegalDocument> search(Map<String, String> params);
 
 }

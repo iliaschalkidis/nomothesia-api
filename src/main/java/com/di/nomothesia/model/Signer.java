@@ -7,6 +7,7 @@ public class Signer {
     private String title;
     
     public Signer() {
+        
     }
     
     //Setters-Getters for Signer

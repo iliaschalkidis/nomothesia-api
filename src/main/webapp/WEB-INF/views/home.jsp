@@ -123,7 +123,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputPassword2">Ημερομηνία Κυκλοφορίας:</label>
                                     <div class='input-group date' >
-                                        <input type='text'  name="date" id='datepicker' class="form-control" />
+                                        <input type='text'  name="date" id='datepicker' class="form-control" placeholder="Ημερομηνία"/>
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div> 
@@ -144,11 +144,16 @@
                             <td></td>
                             <td></td>
                             <td style="text-align: right; margin-top: 5px;">
-                                <a href="${pageContext.servletContext.contextPath}/search">Σύνθετη Αναζήτηση</a 
+                                <a href="${pageContext.servletContext.contextPath}/legislation/search">Σύνθετη Αναζήτηση</a> 
                             </td>
                             
                         </tr>
-                    </table>    
+                    </table>
+                    <input type="hidden" name="datefrom" value="" class="form-control"/>
+                    <input type="hidden" name="dateto" value="" class="form-control"/>
+                    <input type="hidden" name="fek_isuue" value="" class="form-control"/>
+                    <input type="hidden" name="fek_year" value="" class="form-control"/>
+                    <input type="hidden" name="fek_id" value="" class="form-control"/>
                 </form>
             </div>
             </div>

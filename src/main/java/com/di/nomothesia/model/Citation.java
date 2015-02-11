@@ -8,15 +8,12 @@ public class Citation {
   
     private String description;
     private String URI;
-    List<String> targetURIs;
+    private List<String> targetURIs;
     private int id;
     
     public Citation() {
         
         this.targetURIs = new ArrayList<String>();
-        //URI = "legislation/citation/skata";
-        //description = "ÄÓÖÓÇÖ Ç ÇÖÄÎÓÖ ÎÇ ÊÇÖ ÊÎÇ ÊÓÄ";
-        //System.out.println("Åßìáé ç ğáñÜèåóç:" + URI + description);
     
     }
     

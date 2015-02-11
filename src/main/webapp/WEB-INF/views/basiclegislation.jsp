@@ -40,6 +40,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    
     <!--<script>
             $(function(){
                $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
@@ -138,15 +139,19 @@
             <div class="col-md-3">  
                 <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
                     <div align="center"><h4>ΓΕΝΙΚΑ ΣΤΟΙΧΕΙΑ</h4></div><br/>
-                    <u>ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
-                    <u>ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
-                    <u>ΦΕΚ:</u> ${legaldoc.getFEK()}<br/>
-                    <u>ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/> 
+                    <u style="color:  #1087dd">ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
+                    <u style="color:  #1087dd">ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
+                    <u style="color:  #1087dd">ΦΕΚ:</u> ${legaldoc.getFEK()}<br/>
+                    <u style="color:  #1087dd">ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/> 
                     <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop">
                         ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
                     </c:forEach>
-                    <u>ΕΤΙΚΕΤΕΣ:</u> <br/>
-                    Περιβάλλον &amp; Φυσικοί Πόροι
+                    <c:if test="${not empty legaldoc.getTags()}">
+                        <u style="color:  #1087dd">ΕΤΙΚΕΤΕΣ:</u> <br/>
+                        <c:forEach items="${legaldoc.getTags()}" var="tag" varStatus="loop">
+                            ${tag}<c:if test="${!loop.last}">,&nbsp;</c:if>
+                        </c:forEach>
+                    </c:if>
                     
                 </div>
                 <div align="center" style="padding:10px;">
@@ -251,22 +256,15 @@
                 </c:forEach>
                 </div>
                   <div role="tabpanel" class="tab-pane" id="profile">
-                      <br/>Έχοντας υπόψη:<br/><br/>
                       <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                         <thead>
-                            <td>Παραπομπή</td>
-                            <td>Σύνδεσμοι</td>
+                            <td>Έχοντας υπόψη:</td>
                         </thead>
                         <tbody>
                             <c:if test="${not empty legaldoc.getCitations()}">
                             <c:forEach var="citation" items="${legaldoc.getCitations()}" varStatus="loop">
                                 <tr>
                                     <td>${citation.getDescription()}</td>
-                                    <td>
-                                    <c:forEach var="link" items="${citation.gettargetURIs()}" varStatus="loop">
-                                        <a href="${link}">${loop.index + 1}</a>
-                                    </c:forEach>
-                                    </td>
                                 </tr>
                             </c:forEach>
                             </c:if>
@@ -275,9 +273,9 @@
                       
                   </div>
                 <div role="tabpanel" class="tab-pane" id="messages">
-                    <ul>
+                    <ul id="messagescol">
                     <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
-                        <li><a href="${article.getURI()}" >Άρθρο ${article.getId()}</a>
+                        <li><a href="${article.getURI()}" >Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
                     <ul>
                         <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
                             <li><a href="${paragraph.getURI()}">Παράγραφος ${paragraph.getId()}</a></li>
@@ -321,6 +319,34 @@
             <h5>Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
     </div>
-  
+        
+    <script> 
+        function prepareList() {
+            $('#messagescol').find('li:has(ul)')
+            .click( function(event) {
+                if (this == event.target) {
+                    $(this).toggleClass('expanded');
+                    $(this).children('ul').toggle('medium');
+                }
+                return false;
+            })
+            .addClass('collapsed')
+            .children('ul').hide();
+        };
+
+        $(document).ready( function() {
+            prepareList('&plusmn; ');
+        });
+
+//CollapsibleLists.applyTo(document.getElementById('messages'));
+//$(function (){
+//    $('#messagescol').find('li:has(ul)').click(function(event) {
+//        event.stopPropagation();
+//    $(event.target).children('ul').slideToggle();
+//    });
+//});
+    </script>
+
+    
 </body>
 </html>

@@ -8,11 +8,7 @@ public class GovernmentGazette {
     private String id;
     
     public GovernmentGazette() {
-                issue = "Μνημόνιο ή Τανκς";
-                year = "2014";
-                id = "23";
-                
-                System.out.println("Είμαι η εφημερίδα:" + year + issue + id);
+        
     }
     
     //Setters-Getters for GovernmentGazette

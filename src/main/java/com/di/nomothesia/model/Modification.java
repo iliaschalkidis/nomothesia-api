@@ -19,10 +19,6 @@ public class Modification {
     
     public Modification() {
         
-        //URI = "legislation/mod/skata";
-        //Type = "αλλαγή";
-
-        //System.out.println("Είμαι η μόντα:" + URI + Type);
     }
     
     //Setters-Getters for Modification

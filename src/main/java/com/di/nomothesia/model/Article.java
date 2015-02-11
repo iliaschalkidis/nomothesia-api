@@ -14,12 +14,7 @@ public class Article implements Fragment{
     public Article() {
         
         this.paragraphs = new ArrayList<Paragraph>();
-        //par.add(new Paragraph());
-        //URI = "legislation/paragraph/skata";
-        //Title = "ΣΚΑΤΑ";
-        //id = 54;
-
-        //System.out.println("Είμαι το άρθρο:" + URI + id + Title);
+    
     }
     
     //Setters-Getters for Article
@@ -28,7 +23,6 @@ public class Article implements Fragment{
         return Title;
     }
     
-    //@XmlElement(name = "title")
     public void setTitle(String Title) {
         this.Title = Title;
     }

@@ -17,10 +17,7 @@ public class Case implements Fragment{
         //pas.add(new Passage());
         caseList = new ArrayList<Case>();
         //casel.add(new Case());
-        //URI = "legislation/case/skata";
-        //id = 84;
 
-        //System.out.println("Είμαι η περίπτωση:" + URI + id);
     }
     
     //Setters-Getters for Case

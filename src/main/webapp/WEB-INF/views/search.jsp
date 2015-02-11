@@ -119,8 +119,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                     <select class="form-control" name="fek_issue">
-                                        <option value="Α">Α'</option>
-                                        <option value="Β">Β'</option>
+                                        <option value="A">Α'</option>
+                                        <option value="B">Β'</option>
                                     </select>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                     <li><a>Ημερομηνία Κυκλοφορίας:</a>
                     <div class="form-group">                        
                         <div class='input-group date' >
-                            <input type='text'  name="date" id='datepicker' class="form-control" />
+                            <input type='text'  name="date" id='datepicker' class="form-control" placeholder="Ημερομηνία"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div> 
@@ -145,14 +145,14 @@
                         <div class="row">
                         <div class="col-md-6">
                         <div class='input-group date' >
-                            <input type='text'  name="datefrom" id='datepicker2' class="form-control" />
+                            <input type='text'  name="datefrom" id='datepicker2' class="form-control" placeholder="Από"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                         </div>
                             <div class="col-md-6">
                         <div class='input-group date' >
-                            <input type='text'  name="dateto" id='datepicker3' class="form-control" />
+                            <input type='text'  name="dateto" id='datepicker3' class="form-control" placeholder="Έως"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
@@ -350,7 +350,24 @@
             $('#myTab a:first').tab('show') // Select first tab
             $('#myTab a:last').tab('show') // Select last tab
             $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
-      </script>
+    </script>
+    
+    <script>
+    $('form').submit(function() {
+    var arr=[];
+
+    $('input:checked[class=category]').each(function(){
+        arr.push($(this).val());
+    });
+
+    $('#categories').val(arr.join(','));
+    
+    //alert($('#category').val());
+
+    // Prevent actual submit for demo purposes:
+    //return false;
+    });
+</script>
       
 </body>
 </html>
