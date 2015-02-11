@@ -41,12 +41,12 @@
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     
-    <!--<script>
+    <script>
             $(function(){
-               $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
+               $('html, body').animate({scrollTop:$('#${id}').position().top}, 'slow');
                 return false;
             });
-    </script>-->
+    </script>
     <script>
         $(document).ready(function(){
 	

@@ -38,6 +38,7 @@ public class LegislationController {
                 model.addAttribute("legaldoc", legaldoc);
                 List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
 	}
         
@@ -48,6 +49,7 @@ public class LegislationController {
                 model.addAttribute("legaldoc", legaldoc);
                 List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
 	}
         
@@ -56,10 +58,7 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id , 1);
                 model.addAttribute("legaldoc", legaldoc);
-                model.addAttribute("type1", type1);
-                model.addAttribute("id1", id1);
-                model.addAttribute("type2", type2);
-                model.addAttribute("id2", id2);
+                model.addAttribute("id", type1 + "-" + id1 + "-" +type2 + "-" + id2);
 		return "basiclegislation";
 	}
         
@@ -72,6 +71,7 @@ public class LegislationController {
                 model.addAttribute("legaldoc", legaldoc);
                 List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
 	}
         
