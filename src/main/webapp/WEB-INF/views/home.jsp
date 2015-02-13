@@ -86,7 +86,7 @@
                             <td width="45%">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Λέξεις Κλειδιά:</label>
-                                    <input type="text" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε επιθυμητή έκφραση...">
+                                    <input type="text" id="keywords" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε επιθυμητή έκφραση...">
                                 </div>
                             </td>
                             <td width="5%"></td>
@@ -346,5 +346,18 @@
   });
         } );
     </script>
+    
+    <script>
+  $(function() {
+    var availableTags = [
+        <c:forEach var="tag" items="${tags}" >  
+            "${tag}", 
+        </c:forEach>
+    ];
+    $( "#keywords" ).autocomplete({
+      source: availableTags
+    });
+  });
+  </script>
 </body>
 </html>

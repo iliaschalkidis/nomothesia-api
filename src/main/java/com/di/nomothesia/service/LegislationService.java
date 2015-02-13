@@ -142,6 +142,16 @@ public class LegislationService {
         
         return legalDocumentDAO.search(params);
     }
+    
+    public List<String> getTags(){
+          //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        return legalDocumentDAO.getTags();
+    }
 
     public LegalDocument getUpdatedById(String type, String year, String id, int request, String date) {
          //Get the Spring Context

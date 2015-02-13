@@ -1274,8 +1274,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         try {
            
             RepositoryConnection con = repo.getConnection();
-           
-            try {
                 
                 String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
@@ -1285,7 +1283,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                 "\n" +
-                "SELECT ?legaldocument ?title ?type ?date ?id\n" +
+                "SELECT DISTINCT ?legaldocument ?title ?type ?date ?id\n" +
                 "WHERE{\n" +
                 " ?legaldocument dc:title ?title.\n";
                   
@@ -1418,10 +1416,59 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     }
 
                 }
+                
+                if((params.get("keywords")!=null) && !params.get("keywords").equals("")) {
+                    
+                    // Tokenize keywords field
+                    String[] tokens;
+                    if(params.get("keywords").contains(",")){
+                        tokens = params.get("keywords").replaceAll(" ", "").split(",");
+                    }
+                    else{
+                        tokens = params.get("keywords").split(" ");
+                        for(int i=0; i<tokens.length;i++){
+                            tokens[i] = tokens[i].replaceAll(" ", "");
+                        }
+                    }
+                    List<String> stopWords = Arrays.asList("ο","η","το","οι","τα","του","της","των","τον","την","και","κι","κ","ειμαι","εισαι","ειναι","ειμαστε","ειστε","στο","στον","στη","στην","μα" ,"αλλα","απο","για","προς","με","σε","ως","παρα","αντι","κατα","μετα","θα","να","δε","δεν","μη","μην","επι","ενω","εαν","αν","τοτε","που" ,"πως" ,"ποιος" ,"ποια","ποιο","ποιοι","ποιες","ποιων","ποιους","αυτος","αυτη","αυτο","αυτοι","αυτων","αυτους","αυτες","αυτα","εκεινος","εκεινη","εκεινο","εκεινοι","εκεινες","εκεινα","εκεινων","εκεινους","οπως","ομως","ισως","οσο","οτι");
+                    List<String> keywords = new ArrayList<String>();
+                    
+                    // Stop Words Filtering
+                    for (String token : tokens) {
+                        if ((!stopWords.contains(token)) || token.equals("")) {
+                            keywords.add(token);
+                        }
+                    }
+                    // Stemming
+                    for(int i=0; i< keywords.size(); i++){
+                        int size;
+                        if(keywords.get(i).length() <=5){
+                            size = keywords.get(i).length();
+                        }
+                        else if (keywords.get(i).length() <= 8){
+                            size = (int) (keywords.get(i).length() * 0.95);
+                        }
+                        else{
+                            size = (int) (keywords.get(i).length() * 0.8);
+                        }
+                        keywords.set(i,keywords.get(i).substring(0, size-1));
+                        System.out.println(keywords.get(i));
+                    }
+                    
+                    // Add regex filtering
+                    queryString += " ?legaldocument metalex:part+ ?part.\n";
+                    queryString += " ?part leg:text ?text.\n";
+                    queryString += " ?legaldocument leg:tag ?tag.\n";
+                    queryString += "FILTER( ";
+                    for(String keyword : keywords){
+                        queryString += "regex(?text, \"" + keyword +"\") || regex(?title,\"" + keyword +"\") || " +"regex(?tag,\"" + keyword +"\") || ";
+                    }
+                    queryString += "FALSE )\n";
+                }
                   
                 queryString += "}";
                 
-                //System.out.println(queryString);
+                System.out.println(queryString);
                 TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                 result = tupleQuery.evaluate();
 
@@ -1511,11 +1558,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 finally {
                     result.close();
                 }
-
-            }
-            finally {
-                con.close();
-            }
             
         }
         catch (OpenRDFException e) {
@@ -1524,6 +1566,91 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         
         return LDs;
         
+    }
+    
+    @Override
+    public List<String> getTags() {
+        
+        List<String> tags = new ArrayList<String>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+        
+        try {
+           
+            RepositoryConnection con = repo.getConnection();
+            
+            try {
+                
+                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+                "\n" +
+                "SELECT DISTINCT ?tag \n" +
+                "WHERE{\n" +
+                "?legaldocument leg:tag ?tag.\n" +
+                "}\n" +
+                "ORDER BY ?tag";
+                
+                //System.out.println(queryString);
+                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                result = tupleQuery.evaluate();
+
+                try {
+                    // iterate the result set
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+                        String tag = bindingSet.getValue("tag").toString().replace("@el", "");
+                        tags.add(trimDoubleQuotes(tag));
+                    }
+                    
+                }
+                finally {
+                    result.close();
+                }    
+            }
+            finally {
+                con.close();
+            }
+        }
+        catch (OpenRDFException e) {
+            // handle exception
+        }
+
+        return tags;
+
     }
     
     public static String trimDoubleQuotes(String text) {

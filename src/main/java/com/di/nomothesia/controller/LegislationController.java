@@ -158,7 +158,9 @@ public class LegislationController {
 		if(params != null){
                     LegislationService lds = new LegislationService();
                     List<LegalDocument> LDs = lds.searchLegislation(params);
+                    List<String> tags = lds.getTags();
                     model.addAttribute("legalDocuments", LDs);
+                    model.addAttribute("tags",tags);
                 }
 		return "search";
 	}

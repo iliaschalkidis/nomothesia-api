@@ -1,7 +1,9 @@
 package com.di.nomothesia.controller;
 
+import com.di.nomothesia.service.LegislationService;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -28,11 +30,11 @@ public class HomeController {
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
+		LegislationService lds = new LegislationService();
 		String formattedDate = dateFormat.format(date);
-		
+		List<String> tags = lds.getTags();
 		model.addAttribute("serverTime", formattedDate );
-		
+		model.addAttribute("tags",tags);
 		return "home";
 	}
 	

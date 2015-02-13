@@ -81,7 +81,7 @@
                 <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
                 <ul  class="nav nav-sidebar">
                     <li><a>Λέξεις Κλειδιά:</a>
-                        <input type="text" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε επιθυμητή έκφραση...">
+                        <input type="text" name="keywords" class="form-control" id="keywords" placeholder="Εισάγετε επιθυμητή έκφραση...">
                     </li>
                     <li><a>Τύπος Νομοθεσίας:</a>
                         <fieldset>
@@ -368,6 +368,19 @@
     //return false;
     });
 </script>
+
+<script>
+  $(function() {
+    var availableTags = [
+        <c:forEach var="tag" items="${tags}" >  
+            "${tag}", 
+        </c:forEach>
+    ];
+    $( "#keywords" ).autocomplete({
+      source: availableTags
+    });
+  });
+  </script>
       
 </body>
 </html>

@@ -17,5 +17,5 @@ public interface LegalDocumentDAO {
     public EndpointResult sparqlQuery(EndpointResult endpointResult);
     public String getRDFById(String decisionType, String year, String id);
     public List<LegalDocument> search(Map<String, String> params);
-
+    public List<String> getTags();
 }
