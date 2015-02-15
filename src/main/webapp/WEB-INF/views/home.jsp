@@ -296,9 +296,9 @@
    <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
                 $('#example').dataTable({
-       aaSorting: [[ 2, "desc" ]],
+       "aaSorting": [],
        bSortable: true,
-      "iDisplayLength": 4,
+       "iDisplayLength": 4,
        aoColumnDefs: [
             { "aTargets": [ 0 ], "bSortable": true },
             { "aTargets": [ 1 ], "bSortable": true },
@@ -314,7 +314,7 @@
                         "sSearch": "Αναζήτηση",
                         "oPaginate": {
                                     "sNext": "Επόμενη",
-                                     "sPrevious": "Προηγούμενη"
+                                    "sPrevious": "Προηγούμενη"
                          }
 		}
   });
@@ -341,7 +341,7 @@
                         "sSearch": "Αναζήτηση",
                         "oPaginate": {
                                     "sNext": "Επόμενη",
-                                     "sPrevious": "Προηγούμενη"
+                                    "sPrevious": "Προηγούμενη"
                          }
 		}
   });

@@ -1787,7 +1787,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         LegalDocument legald = new LegalDocument();
                         String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
                         legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
-                        System.out.println(legald.getURI() + "NNNNNNNNNNNNNNNNNN");
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         legald.setTitle(trimDoubleQuotes(title));
                         String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
@@ -1916,7 +1915,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         LegalDocument legald = new LegalDocument();
                         String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
                         legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
-                        System.out.println(legald.getURI() + "MMMMMMMMMMMM");
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         legald.setTitle(trimDoubleQuotes(title));
                         String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
