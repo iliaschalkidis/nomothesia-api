@@ -51,18 +51,21 @@
             </div>
         
             <div class="collapse navbar-collapse navbar-menubuilder">
-                <ul class="nav navbar-nav navbar-left">
+               <ul class="nav navbar-nav navbar-left">
                     <li>
                         <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/contact" style="font-family: 'Comfortaa', cursive;" >Επικοινωνία</a>
+                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

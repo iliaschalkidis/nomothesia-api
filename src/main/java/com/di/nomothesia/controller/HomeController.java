@@ -46,4 +46,15 @@ public class HomeController {
                 
 	}
 	
+        @RequestMapping(value = "/aboutus", method = RequestMethod.GET)
+	public String aboutus(Locale locale, Model model) {	
+		return "aboutus";
+                
+	}
+        
+        @RequestMapping(value = "/developer", method = RequestMethod.GET)
+	public String developer(Locale locale, Model model) {	
+		return "developer";
+                
+	}
 }
