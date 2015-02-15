@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +20,7 @@
     <link href='http://fonts.googleapis.com/css?family=Jura&subset=latin,greek' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Comfortaa&subset=latin,greek' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css">
+    
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -31,22 +32,25 @@
     <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
     <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-social.css" rel="stylesheet"/>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
     
-     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     
     <script>
-            $(function(){
-               $('html, body').animate({scrollTop:$('#${id}').position().top}, 'slow');
-                return false;
-            });
+        $(function() {
+            $('html, body').animate({scrollTop:$('#${id}').position().top}, 'slow');
+            return false;
+        });
     </script>
+    
     <script>
         $(document).ready(function(){
 	
@@ -67,8 +71,8 @@
 
         });
     </script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     <script>
           $('#myTab a').click(function (e) {
               e.preventDefault()
@@ -79,7 +83,34 @@
             $('#myTab a:first').tab('show') // Select first tab
             $('#myTab a:last').tab('show') // Select last tab
             $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
-      </script>
+    </script>
+    
+    <script> 
+        function prepareList() {
+            $('#messagescol').find('li:has(ul)')
+            .click( function(event) {
+                if (this == event.target) {
+                    $(this).toggleClass('expanded');
+                    $(this).children('ul').toggle('medium');
+                }
+                return false;
+            })
+            .addClass('collapsed')
+            .children('ul').hide();
+        };
+
+        $(document).ready( function() {
+            prepareList('&plusmn; ');
+        });
+
+//CollapsibleLists.applyTo(document.getElementById('messages'));
+//$(function (){
+//    $('#messagescol').find('li:has(ul)').click(function(event) {
+//        event.stopPropagation();
+//    $(event.target).children('ul').slideToggle();
+//    });
+//});
+    </script>
     
     <!--<div id="fb-root"></div>
     <script>(function(d, s, id) {
@@ -320,33 +351,5 @@
         </div>
     </div>
         
-    <script> 
-        function prepareList() {
-            $('#messagescol').find('li:has(ul)')
-            .click( function(event) {
-                if (this == event.target) {
-                    $(this).toggleClass('expanded');
-                    $(this).children('ul').toggle('medium');
-                }
-                return false;
-            })
-            .addClass('collapsed')
-            .children('ul').hide();
-        };
-
-        $(document).ready( function() {
-            prepareList('&plusmn; ');
-        });
-
-//CollapsibleLists.applyTo(document.getElementById('messages'));
-//$(function (){
-//    $('#messagescol').find('li:has(ul)').click(function(event) {
-//        event.stopPropagation();
-//    $(event.target).children('ul').slideToggle();
-//    });
-//});
-    </script>
-
-    
 </body>
 </html>

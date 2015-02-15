@@ -164,7 +164,6 @@
                   <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">ΝΕΕΣ ΕΚΔΟΣΕΙΣ</a></li>
                     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">ΠΙΟ ΔΗΜΟΦΙΛΗ</a></li>
-
                   </ul>
 
                   <!-- Tab panes -->
@@ -173,18 +172,20 @@
                           <br/>
                           <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
-                            <tr>
-                                <th>Τίτλος</th>
-                                <th>Κωδικός</th>
-                                <th>Ημερομηνία</th>
-                            </tr>
-                        </thead>
+                                <tr>
+                                    <th>Τίτλος</th>
+                                    <th>Κωδικός</th>
+                                    <th>Ημερομηνία</th>
+                                </tr>
+                            </thead>
                         <tbody>
-                            <tr>
-                                <td><a href="${pageContext.servletContext.contextPath}/legislation/pd/2012/10" >Τροποποίηση του υπ’ αριθμ. 54/2011 Προεδρικού Διατάγματος «Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής Προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)» (Α΄ 135)</a></td>
-                                <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2012/10</td>
-                                <td>2012-01-30</td>
-                            </tr>
+                            <c:forEach var="ldrecent" items="${ldrecent}" varStatus="loop">
+                                <tr>
+                                    <td><a href="${ldrecent.getURI()}" >${ldrecent.getTitle()}</a></td>
+                                    <td>${ldrecent.getDecisionType()} ${ldrecent.getYear()}/${ldrecent.getId()}</td>
+                                    <td>${ldrecent.getPublicationDate()}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                         </table>   
                       </div>
@@ -192,23 +193,20 @@
                         <br/>
                         <table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
-                            <tr>
-                                <th>Τίτλος</th>
-                                <th>Κωδικός</th>
-                                <th>Ημερομηνία</th>
-                            </tr>
+                                <tr>
+                                    <th>Τίτλος</th>
+                                    <th>Κωδικός</th>
+                                    <th>Ημερομηνία</th>
+                                </tr>
                         </thead>
                         <tbody>
-                             <tr>
-                                <td><a href="${pageContext.servletContext.contextPath}/legislation/pd/2011/54" >Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)</a></td>
-                                <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2011/54</td>
-                                <td>2011-05-20</td>
-                            </tr>
-                            <tr>
-                                <td><a href="${pageContext.servletContext.contextPath}/legislation/pd/2012/10" >Τροποποίηση του υπ’ αριθμ. 54/2011 Προεδρικού Διατάγματος «Σύσταση Ειδικής Υπηρεσίας Δημοσίων Έργων Αντιπλημμυρικής Προστασίας της Κοιλάδας του ποταμού Έβρου και των παραποτάμων του (ΕΥΔΕ ΕΒΡΟΥ)» (Α΄ 135)</a></td>
-                                <td>ΠΔ (ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ) 2012/10</td>
-                                <td>2012-01-30</td>
-                            </tr>
+                             <c:forEach var="ldviewed" items="${ldviewed}" varStatus="loop">
+                                <tr>
+                                    <td><a href="${ldviewed.getURI()}" >${ldviewed.getTitle()}</a></td>
+                                    <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
+                                    <td>${ldviewed.getPublicationDate()}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                         </table>   
                     </div>

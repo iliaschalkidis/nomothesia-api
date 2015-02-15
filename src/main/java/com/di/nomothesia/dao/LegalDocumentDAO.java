@@ -18,4 +18,7 @@ public interface LegalDocumentDAO {
     public String getRDFById(String decisionType, String year, String id);
     public List<LegalDocument> search(Map<String, String> params);
     public List<String> getTags();
+    public List<LegalDocument> getViewed();
+    public List<LegalDocument> getRecent();
+    
 }

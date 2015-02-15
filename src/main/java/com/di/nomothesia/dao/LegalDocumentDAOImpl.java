@@ -103,7 +103,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
-                "SELECT ?title ?date ?gaztitle ?signername ?signertitle\n" +
+                "SELECT ?title ?date ?gaztitle ?signername ?signertitle ?views\n" +
                 "WHERE{\n" +
                 "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " dc:title ?title.\n" +
@@ -113,6 +113,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 " leg:signer ?signer.\n" +
                 "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:gazette ?gazette.\n" +
+                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                " leg:views ?views.\n" +
                 "?gazette dc:title ?gaztitle.\n" +
                 "?signer foaf:name ?signername.\n" +
                 "?signer foaf:title ?signertitle.\n" +
@@ -143,6 +145,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         String signer_el = bindingSet.getValue("signertitle").toString().replace("@el", "");
                         sign.setTitle(trimDoubleQuotes(signer_el));
                         legald.getSigners().add(sign);
+                        String views = bindingSet.getValue("views").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
+                        legald.setViews(trimDoubleQuotes(views));
+                        System.out.println(legald.getViews() + "OOOOOOOOOOOOOOOOOOOOOOOOOO" + legald.getId());
                     
                     }
                     
@@ -617,9 +622,54 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 finally {
                     result.close();
                 }
-                 
+                
+                int view = Integer.parseInt(legald.getViews());
+                    
+                String queryString2 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "\n" +
+                "DELETE WHERE {\n" +
+                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                " <http://legislation.di.uoa.gr/ontology/views>" +
+                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
+                "}";
+                
+                System.out.println(queryString2);
+
+                
+                    con.prepareUpdate(QueryLanguage.SPARQL, queryString2);
+                
+                
+                view = view+1;
+                
+                String queryString3 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "\n" +
+                "INSERT DATA {\n" +
+                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                " <http://legislation.di.uoa.gr/ontology/views>" +
+                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
+                "}";
+                
+                System.out.println(queryString3);
+
+                
+                    con.prepareUpdate(QueryLanguage.SPARQL, queryString3);
+                
+                
             }
             finally {
+                con.commit();
                 con.close();
             }
             
@@ -1412,11 +1462,15 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         else if (items.get(0).equals("md")) {
                             queryString += "?legaldocument rdf:type leg:MinisterialDecision.\n";  
                         }
+                        else if (items.get(0).equals("rd")) {
+                            queryString += "?legaldocument rdf:type leg:RoyalDecree.\n";  
+                        }
                     
                     }
 
                 }
                 
+                //search by keyword
                 if((params.get("keywords")!=null) && !params.get("keywords").equals("")) {
                     
                     // Tokenize keywords field
@@ -1430,7 +1484,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             tokens[i] = tokens[i].replaceAll(" ", "");
                         }
                     }
-                    List<String> stopWords = Arrays.asList("ο","η","το","οι","τα","του","της","των","τον","την","και","κι","κ","ειμαι","εισαι","ειναι","ειμαστε","ειστε","στο","στον","στη","στην","μα" ,"αλλα","απο","για","προς","με","σε","ως","παρα","αντι","κατα","μετα","θα","να","δε","δεν","μη","μην","επι","ενω","εαν","αν","τοτε","που" ,"πως" ,"ποιος" ,"ποια","ποιο","ποιοι","ποιες","ποιων","ποιους","αυτος","αυτη","αυτο","αυτοι","αυτων","αυτους","αυτες","αυτα","εκεινος","εκεινη","εκεινο","εκεινοι","εκεινες","εκεινα","εκεινων","εκεινους","οπως","ομως","ισως","οσο","οτι");
+                    List<String> stopWords = Arrays.asList("ο","η","το","οι","τα","του","της","των","τον","την","και","κι","κ","είμαι","είσαι","είναι","είμαστε","είστε","στο","στον","στη","στην","μα" ,"αλλά","από","για","προς","με","σε","ως","παρά","αντί","κατά","μετά","θα","να","δε","δεν","μη","μην","επι","ενώ","εάν","αν","τότε","που" ,"πως" ,"ποιός" ,"ποιά","ποιό","ποιοι","ποιες","ποιων","ποιους","αυτός","αυτή","αυτό","αυτοί","αυτών","αυτούς","αυτές","αυτά","εκείνος","εκείνη","εκείνο","εκείνοι","εκείνες","εκείνα","εκείνων","εκείνους","όπως","όμως","ίσως","όσο","ότι");
                     List<String> keywords = new ArrayList<String>();
                     
                     // Stop Words Filtering
@@ -1522,6 +1576,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
                                 ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
                             }
+                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
                             
                         }
                         else {
@@ -1542,6 +1599,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             }
                             else if (type.equals("md")) {
                                 ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                            }
+                            else if (type.equals("rd")) {
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             
                         }
@@ -1650,6 +1710,264 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         }
 
         return tags;
+
+    }
+    
+    @Override
+    public List<LegalDocument> getViewed() {
+        
+        List<LegalDocument> legalviewed = new ArrayList<LegalDocument>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+        
+        try {
+            
+            RepositoryConnection con = repo.getConnection();
+            
+            try {
+                
+                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+                "\n" +
+                "SELECT ?uri ?title ?date ?type ?views ?id\n" +
+                "WHERE{\n" +
+                "?uri dc:title ?title.\n" +
+                "?uri dc:created ?date.\n" +
+                "?uri leg:views ?views.\n" +
+                "?uri rdf:type ?type.\n" +
+                "?uri leg:legislationID ?id.\n" +
+                "FILTER(langMatches(lang(?title), \"el\"))\n" +
+                "}\n" +
+                "ORDER BY DESC(?views)\n" +
+                "LIMIT 10";
+                  
+                //System.out.println(queryString);
+                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                result = tupleQuery.evaluate();
+
+                try {
+                    
+                    // iterate the result set
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+                        LegalDocument legald = new LegalDocument();
+                        String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
+                        legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        System.out.println(legald.getURI() + "NNNNNNNNNNNNNNNNNN");
+                        String title = bindingSet.getValue("title").toString().replace("@el", "");
+                        legald.setTitle(trimDoubleQuotes(title));
+                        String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
+                        legald.setId(trimDoubleQuotes(id));
+                        String date = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");  
+                        date = trimDoubleQuotes(date);
+                        legald.setPublicationDate(date);
+                        String[] year = date.split("-");
+                        legald.setYear(year[0]);
+                        
+                        String type = bindingSet.getValue("type").toString();
+                           
+                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
+                                legald.setDecisionType("ΣΥΝΤΑΓΜΑ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
+                                legald.setDecisionType("ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ (ΠΔ)");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
+                                legald.setDecisionType("ΝΟΜΟΣ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
+                                legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
+                                legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                                legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
+                            
+                        legalviewed.add(legald);
+                        
+                    }
+                    
+                }
+                finally {
+                    result.close();
+                }
+                 
+            }
+            finally {
+                con.close();
+            }
+            
+        }
+        catch (OpenRDFException e) {
+            // handle exception
+        }
+        
+        return legalviewed;
+
+    }
+    
+    @Override
+    public List<LegalDocument> getRecent() {
+        
+        List<LegalDocument> legalrecent = new ArrayList<LegalDocument>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+        
+        try {
+            
+            RepositoryConnection con = repo.getConnection();
+            
+            try {
+                
+                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+                "\n" +
+                "SELECT ?uri ?title ?date ?type ?views ?id\n" +
+                "WHERE{\n" +
+                "?uri dc:title ?title.\n" +
+                "?uri dc:created ?date.\n" +
+                "?uri leg:views ?views.\n" +
+                "?uri rdf:type ?type.\n" +
+                "?uri leg:legislationID ?id.\n" +
+                "FILTER(langMatches(lang(?title), \"el\"))\n" +
+                "}\n" +
+                "ORDER BY DESC(?date)\n" +
+                "LIMIT 10";
+                  
+                //System.out.println(queryString);
+                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                result = tupleQuery.evaluate();
+
+                try {
+                    
+                    // iterate the result set
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+                        LegalDocument legald = new LegalDocument();
+                        String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
+                        legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        System.out.println(legald.getURI() + "MMMMMMMMMMMM");
+                        String title = bindingSet.getValue("title").toString().replace("@el", "");
+                        legald.setTitle(trimDoubleQuotes(title));
+                        String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
+                        legald.setId(trimDoubleQuotes(id));
+                        String date = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");  
+                        date = trimDoubleQuotes(date);
+                        legald.setPublicationDate(date);
+                        String[] year = date.split("-");
+                        legald.setYear(year[0]);
+                        
+                        String type = bindingSet.getValue("type").toString();
+                           
+                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
+                                legald.setDecisionType("ΣΥΝΤΑΓΜΑ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
+                                legald.setDecisionType("ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ (ΠΔ)");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
+                                legald.setDecisionType("ΝΟΜΟΣ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
+                                legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
+                                legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                                legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
+                            
+                        legalrecent.add(legald);
+                        
+                    }
+                    
+                }
+                finally {
+                    result.close();
+                }
+                 
+            }
+            finally {
+                con.close();
+            }
+            
+        }
+        catch (OpenRDFException e) {
+            // handle exception
+        }
+        
+        return legalrecent;
 
     }
     

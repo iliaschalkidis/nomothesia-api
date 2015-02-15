@@ -143,6 +143,26 @@ public class LegislationService {
         return legalDocumentDAO.search(params);
     }
     
+    public List<LegalDocument> MostViewed() {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        return legalDocumentDAO.getViewed();
+    }
+    
+    public List<LegalDocument> MostRecent() {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+        
+        return legalDocumentDAO.getRecent();
+    }
+    
     public List<String> getTags(){
           //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");

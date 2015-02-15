@@ -177,7 +177,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                     <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
+                    <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
                     <tr>
                         <td><a href="${legaldoc.getURI()}" >${legaldoc.getTitle()}</a></td>
                         <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>

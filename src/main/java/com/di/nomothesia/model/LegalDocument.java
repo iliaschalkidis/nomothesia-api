@@ -18,6 +18,7 @@ public class LegalDocument {
     private String decisionType;
     private String year;
     private String id;
+    private String views;
     
     public LegalDocument() {
         
@@ -111,6 +112,14 @@ public class LegalDocument {
 
     public void setId(String id) {
         this.id = id;
+    }
+    
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
     }
     
     public List<String> getTags() {
