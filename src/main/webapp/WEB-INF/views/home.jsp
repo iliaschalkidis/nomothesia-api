@@ -62,7 +62,7 @@
                         <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
@@ -221,34 +221,26 @@
                     
                     <div style="text-align: justify;padding:10px;">
                     <p><img style="width:40%; margin-left: 10px; margin-bottom: 10px;" align="right" src="${pageContext.servletContext.contextPath}/resources/images/greekcloud.png"</img>
-                        Στις μέρες μας, σε αντίθεση με πολλές χώρες της Ευρωπαϊκής Ένωσης, δεν υπάρχει κάποιο
-                        μηχανικά αναγνώσιμο πρότυπο για την ελληνική νομοθεσία και επομένως δεν μπορούν να
-                        προκύψουν προηγμένες διαδικτυακές νομικές υπηρεσίες. Στόχος μας είναι να συνισφέρουμε
-                        στον τομέα της αναπαράστασης νομικής γνώσης και στην ενσωμάτωση αυτής στην περιοχή
-                        των ανοιχτών δεδομένων στην Ελλάδα, τόσο από τεχνολογική σκοπιά όσο και από άποψη
-                        διαφάνειας. Η συγκεκριμένη εργασία παρουσιάζει την Νομοθεσί@, μια πλατφόρμα, που
-                        σκοπό έχει να δώσει πρόβαση στην ελληνική νομοθεσία, με την χρήση ενός νομικού XML
-                        προτύπου και τα διασυνδεδεμένα δεδομένα (linked data). Η Νομοθεσί@ προτείνει ένα νεό
-                        XML πρότυπο για την αναπαράσταση τον νομοθετικών εγγράφων και ταυτόχρονα υιοθετεί
-                        την OWL οντολογία CEN Metalex, παράλληλα με άλλες, με σκοπό να περιγράψει τις νομοθετικές 
-                        σχέσεις και γεγονότα. Η σύνδεση δεδομένων αφορά την διασύνδεση και ανοιχτή δημοσίευση 
-                        ελληνικών δημόσιων δεδομένων και των νομοθετικών δεδομένων κατά μήκος της Ευρωπαϊκή Ένωσης,
-                        με σκοπό την ενίσχυση της ηλεκτρονικής διακυβέρνησης. Πάνω σε αυτές
-                        τις αρχές, χτίζουμε ένα Σύστημα Διαχείρισης Περιεχομένου (ΣΔΠ) για την διαχείρηση του
-                        νομοθετικού αρχείου και διαδικτυακές υπηρεσίες με σκοπό την αναζήτηση και παρουσίαση
-                        της ελληνικής νομοθεσίας.
+                        Στις μέρες μας, σε αντίθεση με πολλές χώρες της Ευρωπαϊκής Ένωσης, δεν υπάρχει κάποιο μηχανικά αναγνώσιμο πρότυπο για την ελληνική νομοθεσία και επομένως δεν μπορούν να προκύψουν προηγμένες διαδικτυακές νομικές υπηρεσίες. Στόχος μας είναι να συνεισφέρουμε στον τομέα της αναπαράστασης νομικής γνώσης και στην ενσωμάτωση αυτής στην περιοχή των ανοιχτών δεδομένων (open data) στην Ελλάδα, τόσο από τεχνολογική σκοπιά όσο και από άποψη διαφάνειας. Η συγκεκριμένη εργασία παρουσιάζει την Νομοθεσί@, μια πλατφόρμα, που σκοπό έχει να δώσει πρόσβαση στην ελληνική νομοθεσία, με την χρήση τεχνολογιών του <a href ="http://semanticweb.org/">Σημασιολογικού Ιστού (Semantic Web)</a> και την διασύνδεση τους με άλλα σύνολα δεδομένων (Καλλικράτης κ.α.) στα πλαίσια προώθησης της ηλεκτρονικής διακυβέρνησης. Η Νομοθεσί@ υιοθετεί την OWL οντολογία <a href="http://www.metalex.eu/">CEN Metalex</a>, ενώ παράλληλα επεξεργάζεται μια επέκταση της στα πλαίσια αναπαράστασης της ελληνική νομοθεσίας με τις όποιες ιδιορρυθμίες παρουσιάζει. Βασικός σκοπός είναι η αναπαράσταση των νομοθετικών σχέσεων και γεγονότων ως προς το περιεχόμενο (content) και τον χρόνο (temporal). Παράλληλα υψίστης σημασίας είναι η διασύνδεση των δεδομένων (linked data), η οποία αφορά τόσο στην διασύνδεση με άλλα δημόσια σύνολα δεδομένων <a href="http://www.linkedopendata.gr/">(Greek Linked Open Data)</a>, όσο και στην προώθηση της διασύνδεσης με το κοινοτικό δίκαιο στα πλαίσια της προώθηση του <a href="http://europa.eu/legislation_summaries/justice_freedom_security/judicial_cooperation_in_civil_matters/jl0068_en.htm">ELI (European Legislation Identifier)</a>. Πάνω σε αυτές τις αρχές, χτίζουμε μία διαδικτυακή διεπαφή προγραμματισμού εφαρμογών (αγγλ. API, από το Application Programming Interface) που στόχο έχει τόσο την δημοσίευση και παρουσίαση της ελληνικής νομοθεσίας στο εύρη κοινό μέσα από την συγκεκριμένη εύχρηστη μοντέρνα διαδικτυακή εφαρμογή, όσο και την δυνατότητα της χρήσης των ανοιχτών δεδομένων που προσφέρει το Νομοθεσί@ ως REST υπηρεσίες (εξαγωγή XML – RDF – PDF) με σκοπό την ανάπτυξη εφαρμογών ειδικού ενδιαφέροντος (νομικού, οικονομικού, δικαιωμάτων) από τρίτους.                        
+                    </p>
+                    <p>
+                        Παρόμοιες πρωτοβουλίες στο εξωτερικό:
+                    <ul>
+                        <li><a href="http://www.metalex.eu/">CEN Metalex</a> (Ολλανδία)</li>
+                        <li><a href="http://www.legislation.gov.uk/">Legislation.gov.uk</a> (Ηνωμένο Βασίλειο)</li>
+                    </ul>
                     </p>
                     <div align="center" style="padding:10px;">
-                        <a class="btn btn-primary btn-lg" href="downloadPDF" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
+                        <a class="btn btn-primary btn-lg" href="/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
                     </div>
                     <div align="center" style="padding:10px;">
-                        <a class="btn btn-primary btn-lg" href="downloadPDF" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
+                        <a class="btn btn-primary btn-lg" href="/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
                     </div>
                     </div>
                 </div>
         </div>
         <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
     </div>
     

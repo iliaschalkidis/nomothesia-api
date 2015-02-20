@@ -68,7 +68,7 @@
                         <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
@@ -106,8 +106,8 @@
             </p>
             <p style="text-align: justify">Γεννήθηκε στην Αθήνα, Αττικής στις 08/02/1990. Είναι μεταπτυχιακός φοιτητής στο Τμήμα Πληροφορικής & Τηλεπικοινωνιών του Καποδιστριακού Πανεπιστημίου Αθηνών και παράλληλα εργάζεται ως ερευνητής στα πλαίσια της συγκεκριμένης εργασίας. Είναι μέλος του  <a href="http://madgik.di.uoa.gr/">Management of Data and Information Knowledge Group (MaDgiK)</a></p>
             <p style="text-align: justify">Επιμελήθηκε την δημιουργία της ηλεκτρονικής πλατφόρμας Νομοθεσί@ στα πλαίσια της πτυχιακής του εργασίας με τίτλο "Νομοθεσία: Πλατφόρμας για την Ελληνική νομοθεσία" με επιβλέποντες τον καθηγητή κ. <a href="http://cgi.di.uoa.gr/~koubarak/">Μανόλη Κουμπαράκη.</a> και τον διδακτορικό φοιτητή <a href="http://cgi.di.uoa.gr/~charnik/">Χαράλαμπο Νικολάου</a>. Μετά από σύσταση του καθηγητή κ.
-            Μανόλη Κουμπαράκη, παρακολούθησε πέρσι το συνέδριο <a href="https://joinup.ec.europa.eu/community/semic/event/semic-2014-semantic-interoperability-conference"> SEMIC 2014 (Semantic Interoperability Community) </a>, που έλαβε χώρα στην Αθήνα, στον τομέα της Ηλεκτρονικής Διακυβέρνησης με χρήση των τεχνολογιών του Σημασιολογικού Ιστού
-(Semantic Web) και ευρήτερα των Διασυνδεδεμένων Δεδομένων (Linked Data). Πλέον συνεχίζει την περαιτέρω ανάπτυξη της πλατφόρμας και στο άμεσο μέλλον αποσκοπέι στην δημιουργία εργαλείου μετατροπής της ελληνικής νομοθεσίας σε RDF/OWL σύνολο δεδομένων (data set) με την υποστήριξη του Υπ. Διοικητικής Μεταρρύθμισης.</p>
+            Μανόλη Κουμπαράκη, παρακολούθησε πέρσι το συνέδριο <a href="https://joinup.ec.europa.eu/community/semic/event/semic-2014-semantic-interoperability-conference"> SEMIC 2014 (Semantic Interoperability Community) </a>, που έλαβε χώρα στην Αθήνα, στον τομέα της Ηλεκτρονικής Διακυβέρνησης και ειδικότερα στην προώθηση των τεχνολογιών του Σημασιολογικού Ιστού
+(Semantic Web) και ευρήτερα των Διασυνδεδεμένων Δεδομένων (Linked Data) στα πλαίσια της ΕΕ. Πλέον συνεχίζει την περαιτέρω ανάπτυξη της πλατφόρμας και στο άμεσο μέλλον αποσκοπέι στην δημιουργία εργαλείου μετατροπής της ελληνικής νομοθεσίας σε RDF/OWL σύνολο δεδομένων (data set) με την υποστήριξη του Υπ. Διοικητικής Μεταρρύθμισης.</p>
             </div>
             <div id="tab2"><br/>
                     <p> <h4>Παναγιώτης Σούρσος (Panagiotis Soursos)</h4>
@@ -206,7 +206,7 @@
             <div class="col-md-2"></div>
         </div>
         <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
     </div>
     

@@ -19,6 +19,7 @@ public class LegalDocument {
     private String year;
     private String id;
     private String views;
+    private String place;
     
     public LegalDocument() {
         
@@ -62,6 +63,9 @@ public class LegalDocument {
         return title;
     }
     
+    public String getPlace() {
+        return place;
+    }
     public void setTitle(String title) {
         this.title = title;
     }
@@ -178,6 +182,10 @@ public class LegalDocument {
             }
         }
         
+    }
+
+    public void setPlace(String geometry) {
+        this.place = geometry;
     }
     
 }

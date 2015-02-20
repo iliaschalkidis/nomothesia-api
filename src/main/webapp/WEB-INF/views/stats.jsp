@@ -33,6 +33,92 @@
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
     
+      <script type="text/javascript">
+  window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer", {            
+      title:{
+        text: ""              
+      },
+
+      data: [  //array of dataSeries     
+      { //dataSeries - first quarter
+ /*** Change type "column" to "bar", "area", "line" or "pie"***/        
+       type: "column",
+       name: "ΠΔ",
+       showInLegend: true,
+       dataPoints: [
+       { label: "2008", y: 200 },
+       { label: "2009", y: 194 },
+       { label: "2010", y: 152 },
+       { label: "2011", y: 138 },
+       { label: "2012", y: 136 },                                    
+       { label: "2013", y: 177 },
+       { label: "2014", y: 178 }
+       ]
+     },
+
+     { //dataSeries - second quarter
+      color: "#B0D0B0",
+      type: "column",
+      name: "Νόμος", 
+      showInLegend: true,               
+      dataPoints: [
+      { label: "2008", y: 3732 },
+      { label: "2009", y: 3813 },
+      { label: "2010", y: 3906 },
+      { label: "2011", y: 4035 },
+      { label: "2012", y: 4102 },                                    
+      { label: "2013", y: 4224 },
+      { label: "2014", y: 4319 }
+      ]
+    }
+    ],
+ /** Set axisY properties here*/
+    axisY:{
+      prefix: "",
+      suffix: ""
+    }    
+  });
+
+chart.render();
+
+    var chart2 = new CanvasJS.Chart("chartContainer2",
+    {
+      title:{
+        text: ""              
+      },
+      legend:{
+        verticalAlign: "bottom",
+        horizontalAlign: "center"
+      },
+      data: [
+      {
+        //startAngle: 45,
+       //indexLabelFontSize: 20,
+       //indexLabelFontFamily: "Garamond",
+       //indexLabelFontColor: "darkgrey",
+       //indexLabelLineColor: "darkgrey",
+       //indexLabelPlacement: "outside",
+       type: "doughnut",
+       showInLegend: true,
+       dataPoints: [
+       {  y: 42.37, legendText:"ΥΠΟΙΚ 2123"},
+       {  y: 21.0, legendText:"ΥΠΕΣ 1232"},
+       {  y: 12, legendText:"ΥΠΕΧΩΔΕ 567"},
+       {  y: 8.2, legendText:"ΥΠΥ 452"},
+       {  y: 7.3, legendText:"ΥΠΔΜΕ 389"},
+       {  y: 4.2, legendText:"ΥΠΠΟΛ 178"},
+       {  y: 2.1, legendText:"ΥΠΕΞ 83"},
+       {  y: 1.0, legendText:"ΛΟΙΠΑ 1%"}
+       ]
+     }
+     ]
+   });
+
+    chart2.render();
+  }
+  </script>
+  <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/canvasjs.min.js"></script>
 </head>
 
 <body>
@@ -51,7 +137,7 @@
             </div>
         
             <div class="collapse navbar-collapse navbar-menubuilder">
-               <ul class="nav navbar-nav navbar-left">
+                <ul class="nav navbar-nav navbar-left">
                     <li>
                         <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
                     </li>
@@ -77,63 +163,25 @@
         </div>
     </div>
       
-    <!-- Search Form -->
+    <!-- Stats -->
     <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ΠΑΡΑΔΕΙΓΜΑΤΑ</h3></span>
-                <div align="center" style="padding:10px;">
-                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;">Εμφάνισε όλες τις τροποποιήσεις<br/>που αφορούν το ΠΔ 2011/54</a>
-                </div>
-                <div align="center" style="padding:10px;">
-                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;">Εμφάνισε την πλήρη δομή <br/>του ΠΔ 2014/65</a>
-                </div>
-                <div align="center" style="padding:10px;">
-                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;">Εμφάνισε μέλη κυβερνήσεων<br/>τα οποία έχουν υπογράψει<br/>τις περισσότερες αποφάσεις<br/>μεταξύ του 2010 και 2014</a>
-                </div>
+        <div class="row" style="min-height: 505px;">
+            <div class="col-md-6">
+            <div class="row" style="padding:10px;">
+                <div id="chartContainer" style="height: 300px; width: 400px;"></div>
             </div>
-            <div class="col-md-9">
-            <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ENDPOINT</h3></span>
-                <form role="form" action="${pageContext.servletContext.contextPath}/legislation/endpoint">
-                  <div class="form-group">
-                      <textarea name="query" class="form-control" rows="15" columns="15"><c:choose><c:when test="${empty endpointResults}">PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
-PREFIX owl: <http://www.w3.org/2002/07/owl#> 
-PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> 
-PREFIX leg: <http://legislation.di.uoa.gr/ontology/> 
-PREFIX dc: <http://purl.org/dc/terms/>
-</c:when>
-<c:otherwise>
-${endpointResults.getQuery()}
-</c:otherwise></c:choose></textarea>
-                  </div>
-                  <div class="form-group" style="text-align: right;">
-                  <button type="submit" class="btn btn-default btn-lg">Εκτέλεση</button>
-                  </div>
-                </form>
+            </div>
+            <div class="col-md-6">
+           <div class="row" style="padding:10px;">
+               <div id="chartContainer2" style="height: 300px; width: 300px;"></div>
+            </div>  
+                    
             </div>
         </div>
-          <div class="row">
-                <br/>
-                <c:if test="${not empty endpointResults.getMessage()}">
-                <div class="alert alert-warning" role="alert">${endpointResults.getMessage()}</div>
-                </c:if>
-                <c:if test="${not empty endpointResults.getResults()}">
-                    <table id="example" class="table table-striped table-bordered" style="text-align: left; font-size: 12px;" cellspacing="0" width="80%">
-                    ${endpointResults.getResults()}
-                    </table>
-                </c:if>
-                <br/>
-                <br/>
-                <br/>
-          </div>
         <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
             <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
     </div>
-    
-
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

@@ -57,4 +57,12 @@ public class HomeController {
 		return "developer";
                 
 	}
+        
+        @RequestMapping(value = "/legislation/statistics", method = RequestMethod.GET)
+	public String stats(Locale locale, Model model) {	
+		return "stats";
+                
+	}
+        
+        
 }

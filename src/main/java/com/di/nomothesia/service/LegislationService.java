@@ -73,7 +73,7 @@ public class LegislationService {
                     "\n" +
                     "SELECT ?part ?type \n" +
                     "WHERE{\n" +
-                    " <http://legislation.di.uoa.gr/pd/2012/10> metalex:part+  ?part.\n" +
+                    " <http://legislation.di.uoa.gr/pd/2014/165> metalex:part+  ?part.\n" +
                     " ?part rdf:type ?type.\n" +
                     "}" +
                     "ORDER BY ?part" 
@@ -96,7 +96,7 @@ public class LegislationService {
                     " ?signer foaf:name ?name.\n" +
                     "}" +
                     "GROUP BY ?signer ?name\n" +
-                    "ORDER BY ?decisions"
+                    "ORDER BY DESC(?decisions)"
             );
         }
         else{

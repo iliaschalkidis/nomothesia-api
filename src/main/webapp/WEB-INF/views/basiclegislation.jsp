@@ -32,7 +32,8 @@
     <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
     <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-social.css" rel="stylesheet"/>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    
+    <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
     
@@ -43,7 +44,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    
+ 
     <script>
         $(function() {
             $('html, body').animate({scrollTop:$('#${id}').position().top}, 'slow');
@@ -73,17 +74,7 @@
     </script>
     
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-    <script>
-          $('#myTab a').click(function (e) {
-              e.preventDefault()
-              $(this).tab('show')
-            })
-            
-            $('#myTab a[href="#profile"]').tab('show') // Select tab by name
-            $('#myTab a:first').tab('show') // Select first tab
-            $('#myTab a:last').tab('show') // Select last tab
-            $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
-    </script>
+
     
     <script> 
         function prepareList() {
@@ -112,20 +103,9 @@
 //});
     </script>
     
-    <!--<div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-    <script type="text/javascript">
-    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
-    </script>-->
 </head>
 
-<body>
+<body <c:if test="${not empty legaldoc.getPlace()}">onload="initialize()"</c:if>>
     
     <!-- Navigation Bar -->
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
@@ -152,7 +132,7 @@
                         <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
@@ -176,29 +156,38 @@
                     <u style="color:  #1087dd">ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
                     <u style="color:  #1087dd">ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
                     <u style="color:  #1087dd">ΦΕΚ:</u> ${legaldoc.getFEK()}<br/>
-                    <u style="color:  #1087dd">ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/> 
-                    <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop">
+                    <u style="color:  #1087dd">ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/>
+                    <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                         ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
                     </c:forEach>
+                    <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">[συνέχεια ...]</a>
+                    <div class="collapse" id="collapseExample">
+                    <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="2">
+                        ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
+                    </c:forEach>
+                    </div><br/>
                     <c:if test="${not empty legaldoc.getTags()}">
                         <u style="color:  #1087dd">ΕΤΙΚΕΤΕΣ:</u> <br/>
                         <c:forEach items="${legaldoc.getTags()}" var="tag" varStatus="loop">
                             ${tag}<c:if test="${!loop.last}">,&nbsp;</c:if>
                         </c:forEach>
+                    </c:if><br/>
+                    <c:if test="${not empty legaldoc.getPlace()}">
+                    <u style="color:  #1087dd">ΧΑΡΤΗΣ:</u><br/> <br/>
+                    <div id="map" style="width:200; height:200px;"></div>
                     </c:if>
-                    
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Enacted Version</a>
+                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Αρxική Έκδοση</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-success btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to XML</a>
+                    <a class="btn btn-success btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to PDF</a>
+                    <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export to RDF</a>
+                    <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή RDF</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -304,7 +293,7 @@
                             </c:if>
                         </tbody>
                       </table>
-                      
+                            
                   </div>
                 <div role="tabpanel" class="tab-pane" id="messages">
                     <ul id="messagescol">
@@ -344,15 +333,35 @@
                     </table>
                     
                 </div>
-                </div>
             </div>
         </div>
         </div>
         <div class="row"  style="height:400px;">&#160;&#160;</div>
         <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
     </div>
-        
+<c:if test="${not empty legaldoc.getPlace()}">
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/geoxml3-kmz.js"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/ProjectedOverlay.js"></script>	
+
+<script type="text/javascript">
+    function initialize() {
+        var myOptions = {
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        // get KML filename
+        var kml = '/resources/js/kml.xml';
+        // create map
+        var map = new google.maps.Map(document.getElementById("map"), myOptions);
+        var myParser = new geoXML3.parser({map: map});
+        myParser.parseKmlString("${legaldoc.getPlace()}");   
+    }
+
+</script>
+</c:if>
 </body>
 </html>
