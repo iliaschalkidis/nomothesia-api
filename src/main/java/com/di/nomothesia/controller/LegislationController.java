@@ -1,6 +1,6 @@
 package com.di.nomothesia.controller;
 
-import com.di.nomothesia.model.EndpointResult;
+import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.service.LegislationService;
 import java.util.List;
@@ -169,7 +169,7 @@ public class LegislationController {
 	public String endpoint(@RequestParam Map<String,String> params, Model model) {
 		if(params.get("query") != null){
                     LegislationService lds = new LegislationService();
-                    EndpointResult eprs = lds.sparqlQuery(params.get("query"));
+                    EndpointResultSet eprs = lds.sparqlQuery(params.get("query"));
                     model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";
@@ -179,7 +179,7 @@ public class LegislationController {
 	public String endpoint( @PathVariable String id, Model model) {
 		if(id != null){
                     LegislationService lds = new LegislationService();
-                    EndpointResult eprs = lds.sparqlQuery(id);
+                    EndpointResultSet eprs = lds.sparqlQuery(id);
                     model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";

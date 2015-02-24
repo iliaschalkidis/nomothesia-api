@@ -4,20 +4,16 @@ import com.di.nomothesia.comparators.LegalDocumentSort;
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.Case;
 import com.di.nomothesia.model.Citation;
-import com.di.nomothesia.model.EndpointResult;
+import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.model.Paragraph;
 import com.di.nomothesia.model.Passage;
 import com.di.nomothesia.model.Signer;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +34,9 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
+import eu.earthobservatory.org.StrabonEndpoint.client.*;
+import org.openrdf.query.resultio.stSPARQLQueryResultFormat;
+
 
 public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 
@@ -158,9 +157,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         System.out.println(legald.getViews() + "OOOOOOOOOOOOOOOOOOOOOOOOOO" + legald.getId());
                         if((flag ==0) &&(bindingSet.hasBinding("place"))){
                             flag = 1;
-                            if(bindingSet.getBinding("place")!=null){
                             legald.setPlace(this.getKML(bindingSet.getValue("place").toString()));
-                            }
                         }
                     }
                     
@@ -820,7 +817,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     @Override
-    public EndpointResult sparqlQuery(EndpointResult endpointResult) {
+    public EndpointResultSet sparqlQuery(EndpointResultSet endpointResult) {
         
         String results = "";
        
@@ -2030,60 +2027,85 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     // HTTP GET request
-    private String getKML(String place) throws Exception {
+    private String getKML(String place){
 
+            EndpointResult result = null;
             Properties props = new Properties();
             InputStream fis = null;
-            String strabonServer = "";
+            String host = "";
+            int port = 0;
+            String appName = "";
             try {
 
                 fis = getClass().getResourceAsStream("/properties.properties");
                 props.load(fis);
 
                 // get the properties values
-                strabonServer = props.getProperty("StrabonServer");
+                host = props.getProperty("StrabonHost");
+                port = Integer.parseInt(props.getProperty("StrabonPort"));
+                appName = props.getProperty("StrabonAppName");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String KML = "";
+            String query = "SELECT ?geo WHERE {<"+place+"> ?hasgeometry ?geo. ?hasgeometry <http://www.w3.org/2000/01/rdf-schema#label> \"has_geometry\"@en.}"; 
+
+            SPARQLEndpoint endpoint = new SPARQLEndpoint(host, port, appName);
+
+            try {
+                result = endpoint.query(query, stSPARQLQueryResultFormat.KML);
+                
+                System.out.println("Status code: " + result.getStatusCode());
+                System.out.println("Query: " + query);
+                System.out.println("Status text: " + result.getStatusText());
+                KML = result.getResponse().replace("<?xml version='1.0' encoding='UTF-8'?>", "");
+                KML = KML.replaceAll("\n", "");
+                KML = KML.replaceAll("\r", "");
+                System.out.println("<----- Result ----->");
+                System.out.println(KML);
+                System.out.println("<----- Result ----->");
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        
-            String url = strabonServer + "/Query?view=HTML&query=+PREFIX+gag:+%3Chttp://geo.linkedopendata.gr/gag/ontology/%3E+SELECT+?geo+WHERE+{+<"+place+">+gag:%CE%AD%CF%87%CE%B5%CE%B9_%CE%B3%CE%B5%CF%89%CE%BC%CE%B5%CF%84%CF%81%CE%AF%CE%B1+?geo.}+&format=KML"; //http://localhost:8080/strabon-endpoint-3.2.9/Query?view=HTML&query=+PREFIX+gag:+<http://geo.linkedopendata.gr/gag/ontology/>+SELECT+?geo+WHERE+{+<http://geo.linkedopendata.gr/gag/id/1104>+gag:έχει_γεωμετρία+?geo.}+&format=KML";
             
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            return KML;
 
-            // optional default is GET
-            con.setRequestMethod("GET");
-
-            //add request header
-            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            con.setRequestProperty("Accept", "application/vnd.google-earth.kml+xml");
-            int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'GET' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-            }
-            in.close();
-            
-            String[] outs = response.toString().split("<!-- Response -->");
-            String KML = outs[1].replaceAll("&lt;","<");
-            KML = KML.replaceAll("&gt;", ">");
-            outs = KML.split("<kml");
-            //print result
-            System.out.println(KML);
-            System.out.println("KML");
-            System.out.println("======================================================================================");
-            System.out.println(response.toString());
-            //System.out.println(outs[1]);
-            System.out.println("======================================================================================");
-            return "<kml" + outs[1];
+//            URL obj = new URL(url);
+//            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+//
+//            // optional default is GET
+//            con.setRequestMethod("GET");
+//
+//            //add request header
+//            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//            con.setRequestProperty("Accept", "application/vnd.google-earth.kml+xml");
+//            int responseCode = con.getResponseCode();
+//            System.out.println("\nSending 'GET' request to URL : " + url);
+//            System.out.println("Response Code : " + responseCode);
+//
+//            BufferedReader in = new BufferedReader(
+//                    new InputStreamReader(con.getInputStream()));
+//            String inputLine;
+//            StringBuilder response = new StringBuilder();
+//
+//            while ((inputLine = in.readLine()) != null) {
+//                    response.append(inputLine);
+//            }
+//            in.close();
+//            
+//            String[] outs = response.toString().split("<!-- Response -->");
+//            String KML = outs[1].replaceAll("&lt;","<");
+//            KML = KML.replaceAll("&gt;", ">");
+//            outs = KML.split("<kml");
+//            //print result
+//            System.out.println(KML);
+//            System.out.println("KML");
+//            System.out.println("======================================================================================");
+//            System.out.println(response.toString());
+//            //System.out.println(outs[1]);
+//            System.out.println("======================================================================================");
+//            return "<kml" + outs[1];
     }
     
 }

@@ -1,7 +1,7 @@
 
 package com.di.nomothesia.model;
 
-public class EndpointResult {
+public class EndpointResultSet {
     
     private String query;
     private String results;

@@ -1,6 +1,6 @@
 package com.di.nomothesia.dao;
 
-import com.di.nomothesia.model.EndpointResult;
+import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import java.util.List;
@@ -14,7 +14,7 @@ public interface LegalDocumentDAO {
     public LegalDocument getMetadataById(String decisionType, String year, String id);
     public List<Modification> getModifications(String decisionType, String year, String id, String date, int req);
     public List<LegalDocument> getAllModifications(String decisionType, String year, String id);
-    public EndpointResult sparqlQuery(EndpointResult endpointResult);
+    public EndpointResultSet sparqlQuery(EndpointResultSet endpointResult);
     public String getRDFById(String decisionType, String year, String id);
     public List<LegalDocument> search(Map<String, String> params);
     public List<String> getTags();

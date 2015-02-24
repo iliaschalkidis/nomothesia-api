@@ -2,7 +2,7 @@ package com.di.nomothesia.service;
 
 import com.di.nomothesia.controller.XMLBuilder;
 import com.di.nomothesia.dao.LegalDocumentDAO;
-import com.di.nomothesia.model.EndpointResult;
+import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import java.util.List;
@@ -34,7 +34,7 @@ public class LegislationService {
         return legalDocumentDAO.getAllModifications(decisionType, year, id);
     }
 
-    public EndpointResult sparqlQuery(String query) {
+    public EndpointResultSet sparqlQuery(String query) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -42,7 +42,7 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
         //Set query
-        EndpointResult eprs = new EndpointResult();
+        EndpointResultSet eprs = new EndpointResultSet();
         if(query.equals("1")) {
             eprs.setQuery("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
