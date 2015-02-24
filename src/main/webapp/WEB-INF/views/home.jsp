@@ -231,10 +231,10 @@
                     </ul>
                     </p>
                     <div align="center" style="padding:10px;">
-                        <a class="btn btn-primary btn-lg" href="/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
+                        <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
                     </div>
                     <div align="center" style="padding:10px;">
-                        <a class="btn btn-primary btn-lg" href="/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
+                        <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
                     </div>
                     </div>
                 </div>

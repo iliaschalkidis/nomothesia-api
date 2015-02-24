@@ -163,7 +163,7 @@
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">[συνέχεια ...]</a>
                     <div class="collapse" id="collapseExample">
                     <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="2">
-                        ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
+                        ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>
                     </c:forEach>
                     </div><br/>
                     <c:if test="${not empty legaldoc.getTags()}">

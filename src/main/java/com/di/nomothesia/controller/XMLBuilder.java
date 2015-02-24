@@ -54,6 +54,10 @@ public class XMLBuilder  {
             FEK.setTextContent(legald.getFEK());
             Metadata.appendChild(FEK);
             
+            Element views = doc.createElement("views");
+            views.setTextContent(legald.getViews());
+            Metadata.appendChild(views);
+            
             Element type = doc.createElement("decisiontype");
             type.setTextContent(legald.getDecisionType());
             Metadata.appendChild(type);

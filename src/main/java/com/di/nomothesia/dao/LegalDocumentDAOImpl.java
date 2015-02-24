@@ -35,6 +35,7 @@ import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import eu.earthobservatory.org.StrabonEndpoint.client.*;
+import org.openrdf.query.Update;
 import org.openrdf.query.resultio.stSPARQLQueryResultFormat;
 
 
@@ -154,7 +155,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         legald.getSigners().add(sign);
                         String views = bindingSet.getValue("views").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
                         legald.setViews(trimDoubleQuotes(views));
-                        System.out.println(legald.getViews() + "OOOOOOOOOOOOOOOOOOOOOOOOOO" + legald.getId());
+                        
                         if((flag ==0) &&(bindingSet.hasBinding("place"))){
                             flag = 1;
                             legald.setPlace(this.getKML(bindingSet.getValue("place").toString()));
@@ -449,7 +450,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         "ORDER BY ?part";
                     }
                   
-                    System.out.println(queryString);
+                    //System.out.println(queryString);
                     TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                     result = tupleQuery.evaluate();
 
@@ -639,53 +640,50 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     result.close();
                 }
                 
-                //int view = Integer.parseInt(legald.getViews());
+                int view = Integer.parseInt(legald.getViews());
                     
-//                String queryString2 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-//                "\n" +
-//                "DELETE WHERE {\n" +
-//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-//                " <http://legislation.di.uoa.gr/ontology/views>" +
-//                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
-//                "}";
+                String queryString2 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "\n" +
+                "DELETE WHERE {\n" +
+                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                " <http://legislation.di.uoa.gr/ontology/views>" +
+                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
+                "}";
                 
-//                System.out.println(queryString2);
-//
-//                
-//                    con.prepareUpdate(QueryLanguage.SPARQL, queryString2);
-//                
-//                
-//                view = view+1;
+                //System.out.println(queryString2);
+                Update update = con.prepareUpdate(QueryLanguage.SPARQL, queryString2);
+                update.execute();
+                con.commit();
                 
-//                String queryString3 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-//                "\n" +
-//                "INSERT DATA {\n" +
-//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-//                " <http://legislation.di.uoa.gr/ontology/views>" +
-//                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
-//                "}";
+                view = view+1;
                 
-//                System.out.println(queryString3);
-//
-//                
-//                    con.prepareUpdate(QueryLanguage.SPARQL, queryString3);
-//                
+                String queryString3 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "\n" +
+                "INSERT DATA {\n" +
+                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                " <http://legislation.di.uoa.gr/ontology/views>" +
+                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
+                "}";
+                
+                //System.out.println(queryString3);
+                Update update2 = con.prepareUpdate(QueryLanguage.SPARQL, queryString3);
+                update2.execute();
+                con.commit();
                 
             }
             finally {
-                con.commit();
                 con.close();
             }
             
@@ -2027,7 +2025,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     // HTTP GET request
-    private String getKML(String place){
+    private String getKML(String place) {
 
             EndpointResult result = null;
             Properties props = new Properties();
@@ -2053,6 +2051,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             SPARQLEndpoint endpoint = new SPARQLEndpoint(host, port, appName);
 
             try {
+                
                 result = endpoint.query(query, stSPARQLQueryResultFormat.KML);
                 
                 System.out.println("Status code: " + result.getStatusCode());
