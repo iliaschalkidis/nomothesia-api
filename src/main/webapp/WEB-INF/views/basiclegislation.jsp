@@ -103,6 +103,15 @@
 //});
     </script>
     
+    <style>
+        #footer {
+            position:absolute;
+            width:100%;
+            height:60px;   /* Height of the footer */
+            /*background:#6cf;*/
+        }
+    </style>
+    
 </head>
 
 <body <c:if test="${not empty legaldoc.getPlace()}">onload="initialize()"</c:if>>
@@ -337,10 +346,12 @@
         </div>
         </div>
         <div class="row"  style="height:400px;">&#160;&#160;</div>
-        <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
-        </div>
     </div>
+                        
+    <div id="footer" style="text-align: center; font-family:'Jura';" >
+        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+    </div>                        
+                            
 <c:if test="${not empty legaldoc.getPlace()}">
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/geoxml3-kmz.js"></script>

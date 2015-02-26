@@ -32,6 +32,15 @@
     
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
+
+<style>
+    #footer {
+        position:absolute;
+        width:100%;
+        height:60px;   /* Height of the footer */
+        <c:if test="${empty endpointResults.getResults()}">bottom: 0;</c:if>
+    }
+</style>    
     
 </head>
 
@@ -128,13 +137,13 @@ ${endpointResults.getQuery()}
                 <br/>
                 <br/>
           </div>
-        <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
-        </div>
+        
     </div>
     
+    <div id="footer" style="text-align: center; font-family:'Jura';" >
+        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+    </div>
 
-    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

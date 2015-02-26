@@ -17,10 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -161,6 +163,11 @@ public class LegislationController {
                     List<String> tags = lds.getTags();
                     model.addAttribute("legalDocuments", LDs);
                     model.addAttribute("tags",tags);
+                    
+                    if((params.get("keywords")!=null) && !params.get("keywords").equals("")) {
+                        model.addAttribute("keywords",params.get("keywords"));
+                    }
+                    
                 }
 		return "search";
 	}
@@ -185,4 +192,12 @@ public class LegislationController {
 		return "endpoint";
 	}
 	
+       @ExceptionHandler(Exception.class)
+	public String handleAllException(Exception ex) {
+ 
+		//ModelAndView model = new ModelAndView("error/exception_error");
+		return "home";
+ 
+	}
+        
 }

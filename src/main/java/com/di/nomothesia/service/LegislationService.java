@@ -73,7 +73,7 @@ public class LegislationService {
                     "\n" +
                     "SELECT ?part ?type \n" +
                     "WHERE{\n" +
-                    " <http://legislation.di.uoa.gr/pd/2014/165> metalex:part+  ?part.\n" +
+                    " <http://legislation.di.uoa.gr/pd/2014/65> metalex:part+  ?part.\n" +
                     " ?part rdf:type ?type.\n" +
                     "}" +
                     "ORDER BY ?part" 
@@ -183,6 +183,9 @@ public class LegislationService {
         //Get Legal Document
         LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
         
+        if (legald.getPublicationDate().compareTo(date) > 0){
+            legald = null;
+        };
         //Get all Modifications
         List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
         

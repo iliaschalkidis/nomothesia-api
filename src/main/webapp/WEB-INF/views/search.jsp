@@ -32,6 +32,16 @@
     
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
+
+<style>
+    #footer {
+        position:absolute;
+        bottom:0;
+        width:100%;
+        height:60px;   /* Height of the footer */
+        /*background:#6cf;*/
+    }
+</style>    
     
 </head>
 
@@ -84,7 +94,7 @@
                 <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
                 <ul  class="nav nav-sidebar">
                     <li><a>Λέξεις Κλειδιά:</a>
-                        <input type="text" name="keywords" class="form-control" id="keywords" placeholder="Εισάγετε επιθυμητή έκφραση...">
+                        <input type="text" name="keywords" class="form-control" id="keywords" <c:if test="${not empty keywords}">value="${keywords}"</c:if> placeholder="Εισάγετε επιθυμητή έκφραση...">
                     </li>
                     <li><a>Τύπος Νομοθεσίας:</a>
                         <fieldset>
@@ -192,13 +202,13 @@
         </div>
         </div>
         <div class="row"  style="height:400px;">&#160;&#160;</div>
-        <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
-        </div>
+        
     </div>
     
+    <div id="footer" style="text-align: center; font-family:'Jura';" >
+        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+    </div>
 
-    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

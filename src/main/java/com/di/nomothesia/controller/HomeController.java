@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -173,5 +174,13 @@ public class HomeController {
             outStream.close();
 
         }
+        
+        @ExceptionHandler(Exception.class)
+	public String handleAllException(Exception ex) {
+ 
+		//ModelAndView model = new ModelAndView("error/exception_error");
+		return "home";
+ 
+	}
             
 }

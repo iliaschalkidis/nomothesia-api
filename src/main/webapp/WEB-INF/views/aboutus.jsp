@@ -35,7 +35,15 @@
     -->
     <style>
         .tabs {
-            min-height: 505px;
+            min-height: 100%;
+        }
+        
+        #footer {
+            position:absolute;
+            bottom:0;
+            width:100%;
+            height:60px;   /* Height of the footer */
+            /*background:#6cf;*/
         }
     </style>
 
@@ -85,7 +93,7 @@
       
     <!-- Search Form -->
     <div class="container">
-        <div class="row">
+        <div class="row" >
             <div class="col-md-2"></div>
             <div class="col-md-8">
             <div class="tabs" id="tabs"> 
@@ -205,11 +213,12 @@
             </div>
             <div class="col-md-2"></div>
         </div>
-        <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
-        </div>
+        
     </div>
     
+    <div id="footer" style="text-align: center; font-family:'Jura';" >
+        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+    </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

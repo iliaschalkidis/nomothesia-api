@@ -857,7 +857,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 con.prepareGraphQuery(QueryLanguage.SPARQL,endpointResult.getQuery()).evaluate(writer); 
                 out.writeTo(System.out);
                 results += "<tr><td>Result</td></tr><tr><td>";
-                results += out.toString("ISO-8859-1");
+                results += "<pre>" ; 
+                String xml = out.toString("UTF-8");
+                xml = xml.replaceAll("<", "&lt");
+                xml = xml.replaceAll(">", "&gt");
+                results += xml+ "</pre>";
                 results += "</td></tr>";
             }
             catch (IOException ex) {

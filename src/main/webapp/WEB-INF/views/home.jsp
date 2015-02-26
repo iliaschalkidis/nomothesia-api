@@ -32,6 +32,15 @@
     
     <!-- jQueryUI Calendar-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
+
+<style>
+    #footer {
+        position:absolute;
+        width:100%;
+        height:60px;   /* Height of the footer */
+        /*background:#6cf;*/
+    }
+</style>    
     
 </head>
 
@@ -173,7 +182,7 @@
                   <div class="tab-content">
                       <div role="tabpanel" class="tab-pane active" id="home">
                           <br/>
-                          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                          <table id="example" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Τίτλος</th>
@@ -194,16 +203,16 @@
                       </div>
                     <div role="tabpanel" class="tab-pane" id="profile">
                         <br/>
-                        <table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                          <table id="example2" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Τίτλος</th>
                                     <th>Κωδικός</th>
                                     <th>Ημερομηνία</th>
                                 </tr>
-                        </thead>
+                            </thead>
                         <tbody>
-                             <c:forEach var="ldviewed" items="${ldviewed}" varStatus="loop">
+                            <c:forEach var="ldviewed" items="${ldviewed}" varStatus="loop">
                                 <tr>
                                     <td><a href="${ldviewed.getURI()}" >${ldviewed.getTitle()}</a></td>
                                     <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
@@ -239,9 +248,11 @@
                     </div>
                 </div>
         </div>
-        <div class="row" style="margin:10px; text-align: center; font-family:'Jura';">
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
-        </div>
+        
+    </div>
+                    
+    <div id="footer" style="text-align: center; font-family:'Jura';" >
+        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
     </div>
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -274,72 +285,81 @@
                 );
       });
       </script>
-      <script>
-          $('#myTab a').click(function (e) {
-              e.preventDefault()
-              $(this).tab('show')
-            })
-            
-            $('#myTab a[href="#profile"]').tab('show') // Select tab by name
-            $('#myTab a:first').tab('show') // Select first tab
-            $('#myTab a:last').tab('show') // Select last tab
-            $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
-      </script>
-   <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-                $('#example').dataTable({
-       "aaSorting": [],
-       bSortable: true,
-       "iDisplayLength": 4,
-       aoColumnDefs: [
-            { "aTargets": [ 0 ], "bSortable": true },
-            { "aTargets": [ 1 ], "bSortable": true },
-            { "aTargets": [ 2 ], "bSortable": true }
-        ],
-      "bLengthChange": false,
-      "oLanguage": {
-			"sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-			"sZeroRecords": "Δεν βρέθηκε τίποτα",
-			"sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-			"sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-			"sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-                        "oPaginate": {
-                                    "sNext": "Επόμενη",
-                                    "sPrevious": "Προηγούμενη"
-                         }
-		}
-  });
-        } );
-    </script>
+      
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
-                $('#example2').dataTable({
-      "aaSorting": [],
-      bSortable: true,
-      "iDisplayLength": 4,
-       aoColumnDefs: [
-            { "aTargets": [ 0 ], "bSortable": true },
-            { "aTargets": [ 1 ], "bSortable": true },
-            { "aTargets": [ 2 ], "bSortable": true }
-        ],
-      "bLengthChange": false,
-      "oLanguage": {
-			"sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-			"sZeroRecords": "Δεν βρέθηκε τίποτα",
-			"sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-			"sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-			"sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-                        "oPaginate": {
-                                    "sNext": "Επόμενη",
-                                    "sPrevious": "Προηγούμενη"
-                         }
-		}
-  });
-        } );
+        
+            $('#example').dataTable(
+                {
+                "autoWidth": false,    
+                "scrollY": "400px",
+                "scrollCollapse": true,
+                "paging": true,
+                "iDisplayLength": 4,
+                "aaSorting": [],
+                "bSortable": true,
+
+                "aoColumnDefs": [
+                    { "aTargets": [ 0 ], "bSortable": true },
+                    { "aTargets": [ 1 ], "bSortable": true },
+                    { "aTargets": [ 2 ], "bSortable": true }],
+
+                "bLengthChange": false,
+
+                "oLanguage": {
+
+                    "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
+                    "sZeroRecords": "Δεν βρέθηκε τίποτα",
+                    "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
+                    "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
+                    "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
+                    "sSearch": "Αναζήτηση",
+
+                    "oPaginate": {
+                        "sNext": "Επόμενη",
+                        "sPrevious": "Προηγούμενη"
+                    }
+
+                }
+                });
+                
+                $('#example2').dataTable(
+                {
+                "autoWidth": false,    
+                "scrollY": "400px",
+                "scrollCollapse": true,
+                "paging": true,
+                "iDisplayLength": 4,
+                "aaSorting": [],
+                "bSortable": true,
+
+                "aoColumnDefs": [
+                    { "aTargets": [ 0 ], "bSortable": true },
+                    { "aTargets": [ 1 ], "bSortable": true },
+                    { "aTargets": [ 2 ], "bSortable": true }],
+
+                "bLengthChange": false,
+
+                "oLanguage": {
+
+                    "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
+                    "sZeroRecords": "Δεν βρέθηκε τίποτα",
+                    "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
+                    "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
+                    "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
+                    "sSearch": "Αναζήτηση",
+
+                    "oPaginate": {
+                        "sNext": "Επόμενη",
+                        "sPrevious": "Προηγούμενη"
+                    }
+
+                }
+                });
+                
+            });
     </script>
-    
+   
     <script>
   $(function() {
     var availableTags = [
