@@ -111,14 +111,23 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#> 
 PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> 
 PREFIX leg: <http://legislation.di.uoa.gr/ontology/> 
-PREFIX dc: <http://purl.org/dc/terms/>
-</c:when>
-<c:otherwise>
-${endpointResults.getQuery()}
-</c:otherwise></c:choose></textarea>
+PREFIX dc: <http://purl.org/dc/terms/></c:when>
+<c:otherwise>${endpointResults.getQuery()}</c:otherwise></c:choose></textarea>
                   </div>
                   <div class="form-group" style="text-align: right;">
-                  <button type="submit" class="btn btn-default btn-lg">Εκτέλεση</button>
+                  <div class="row">
+                      <div class="col-md-3" style="text-align:left;">
+                        <label for="format">Mορφή αποτελέσματος:</label>
+                        <select class="form-control" name="format">
+                            <option value="HTML">HTML</option>
+                            <option value="XML">SPARQL/XML</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-5" style="bottom:0"> 
+                        <button type="submit" class="btn btn-default btn-lg">Εκτέλεση</button>
+                    </div>
+                  </div>
                   </div>
                 </form>
             </div>

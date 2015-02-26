@@ -35,7 +35,9 @@ import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import eu.earthobservatory.org.StrabonEndpoint.client.*;
+import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.Update;
+import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
 import org.openrdf.query.resultio.stSPARQLQueryResultFormat;
 
 
@@ -815,8 +817,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     @Override
-    public EndpointResultSet sparqlQuery(EndpointResultSet endpointResult) {
-        
+    public EndpointResultSet sparqlQuery(EndpointResultSet endpointResult,String format){
         String results = "";
        
         String sesameServer ="";
@@ -880,55 +881,107 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             }
         }
         else{
-        TupleQueryResult result;
-         try {
-           RepositoryConnection con = repo.getConnection();
-           try {
-                  
-                  System.out.println(endpointResult.getQuery());
-                  TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, endpointResult.getQuery());
-                  result = tupleQuery.evaluate();
+        
+        if(format.equals("XML")){
+               ByteArrayOutputStream out = new ByteArrayOutputStream();
+               try {
+                   SPARQLResultsXMLWriter sparqlWriter = new SPARQLResultsXMLWriter(out);
 
-                  try {
-                    //iterate the result set
-                    
-                    List<String> bindingNames = result.getBindingNames();
-                    results += "<tr>";
-                    for (String bindingName : bindingNames) {
-                            results += "<td>" + bindingName + "</td>";
+                   RepositoryConnection con = repo.getConnection();
+                   try {
+                      TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, endpointResult.getQuery());
+                      tupleQuery.evaluate(sparqlWriter);
+                      results += "<tr><td>Result</td></tr><tr><td>";
+                      results += "<pre>" ; 
+                      String xml = out.toString("UTF-8");
+                      xml = xml.replaceAll("<", "&lt");
+                      xml = xml.replaceAll(">", "&gt");
+                      results += xml+ "</pre>";
+                      results += "</td></tr>";
                     }
-                    results += "</tr>";
-                    while (result.hasNext()) {
-                           BindingSet bindingSet = result.next();
-                           results += "<tr>";
-                        for (String bindingName : bindingNames) {
-                            if(bindingSet.getValue(bindingName)!=null){
-                                results += "<td>" + bindingSet.getValue(bindingName).toString() + "</td>";
-                            }
-                            else{
-                                results += "<td></td>";
-                            }
-                        }
-                           results += "</tr>";
+                    catch (IOException ex) {
+                        endpointResult.setMessage(ex.toString());
+                    }
+                    catch (MalformedQueryException ex) {                  
+                            endpointResult.setMessage(ex.toString());
+                    } catch (QueryEvaluationException ex) {
+                            endpointResult.setMessage(ex.toString());
+                    } catch (RepositoryException ex) {
+                            endpointResult.setMessage(ex.toString());
+                    } catch (TupleQueryResultHandlerException ex) {      
+                       endpointResult.setMessage(ex.toString());
+                   }      
+                   finally {
+                      try{
+                         con.close();
+                      }
+                      catch (RepositoryException ex) {
+                            endpointResult.setMessage(ex.toString());
+                      }
                    }
                 }
-                finally {
-                        result.close();
+            catch (RepositoryException ex) {
+                Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }                finally {
+                   try{
+                   out.close();
+                   }
+                   catch (IOException ex) {
+                        endpointResult.setMessage(ex.toString());
+                    }
                 }
-                 
-           }
-           finally {
-              con.close();
-           }
         }
-        catch (OpenRDFException e) {
-            System.out.println("3");
-           endpointResult.setMessage(e.toString());
-           // handle exception
+        else if(format.equals("HTML")){
+            TupleQueryResult result;
+             try {
+               RepositoryConnection con = repo.getConnection();
+               try {
+
+                      System.out.println(endpointResult.getQuery());
+                      TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, endpointResult.getQuery());
+                      result = tupleQuery.evaluate();
+
+                      try {
+                        //iterate the result set
+
+                        List<String> bindingNames = result.getBindingNames();
+                        results += "<tr>";
+                        for (String bindingName : bindingNames) {
+                                results += "<td>" + bindingName + "</td>";
+                        }
+                        results += "</tr>";
+                        while (result.hasNext()) {
+                               BindingSet bindingSet = result.next();
+                               results += "<tr>";
+                            for (String bindingName : bindingNames) {
+                                if(bindingSet.getValue(bindingName)!=null){
+                                    results += "<td>" + bindingSet.getValue(bindingName).toString() + "</td>";
+                                }
+                                else{
+                                    results += "<td></td>";
+                                }
+                            }
+                               results += "</tr>";
+                       }
+                    }
+                    finally {
+                            result.close();
+                    }
+
+               }
+               finally {
+                  con.close();
+               }
+            }
+            catch (OpenRDFException e) {
+                System.out.println("3");
+               endpointResult.setMessage(e.toString());
+               // handle exception
+            }
         }
+        
         }
         endpointResult.setResults(results);
-        
         return endpointResult;
 
     }

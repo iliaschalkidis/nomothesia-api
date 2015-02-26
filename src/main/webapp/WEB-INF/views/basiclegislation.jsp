@@ -198,6 +198,9 @@
                 <div align="center" style="padding:10px;">
                     <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή RDF</a>
                 </div>
+                <div align="center" style="padding:10px;">
+                    <a class="btn btn-warning btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή JSON</a>
+                </div>
             </div>
             <div class="col-md-9">
                 <ul style="margin: 0; padding: 0; list-style-type: none; text-align: right;">

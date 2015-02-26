@@ -34,7 +34,7 @@ public class LegislationService {
         return legalDocumentDAO.getAllModifications(decisionType, year, id);
     }
 
-    public EndpointResultSet sparqlQuery(String query) {
+    public EndpointResultSet sparqlQuery(String query, String format) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -104,7 +104,7 @@ public class LegislationService {
         }
         
         //Get Query Result
-        return legalDocumentDAO.sparqlQuery(eprs);
+        return legalDocumentDAO.sparqlQuery(eprs,format);
     }
 
     public String getRDFById(String type, String year, String id) {
@@ -183,9 +183,9 @@ public class LegislationService {
         //Get Legal Document
         LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
         
-        if (legald.getPublicationDate().compareTo(date) > 0){
+        if ((date != null) && (legald.getPublicationDate().compareTo(date) > 0)){
             legald = null;
-        };
+        }
         //Get all Modifications
         List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
         

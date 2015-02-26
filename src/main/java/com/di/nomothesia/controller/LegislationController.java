@@ -4,7 +4,6 @@ import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.service.LegislationService;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -31,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LegislationController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LegislationController.class);
 	
 	@RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted", method = RequestMethod.GET)
 	public String presentOriginalLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
@@ -96,6 +95,17 @@ public class LegislationController {
 	
         }
         
+        @RequestMapping(value="/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.json", method = RequestMethod.GET)
+	public @ResponseBody LegalDocument exportDateToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id,@PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd) {
+                LegislationService lds = new LegislationService();
+                String date = "";
+                date += yyyy + "-" + mm + "-" + dd;
+		LegalDocument legal = lds.getUpdatedById(type,year,id,2,date);
+ 
+		return legal;
+ 
+	}
+        
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.pdf", method = RequestMethod.GET, produces={"application/xml"})
         public ModelAndView exportDateToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd) {
                 LegislationService lds = new LegislationService();
@@ -123,6 +133,15 @@ public class LegislationController {
 	
         }
         
+        @RequestMapping(value="/legislation/{type}/{year}/{id}/enacted/data.json", method = RequestMethod.GET)
+	public @ResponseBody LegalDocument exportToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
+                LegislationService lds = new LegislationService();
+		LegalDocument legal = lds.getById(type,year,id,2);
+ 
+		return legal;
+ 
+	}
+        
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegislationService lds = new LegislationService();
@@ -147,6 +166,15 @@ public class LegislationController {
             return new ResponseEntity<String>(rdfResult,new HttpHeaders(),HttpStatus.CREATED);
 	
         }
+        
+        @RequestMapping(value="/legislation/{type}/{year}/{id}/data.json", method = RequestMethod.GET)
+	public @ResponseBody LegalDocument exportUpdatedToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
+                LegislationService lds = new LegislationService();
+		LegalDocument legal = lds.getUpdatedById(type,year,id,2,null);
+ 
+		return legal;
+ 
+	}
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportUpdatedToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
@@ -176,7 +204,7 @@ public class LegislationController {
 	public String endpoint(@RequestParam Map<String,String> params, Model model) {
 		if(params.get("query") != null){
                     LegislationService lds = new LegislationService();
-                    EndpointResultSet eprs = lds.sparqlQuery(params.get("query"));
+                    EndpointResultSet eprs = lds.sparqlQuery(params.get("query"),params.get("format"));
                     model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";
@@ -186,7 +214,7 @@ public class LegislationController {
 	public String endpoint( @PathVariable String id, Model model) {
 		if(id != null){
                     LegislationService lds = new LegislationService();
-                    EndpointResultSet eprs = lds.sparqlQuery(id);
+                    EndpointResultSet eprs = lds.sparqlQuery(id,"HTML");
                     model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";
