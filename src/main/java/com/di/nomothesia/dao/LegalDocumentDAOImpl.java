@@ -133,7 +133,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "FILTER(langMatches(lang(?title), \"el\"))\n"+
                 "}";
                   
-                System.out.println(queryString);
+                //System.out.println(queryString);
                 TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                 result = tupleQuery.evaluate();
 
@@ -237,9 +237,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     @Override
-    public LegalDocument getCitationsById(String decisionType, String year, String id, int req) {
+    public LegalDocument getCitationsById(String decisionType, String year, String id, int req, LegalDocument legald) {
         
-        LegalDocument legald = this.getMetadataById(decisionType, year, id);
+        //LegalDocument legald = this.getMetadataById(decisionType, year, id);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -387,9 +387,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     @Override
-    public LegalDocument getById(String decisionType, String year, String id, int req) {
+    public LegalDocument getById(String decisionType, String year, String id, int req, LegalDocument legald) {
         
-        LegalDocument legald = this.getCitationsById(decisionType, year, id, req);
+        //LegalDocument legald = this.getCitationsById(decisionType, year, id, req);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -1518,6 +1518,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 else if (items.get(i).equals("md")) {
                                     queryString += "?type=leg:MinisterialDecision";
                                 }
+                                else if (items.get(i).equals("rd")) {
+                                    queryString += "?type=leg:RoyalDecree";
+                                }
                                   
                             }
                             else {
@@ -1536,6 +1539,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 }
                                 else if (items.get(i).equals("md")) {
                                     queryString += "?type=leg:MinisterialDecision || ";
+                                }
+                                else if (items.get(i).equals("rd")) {
+                                    queryString += "?type=leg:RoyalDecree || ";
                                 }
                                   
                             }
@@ -1622,7 +1628,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                   
                 queryString += "}";
                 
-                System.out.println(queryString);
+                //System.out.println(queryString);
                 TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                 result = tupleQuery.evaluate();
 

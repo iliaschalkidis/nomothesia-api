@@ -99,19 +99,22 @@
                     <li><a>Τύπος Νομοθεσίας:</a>
                         <fieldset>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="con">Σύνταγμα</label>
+                          <label><input type="checkbox" class="category" value="con" <c:if test="${type != null && fn:contains(type, 'con')}">checked='checked'</c:if>>Σύνταγμα</label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="law">Νόμος</label>
+                          <label><input type="checkbox" class="category" value="law" <c:if test="${type != null && fn:contains(type, 'law')}">checked='checked'</c:if>>Νόμος</label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="pd">Προεδρικό Διάταγμα (ΠΔ)</label>
+                          <label><input type="checkbox" class="category" value="pd" <c:if test="${type != null && fn:contains(type, 'pd')}">checked='checked'</c:if>>Προεδρικό Διάταγμα (ΠΔ)</label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="amc">Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</label>
+                          <label><input type="checkbox" class="category" value="amc" <c:if test="${type != null && fn:contains(type, 'amc')}">checked='checked'</c:if>>Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="md">Υπουργική Απόφαση (ΥΑ)</label>
+                          <label><input type="checkbox" class="category" value="md" <c:if test="${type != null && fn:contains(type, 'md')}">checked='checked'</c:if>>Υπουργική Απόφαση (ΥΑ)</label>
+                           </div>
+                           <div class="checkbox">
+                          <label><input type="checkbox" class="category" value="rd" <c:if test="${type != null && fn:contains(type, 'rd')}">checked='checked'</c:if>>Βασιλικό Διάταγμα (ΒΔ)</label>
                            </div>
                            <input id='categories' type='hidden' name='type' />
                         </fieldset>
@@ -119,11 +122,11 @@
                     <li><a>Αριθμός Κυκλοφορίας:</a>                        
                         <div class="row">
                         <div class="col-md-5">
-                        <input class="form-control" value="" type="number" name="year" min="1976" max="2015" step="1">
+                        <input class="form-control" <c:if test="${not empty year}">value="${year}"</c:if> type="number" name="year" min="1976" max="2015" step="1">
                         </div>
                         <div class="col-md-1" style="font-size: 25px;">/</div>
                         <div class="col-md-5"> 
-                        <input class="form-control" type="text" name="id" placeholder="N.">
+                        <input class="form-control" type="text" name="id" <c:if test="${not empty id}">value="${id}"</c:if> placeholder="N.">
                         </div>
                         </div>
                     </li>
@@ -138,18 +141,18 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                        <input class="form-control" value="" type="number" name="fek_year" min="1976" max="2015" step="1">
+                        <input class="form-control" type="number" <c:if test="${not empty fek_year}">value="${fek_year}"</c:if> name="fek_year" min="1976" max="2015" step="1">
                         </div>
                         <!--<div class="col-md-1" style="font-size: 25px;">/</div>-->
                         <div class="col-md-4"> 
-                        <input class="form-control" type="text" name="fek_id" placeholder="N.">
+                        <input class="form-control" type="text" name="fek_id" <c:if test="${not empty fek_id}">value="${fek_id}"</c:if> placeholder="N.">
                         </div>
                         </div>
                     </li>
                     <li><a>Ημερομηνία Κυκλοφορίας:</a>
                     <div class="form-group">                        
                         <div class='input-group date' >
-                            <input type='text'  name="date" id='datepicker' class="form-control" placeholder="Ημερομηνία"/>
+                            <input type='text'  name="date" id='datepicker' class="form-control" <c:if test="${not empty date}">value="${date}"</c:if> placeholder="Ημερομηνία"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div> 
@@ -158,14 +161,14 @@
                         <div class="row">
                         <div class="col-md-6">
                         <div class='input-group date' >
-                            <input type='text'  name="datefrom" id='datepicker2' class="form-control" placeholder="Από"/>
+                            <input type='text'  name="datefrom" id='datepicker2' class="form-control" <c:if test="${not empty datefrom}">value="${datefrom}"</c:if> placeholder="Από"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                         </div>
                             <div class="col-md-6">
                         <div class='input-group date' >
-                            <input type='text'  name="dateto" id='datepicker3' class="form-control" placeholder="Έως"/>
+                            <input type='text'  name="dateto" id='datepicker3' class="form-control" <c:if test="${not empty dateto}">value="${dateto}"</c:if> placeholder="Έως"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
