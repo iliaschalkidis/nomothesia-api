@@ -1,3 +1,4 @@
+<%@page import="com.di.nomothesia.model.LegalDocument"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
@@ -193,8 +194,11 @@
                                         </thead>
                                         <tbody>
                                             <c:forEach var="ldrecent" items="${ldrecent}" varStatus="loop">
+                                                <% LegalDocument ldr = (LegalDocument) pageContext.getAttribute("ldrecent");
+                                                String[] URIsr = ldr.getURI().toString().split("uoa.gr/");
+                                                pageContext.setAttribute("urir", URIsr[1]); %>
                                                 <tr>
-                                                    <td><a href="${ldrecent.getURI()}" >${ldrecent.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
                                                     <td>${ldrecent.getDecisionType()} ${ldrecent.getYear()}/${ldrecent.getId()}</td>
                                                     <td>${ldrecent.getPublicationDate()}</td>
                                                 </tr>
@@ -215,8 +219,11 @@
                                         </thead>
                                         <tbody>
                                             <c:forEach var="ldviewed" items="${ldviewed}" varStatus="loop">
+                                                <% LegalDocument ldv = (LegalDocument) pageContext.getAttribute("ldviewed");
+                                                String[] URIs = ldv.getURI().toString().split("uoa.gr/");
+                                                pageContext.setAttribute("uri", URIs[1]); %>
                                                 <tr>
-                                                    <td><a href="${ldviewed.getURI()}" >${ldviewed.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
                                                     <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
                                                     <td>${ldviewed.getPublicationDate()}</td>
                                                 </tr>

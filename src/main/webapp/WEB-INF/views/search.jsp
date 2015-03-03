@@ -1,3 +1,4 @@
+<%@page import="com.di.nomothesia.model.LegalDocument"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
@@ -194,8 +195,11 @@
                 </thead>
                 <tbody>
                     <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
+                    <% LegalDocument ld = (LegalDocument) pageContext.getAttribute("legaldoc");
+                    String[] URIs = ld.getURI().toString().split("uoa.gr/");
+                    pageContext.setAttribute("uri", URIs[1]); %>
                     <tr>
-                        <td><a href="${legaldoc.getURI()}" >${legaldoc.getTitle()}</a></td>
+                        <td><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${uri}"/>">${legaldoc.getTitle()}</a></td>
                         <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                         <td>${legaldoc.getPublicationDate()}</td>
                     </tr>

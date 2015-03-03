@@ -61,6 +61,15 @@ public class LegislationController {
 		return "basiclegislation";
 	}
         
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}", method = RequestMethod.GET)
+	public String presentLegalFragmentless(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, Model model) {
+		LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getById(type, year, id , 1);
+                model.addAttribute("legaldoc", legaldoc);
+                model.addAttribute("id", type1 + "-" + id1);
+		return "basiclegislation";
+	}
+        
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}", method = RequestMethod.GET)
         public String presentModificationByDate(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Model model) {
 		LegislationService lds = new LegislationService();

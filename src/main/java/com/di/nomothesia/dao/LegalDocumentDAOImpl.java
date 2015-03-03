@@ -1714,8 +1714,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                        
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         ld.setTitle(trimDoubleQuotes(title));
-                        String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
-                        ld.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        //String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
+                        ld.setURI(trimDoubleQuotes(bindingSet.getValue("legaldocument").toString()));
                         LDs.add(ld);
                    
                     }
@@ -1891,8 +1891,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         BindingSet bindingSet = result.next();
                         LegalDocument legald = new LegalDocument();
-                        String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
-                        legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        //String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
+                        legald.setURI(trimDoubleQuotes(bindingSet.getValue("uri").toString()));
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         legald.setTitle(trimDoubleQuotes(title));
                         String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
@@ -2019,8 +2019,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         BindingSet bindingSet = result.next();
                         LegalDocument legald = new LegalDocument();
-                        String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
-                        legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        //String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
+                        legald.setURI(trimDoubleQuotes(bindingSet.getValue("uri").toString()));
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         legald.setTitle(trimDoubleQuotes(title));
                         String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
