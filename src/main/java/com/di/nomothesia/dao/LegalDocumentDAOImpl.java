@@ -133,7 +133,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "FILTER(langMatches(lang(?title), \"el\"))\n"+
                 "}";
                   
-                System.out.println(queryString);
+                //System.out.println(queryString);
                 TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                 result = tupleQuery.evaluate();
 
@@ -237,9 +237,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     @Override
-    public LegalDocument getCitationsById(String decisionType, String year, String id, int req) {
+    public LegalDocument getCitationsById(String decisionType, String year, String id, int req, LegalDocument legald) {
         
-        LegalDocument legald = this.getMetadataById(decisionType, year, id);
+        //LegalDocument legald = this.getMetadataById(decisionType, year, id);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -387,9 +387,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
     
     @Override
-    public LegalDocument getById(String decisionType, String year, String id, int req) {
+    public LegalDocument getById(String decisionType, String year, String id, int req, LegalDocument legald) {
         
-        LegalDocument legald = this.getCitationsById(decisionType, year, id, req);
+        //LegalDocument legald = this.getCitationsById(decisionType, year, id, req);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -1518,6 +1518,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 else if (items.get(i).equals("md")) {
                                     queryString += "?type=leg:MinisterialDecision";
                                 }
+                                else if (items.get(i).equals("rd")) {
+                                    queryString += "?type=leg:RoyalDecree";
+                                }
                                   
                             }
                             else {
@@ -1536,6 +1539,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 }
                                 else if (items.get(i).equals("md")) {
                                     queryString += "?type=leg:MinisterialDecision || ";
+                                }
+                                else if (items.get(i).equals("rd")) {
+                                    queryString += "?type=leg:RoyalDecree || ";
                                 }
                                   
                             }
@@ -1622,7 +1628,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                   
                 queryString += "}";
                 
-                System.out.println(queryString);
+                //System.out.println(queryString);
                 TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                 result = tupleQuery.evaluate();
 
@@ -1708,8 +1714,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                        
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         ld.setTitle(trimDoubleQuotes(title));
-                        String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
-                        ld.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        //String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
+                        ld.setURI(trimDoubleQuotes(bindingSet.getValue("legaldocument").toString()));
                         LDs.add(ld);
                    
                     }
@@ -1885,8 +1891,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         BindingSet bindingSet = result.next();
                         LegalDocument legald = new LegalDocument();
-                        String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
-                        legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        //String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
+                        legald.setURI(trimDoubleQuotes(bindingSet.getValue("uri").toString()));
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         legald.setTitle(trimDoubleQuotes(title));
                         String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
@@ -2013,8 +2019,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         BindingSet bindingSet = result.next();
                         LegalDocument legald = new LegalDocument();
-                        String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
-                        legald.setURI("http://localhost:8084/nomothesia/legislation/" + URIs[1]);
+                        //String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
+                        legald.setURI(trimDoubleQuotes(bindingSet.getValue("uri").toString()));
                         String title = bindingSet.getValue("title").toString().replace("@el", "");
                         legald.setTitle(trimDoubleQuotes(title));
                         String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");

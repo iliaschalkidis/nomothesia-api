@@ -9,8 +9,8 @@ import java.util.Map;
 
 public interface LegalDocumentDAO {
     
-    public LegalDocument getById(String decisionType, String year, String id, int req);
-    public LegalDocument getCitationsById(String decisionType, String year, String id, int req);
+    public LegalDocument getById(String decisionType, String year, String id, int req, LegalDocument legald);
+    public LegalDocument getCitationsById(String decisionType, String year, String id, int req, LegalDocument legald);
     public LegalDocument getMetadataById(String decisionType, String year, String id);
     public List<Modification> getModifications(String decisionType, String year, String id, String date, int req);
     public List<LegalDocument> getAllModifications(String decisionType, String year, String id);

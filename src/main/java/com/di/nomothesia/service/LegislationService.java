@@ -19,8 +19,14 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Get Metadata
+        LegalDocument legald = legalDocumentDAO.getMetadataById(decisionType, year, id);
+        
+        //Get Citations
+        legald = legalDocumentDAO.getCitationsById(decisionType, year, id, request, legald);
+        
         //Get Legal Document
-        return legalDocumentDAO.getById(decisionType, year, id, request);
+        return legalDocumentDAO.getById(decisionType, year, id, request, legald);
     }
     
     public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id) {
@@ -125,8 +131,14 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Get Metadata
+        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
+        
+        //Get Citations
+        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
+        
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
+        legald = legalDocumentDAO.getById(type, year, id, request, legald);
         
         // Build XML
         XMLBuilder xmlbuild = new XMLBuilder();
@@ -180,12 +192,19 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
-        //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
+        //Get Metadata
+        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
         
         if ((date != null) && (legald.getPublicationDate().compareTo(date) > 0)){
             legald = null;
         }
+        
+        //Get Citations
+        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
+        
+        //Get Legal Document
+        legald = legalDocumentDAO.getById(type, year, id, request, legald);
+        
         //Get all Modifications
         List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
         
@@ -202,8 +221,14 @@ public class LegislationService {
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
+        //Get Metadata
+        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
+        
+        //Get Citations
+        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
+        
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
+        legald = legalDocumentDAO.getById(type, year, id, request, legald);
         
         //Get all Modifications
         List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, request);
@@ -222,9 +247,15 @@ public class LegislationService {
          
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+       
+        //Get Metadata
+        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
+        
+        //Get Citations
+        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
         
         //Get Legal Document
-        LegalDocument legald = legalDocumentDAO.getById(type, year, id, request);
+        legald = legalDocumentDAO.getById(type, year, id, request, legald);
         
         //Get all Modifications
         List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);

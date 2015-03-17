@@ -5,10 +5,8 @@ import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.service.LegislationService;
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.TransformerException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -60,6 +58,15 @@ public class LegislationController {
                 LegalDocument legaldoc = lds.getById(type, year, id , 1);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id", type1 + "-" + id1 + "-" +type2 + "-" + id2);
+		return "basiclegislation";
+	}
+        
+        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}", method = RequestMethod.GET)
+	public String presentLegalFragmentless(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, Model model) {
+		LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getById(type, year, id , 1);
+                model.addAttribute("legaldoc", legaldoc);
+                model.addAttribute("id", type1 + "-" + id1);
 		return "basiclegislation";
 	}
         
@@ -196,6 +203,37 @@ public class LegislationController {
                         model.addAttribute("keywords",params.get("keywords"));
                     }
                     
+                    if((params.get("date")!=null) && !params.get("date").equals("")) {
+                        model.addAttribute("date",params.get("date"));
+                    }
+                    
+                    if((params.get("datefrom")!=null) && !params.get("datefrom").equals("")) {
+                        model.addAttribute("datefrom",params.get("datefrom"));
+                    }
+                    
+                    if((params.get("dateto")!=null) && !params.get("dateto").equals("")) {
+                        model.addAttribute("dateto",params.get("dateto"));
+                    }
+                    
+                    if((params.get("year")!=null) && !params.get("year").equals("")) {
+                        model.addAttribute("year",params.get("year"));
+                    }
+                    
+                    if((params.get("id")!=null) && !params.get("id").equals("")) {
+                        model.addAttribute("id",params.get("id"));
+                    }
+                    
+                    if((params.get("fek_year")!=null) && !params.get("fek_year").equals("")) {
+                        model.addAttribute("fek_year",params.get("fek_year"));
+                    }
+                    
+                    if((params.get("fek_id")!=null) && !params.get("fek_id").equals("")) {
+                        model.addAttribute("fek_id",params.get("fek_id"));
+                    }
+                    
+                    if((params.get("type")!=null) && !params.get("type").equals("")) {
+                        model.addAttribute("type",params.get("type"));
+                    }
                 }
 		return "search";
 	}

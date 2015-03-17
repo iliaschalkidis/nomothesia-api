@@ -1,3 +1,5 @@
+<%@page import="com.di.nomothesia.model.Article"%>
+<%@page import="com.di.nomothesia.model.Paragraph"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false"%>
@@ -310,10 +312,16 @@
                 <div role="tabpanel" class="tab-pane" id="messages">
                     <ul id="messagescol">
                     <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
-                        <li><a href="${article.getURI()}" >Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
+                        <% Article a = (Article) pageContext.getAttribute("article");
+                        String[] URIs = a.getURI().toString().split("uoa.gr/");
+                        pageContext.setAttribute("uri", URIs[1]); %>
+                        <li><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${uri}"/>">Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
                     <ul>
                         <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
-                            <li><a href="${paragraph.getURI()}">Παράγραφος ${paragraph.getId()}</a></li>
+                            <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
+                            String[] URIs1 = p.getURI().toString().split("uoa.gr/");
+                            pageContext.setAttribute("uri1", URIs1[1]); %>
+                            <li><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${uri1}"/>">Παράγραφος ${paragraph.getId()}</a></li>
                         </c:forEach>
                     </ul></li>
                     </c:forEach>
