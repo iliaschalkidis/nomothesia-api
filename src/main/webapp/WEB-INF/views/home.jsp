@@ -198,7 +198,7 @@
                                                 String[] URIsr = ldr.getURI().toString().split("uoa.gr/");
                                                 pageContext.setAttribute("urir", URIsr[1]); %>
                                                 <tr>
-                                                    <td><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="http://localhost:8080/nomothesia/legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
                                                     <td>${ldrecent.getDecisionType()} ${ldrecent.getYear()}/${ldrecent.getId()}</td>
                                                     <td>${ldrecent.getPublicationDate()}</td>
                                                 </tr>
@@ -223,7 +223,7 @@
                                                 String[] URIs = ldv.getURI().toString().split("uoa.gr/");
                                                 pageContext.setAttribute("uri", URIs[1]); %>
                                                 <tr>
-                                                    <td><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="http://localhost:8080/nomothesia/legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
                                                     <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
                                                     <td>${ldviewed.getPublicationDate()}</td>
                                                 </tr>

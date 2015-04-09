@@ -12,6 +12,7 @@ public class Paragraph implements Fragment{
     private String table;
     private String URI;
     private int id;
+    private int status;
     
     public Paragraph() {
         
@@ -23,6 +24,15 @@ public class Paragraph implements Fragment{
     }
     
     //Setters-Getters for Paragraph
+    @Override
+    public int getStatus() {
+        return status;
+    }
+    
+    @Override
+    public void setStatus(int s) {
+        this.status = s;
+    }
     
     public List<Passage> getPassages() {
         return passages;

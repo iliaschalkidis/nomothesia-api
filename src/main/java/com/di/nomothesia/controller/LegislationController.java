@@ -108,7 +108,7 @@ public class LegislationController {
                 String date = "";
                 date += yyyy + "-" + mm + "-" + dd;
 		LegalDocument legal = lds.getUpdatedById(type,year,id,2,date);
- 
+                legal.setPlace(null);
 		return legal;
  
 	}
@@ -144,7 +144,7 @@ public class LegislationController {
 	public @ResponseBody LegalDocument exportToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegislationService lds = new LegislationService();
 		LegalDocument legal = lds.getById(type,year,id,2);
- 
+                legal.setPlace(null);
 		return legal;
  
 	}
@@ -178,7 +178,7 @@ public class LegislationController {
 	public @ResponseBody LegalDocument exportUpdatedToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegislationService lds = new LegislationService();
 		LegalDocument legal = lds.getUpdatedById(type,year,id,2,null);
- 
+                legal.setPlace(null);
 		return legal;
  
 	}

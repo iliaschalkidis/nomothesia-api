@@ -199,7 +199,7 @@
                     String[] URIs = ld.getURI().toString().split("uoa.gr/");
                     pageContext.setAttribute("uri", URIs[1]); %>
                     <tr>
-                        <td><a href="<c:url value="http://localhost:8084/nomothesia/legislation/${uri}"/>">${legaldoc.getTitle()}</a></td>
+                        <td><a href="<c:url value="http://localhost:8080/nomothesia/legislation/${uri}"/>">${legaldoc.getTitle()}</a></td>
                         <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                         <td>${legaldoc.getPublicationDate()}</td>
                     </tr>

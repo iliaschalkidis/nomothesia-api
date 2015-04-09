@@ -6,13 +6,23 @@ public class Passage implements Fragment {
     private String URI; 
     private String text;
     private int id;
+    private int status;
     
     public Passage() {
 
     }
     
     //Setters-Getters for Passage
-
+    @Override
+    public int getStatus() {
+        return status;
+    }
+    
+    @Override
+    public void setStatus(int s) {
+        this.status = s;
+    }
+    
     @Override
     public String getURI() {
         return URI;

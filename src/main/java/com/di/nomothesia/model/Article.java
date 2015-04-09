@@ -10,11 +10,12 @@ public class Article implements Fragment{
     private int id;
     private String URI;
     List<Paragraph> paragraphs;
+    private int status;
     
     public Article() {
         
         this.paragraphs = new ArrayList<Paragraph>();
-    
+        status = 0;
     }
     
     //Setters-Getters for Article
@@ -50,6 +51,16 @@ public class Article implements Fragment{
     
     public void setParagraphs(List<Paragraph> paragraphs) {
         this.paragraphs = paragraphs;
+    }
+
+    @Override
+    public int getStatus() {
+        return status;
+    }
+
+    @Override
+    public void setStatus(int s) {
+        this.status = s;
     }
     
 }

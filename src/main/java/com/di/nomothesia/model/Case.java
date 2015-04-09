@@ -10,7 +10,8 @@ public class Case implements Fragment{
     private int id;
     private List<Passage> passages;
     private List<Case> caseList;
-
+    private int status;
+    
     public Case() {
         
         passages = new ArrayList<Passage>();
@@ -21,6 +22,15 @@ public class Case implements Fragment{
     }
     
     //Setters-Getters for Case
+    @Override
+    public int getStatus() {
+        return status;
+    }
+    
+    @Override
+    public void setStatus(int s) {
+        this.status = s;
+    }
     
     @Override
     public String getURI() {

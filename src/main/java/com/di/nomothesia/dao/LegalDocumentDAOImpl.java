@@ -149,7 +149,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         legald.setTitle(trimDoubleQuotes(title_el));
                         String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
                         legald.setPublicationDate(trimDoubleQuotes(date2));
-                        legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
+                        String fek = bindingSet.getValue("gaztitle").toString().replace("^^","");
+                        legald.setFEK(trimDoubleQuotes(fek));
                         String name_el = bindingSet.getValue("signername").toString().replace("@el", "");
                         sign.setFullName(trimDoubleQuotes(name_el));
                         String signer_el = bindingSet.getValue("signertitle").toString().replace("@el", "");
@@ -1137,6 +1138,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 count3 = -1;
                                 count4 = -1;
                                 fragment = article;
+                                fragment.setStatus(1);
                                 frag = 1;
                                 
                             }
@@ -1150,12 +1152,14 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 
                                 if(frag == 0) {
                                     fragment = paragraph;
+                                    fragment.setStatus(1);
                                     frag = 2;
                                 }
                                 else{
                                     Article article = (Article) fragment;
                                     article.getParagraphs().add(paragraph);
                                     fragment = article;
+                                    fragment.setStatus(1);
                                 }
                                 
                                 count2++;
@@ -1185,16 +1189,19 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 
                                     if(frag == 0) {
                                         fragment = passage;
+                                        fragment.setStatus(1);
                                     }
                                     else if (frag == 1) {
                                         Article article = (Article) fragment;
                                         article.getParagraphs().get(count2).getPassages().add(passage);
                                         fragment = article;
+                                        fragment.setStatus(1);
                                     }
                                     else {
                                         Paragraph paragraph = (Paragraph) fragment;
                                         paragraph.getPassages().add(passage);
                                         fragment = paragraph;
+                                        fragment.setStatus(1);
                                     }
 
                                     count3 ++;
@@ -1227,16 +1234,19 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 
                                     if(frag == 0) {
                                         fragment = case1;
+                                        fragment.setStatus(1);
                                     }
                                     else if (frag == 1) {
                                         Article article = (Article) fragment;
                                         article.getParagraphs().get(count2).getCaseList().add(case1);
                                         fragment = article;
+                                        fragment.setStatus(1);
                                     }
                                     else {
                                         Paragraph paragraph = (Paragraph) fragment;
                                         paragraph.getCaseList().add(case1);
                                         fragment = paragraph;
+                                        fragment.setStatus(1);
                                     }
 
                                     count4 ++;
@@ -1359,7 +1369,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
                             String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
                             legald.setPublicationDate(trimDoubleQuotes(date2));
-                            legald.setFEK(trimDoubleQuotes(bindingSet.getValue("gaztitle").toString()));
+                            String fek = bindingSet.getValue("gaztitle").toString().replace("^^","");
+                            legald.setFEK(trimDoubleQuotes(fek));
                             legalds.add(legald);
                         }
                         
