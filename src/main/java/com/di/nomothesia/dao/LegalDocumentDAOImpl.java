@@ -1168,91 +1168,93 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 
                             }
                             else if (bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Passage")) {
-                                
-                                if(!old.equals(bindingSet.getValue("patient").toString())) {
                                     
-                                    Passage passage = new Passage();
-                                    passage.setId(count3+2);
-                                    passage.setURI(bindingSet.getValue("part").toString());
-                                    
-                                    if (bindingSet.getValue("text").toString().contains("@html")) {
-                                        String text = bindingSet.getValue("text").toString().replace("@html", "");
-                                        passage.setText(trimDoubleQuotes(text));
-                                    }
-                                    else if (bindingSet.getValue("text").toString().contains("@el")) {
-                                        String text = bindingSet.getValue("text").toString().replace("@el", "");
-                                        passage.setText(trimDoubleQuotes(text));
-                                    }
-                                    
-                                    //System.out.println(passage.getURI());
-                                    //System.out.println("NEW PASSAGE");
+                                Passage passage = new Passage();
+                                passage.setId(count3+2);
+                                passage.setURI(bindingSet.getValue("part").toString());
 
-                                    if(frag == 0) {
-                                        fragment = passage;
-                                        fragment.setStatus(1);
-                                    }
-                                    else if (frag == 1) {
-                                        Article article = (Article) fragment;
-                                        article.getParagraphs().get(count2).getPassages().add(passage);
-                                        fragment = article;
-                                        fragment.setStatus(1);
-                                    }
-                                    else {
-                                        Paragraph paragraph = (Paragraph) fragment;
-                                        paragraph.getPassages().add(passage);
-                                        fragment = paragraph;
-                                        fragment.setStatus(1);
-                                    }
-
-                                    count3 ++;
-                                    old = bindingSet.getValue("patient").toString();
-                                    
+                                if (bindingSet.getValue("text").toString().contains("@html")) {
+                                    String text = bindingSet.getValue("text").toString().replace("@html", "");
+                                    passage.setText(trimDoubleQuotes(text));
                                 }
+                                else if (bindingSet.getValue("text").toString().contains("@el")) {
+                                    String text = bindingSet.getValue("text").toString().replace("@el", "");
+                                    passage.setText(trimDoubleQuotes(text));
+                                }
+
+                                //System.out.println(passage.getURI());
+                                //System.out.println("NEW PASSAGE");
+
+                                if(frag == 0) {
+                                    fragment = passage;
+                                    fragment.setStatus(1);
+                                }
+                                else if (frag == 1) {
+                                    Article article = (Article) fragment;
+                                    article.getParagraphs().get(count2).getPassages().add(passage);
+                                    fragment = article;
+                                    fragment.setStatus(1);
+                                }
+                                else if (frag == 2) {
+                                    Paragraph paragraph = (Paragraph) fragment;
+                                    paragraph.getPassages().add(passage);
+                                    fragment = paragraph;
+                                    fragment.setStatus(1);
+                                }
+                                else {
+                                    Paragraph paragraph = (Paragraph) fragment;
+                                    paragraph.getPassages().add(passage);
+                                    fragment = paragraph;
+                                    fragment.setStatus(1);
+                                }
+
+                                count3 ++;
                                 
                             }
                             else if (bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Case")) {
                                 
-                                if (!old.equals(bindingSet.getValue("patient").toString())) {
+                                Case case1 = new Case();
+                                case1.setId(count4+2);
+                                case1.setURI(bindingSet.getValue("part").toString());
+                                Passage passage = new Passage();
 
-                                    Case case1 = new Case();
-                                    case1.setId(count4+2);
-                                    case1.setURI(bindingSet.getValue("part").toString());
-                                    Passage passage = new Passage();
-                                    
-                                    if (bindingSet.getValue("text").toString().contains("@html")) {
-                                        String text = bindingSet.getValue("text").toString().replace("@html", "");
-                                        passage.setText(trimDoubleQuotes(text));
-                                    }
-                                    else if (bindingSet.getValue("text").toString().contains("@el")) {
-                                        String text = bindingSet.getValue("text").toString().replace("@el", "");
-                                        passage.setText(trimDoubleQuotes(text));
-                                    }
-                                    
-                                    case1.getPassages().add(passage);
-                                    //System.out.println(case1.getURI());
-                                    //System.out.println("NEW CASE");
-
-                                    if(frag == 0) {
-                                        fragment = case1;
-                                        fragment.setStatus(1);
-                                    }
-                                    else if (frag == 1) {
-                                        Article article = (Article) fragment;
-                                        article.getParagraphs().get(count2).getCaseList().add(case1);
-                                        fragment = article;
-                                        fragment.setStatus(1);
-                                    }
-                                    else {
-                                        Paragraph paragraph = (Paragraph) fragment;
-                                        paragraph.getCaseList().add(case1);
-                                        fragment = paragraph;
-                                        fragment.setStatus(1);
-                                    }
-
-                                    count4 ++;
-                                    old = bindingSet.getValue("patient").toString();
-                                    
+                                if (bindingSet.getValue("text").toString().contains("@html")) {
+                                    String text = bindingSet.getValue("text").toString().replace("@html", "");
+                                    passage.setText(trimDoubleQuotes(text));
                                 }
+                                else if (bindingSet.getValue("text").toString().contains("@el")) {
+                                    String text = bindingSet.getValue("text").toString().replace("@el", "");
+                                    passage.setText(trimDoubleQuotes(text));
+                                }
+
+                                case1.getPassages().add(passage);
+                                //System.out.println(case1.getURI());
+                                //System.out.println("NEW CASE");
+
+                                if(frag == 0) {
+                                    fragment = case1;
+                                    fragment.setStatus(1);
+                                }
+                                else if (frag == 1) {
+                                    Article article = (Article) fragment;
+                                    article.getParagraphs().get(count2).getCaseList().add(case1);
+                                    fragment = article;
+                                    fragment.setStatus(1);
+                                }
+                                else if (frag == 2) {
+                                    Paragraph paragraph = (Paragraph) fragment;
+                                    paragraph.getCaseList().add(case1);
+                                    fragment = paragraph;
+                                    fragment.setStatus(1);
+                                }
+                                else {
+                                    Paragraph paragraph = (Paragraph) fragment;
+                                    paragraph.getCaseList().add(case1);
+                                    fragment = paragraph;
+                                    fragment.setStatus(1);
+                                }
+
+                                count4 ++;
                                 
                             }
 
