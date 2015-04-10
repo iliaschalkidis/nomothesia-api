@@ -166,7 +166,18 @@
                     <div align="center"><h4>ΓΕΝΙΚΑ ΣΤΟΙΧΕΙΑ</h4></div><br/>
                     <u style="color:  #1087dd">ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
                     <u style="color:  #1087dd">ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
-                    <u style="color:  #1087dd">ΦΕΚ:</u> ${legaldoc.getFEK()}<br/>
+                    <c:set var="repl" value='"' />
+                    <c:choose>
+                        <c:when test="${fn:contains(legaldoc.getFEK(),repl)}">
+                            <c:set var="str" value="${fn:split(legaldoc.getFEK(),repl)}"/>
+                            <c:set var="fek" value="${str[0]}"/>
+                        </c:when>
+                        <c:when test="${fn:contains(legaldoc.getFEK(),repl)==false}">
+                            <c:set var="fek" value="${legaldoc.getFEK()}"/>
+                        </c:when>
+                    </c:choose>
+                    <c:set var="fek2" value="${fn:split(fek, '/')}" />
+                    <u style="color:  #1087dd">ΦΕΚ:</u> <a href="${pageContext.servletContext.contextPath}/legislation/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
                     <u style="color:  #1087dd">ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/>
                     <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                         ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
@@ -234,12 +245,12 @@
                     <ol>
                     <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
                         <c:if test="${paragraph.getStatus() == 1}">
-                            <div style="background-color:#ECF8E0">
+                            <div id="modification">
                         </c:if>
                         <li><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
                             <c:forEach var="passage" items="${paragraph.getPassages()}" varStatus="loop">
                                 <c:if test="${passage.getStatus() == 1}">
-                                    <div style="background-color:#ECF8E0">
+                                    <div id="modification">
                                 </c:if>
                                 ${passage.getText()}
                                 <c:if test="${passage.getStatus() == 1}">
@@ -249,12 +260,12 @@
                             <ol style="list-style-type: lower-greek;">    
                             <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
                                 <c:if test="${case1.getStatus() == 1}">
-                                    <div style="background-color:#ECF8E0">
+                                    <div id="modification">
                                 </c:if>
                                 <li>
                                 <c:forEach var="passage2" items="${case1.getPassages()}" varStatus="loop">
                                 <c:if test="${passage2.getStatus() == 1}">
-                                    <div style="background-color:#ECF8E0">
+                                    <div id="modification">
                                 </c:if>
                                 ${passage2.getText()}
                                 <c:if test="${passage2.getStatus() == 1}">
@@ -265,11 +276,11 @@
                                     <ol style="list-style-type: lower-greek;">
                                 <c:forEach var="case2" items="${case1.getCaseList()}" varStatus="loop">
                                     <c:if test="${case2.getStatus() == 1}">
-                                        <div style="background-color:#ECF8E0">
+                                        <div id="modification">
                                     </c:if>
                                     <c:forEach var="passage3" items="${case2.getPassages()}" varStatus="loop">
                                     <c:if test="${passage3.getStatus() == 1}">
-                                        <div style="background-color:#ECF8E0">
+                                        <div id="modification">
                                     </c:if>
                                     <li>${passage3.getText()}</li>
                                     <c:if test="${passage3.getStatus() == 1}">
