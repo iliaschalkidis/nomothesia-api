@@ -71,6 +71,9 @@
                             <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
                         </li>
                         <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                        </li>
+                        <li>
                             <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                         </li>
                         <li>
@@ -244,8 +247,8 @@
                         <p>
                         Παρόμοιες πρωτοβουλίες στο εξωτερικό:
                             <ul>
-                                <li><a href="http://www.metalex.eu/">CEN Metalex</a> (Ολλανδία)</li>
-                                <li><a href="http://www.legislation.gov.uk/">Legislation.gov.uk</a> (Ηνωμένο Βασίλειο)</li>
+                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> (Ολλανδία)</li>
+                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> (Ηνωμένο Βασίλειο)</li>
                             </ul>
                         </p>
                         <div align="center" style="padding:10px;">
