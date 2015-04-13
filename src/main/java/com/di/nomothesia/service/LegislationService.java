@@ -29,15 +29,15 @@ public class LegislationService {
         return legalDocumentDAO.getById(decisionType, year, id, request, legald);
     }
     
-    public List<LegalDocument> getAllModificationsById(String decisionType, String year, String id) {
+    public List<Modification> getAllModificationsById(String decisionType, String year, String id) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
         //Get the ProductDAO Bean
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
         
-        //Get Legal Document
-        return legalDocumentDAO.getAllModifications(decisionType, year, id);
+        ///Get all Modifications
+        return legalDocumentDAO.getAllModifications(decisionType, year, id, null, 1);
     }
 
     public EndpointResultSet sparqlQuery(String query, String format) {
@@ -206,7 +206,7 @@ public class LegislationService {
         legald = legalDocumentDAO.getById(type, year, id, request, legald);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
+        List<Modification> mods = legalDocumentDAO.getAllModifications(type, year, id, date, request);
         
         //Apply Modifications
         legald.applyModifications(mods);
@@ -231,7 +231,7 @@ public class LegislationService {
         legald = legalDocumentDAO.getById(type, year, id, request, legald);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, null, request);
+        List<Modification> mods = legalDocumentDAO.getAllModifications(type, year, id, null, request);
         
         //Apply Modifications
         legald.applyModifications(mods);
@@ -258,7 +258,7 @@ public class LegislationService {
         legald = legalDocumentDAO.getById(type, year, id, request, legald);
         
         //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getModifications(type, year, id, date, request);
+        List<Modification> mods = legalDocumentDAO.getAllModifications(type, year, id, date, request);
         
         //Apply Modifications
         legald.applyModifications(mods);

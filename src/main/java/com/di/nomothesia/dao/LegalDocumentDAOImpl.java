@@ -988,7 +988,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     }
 
     @Override
-    public List<Modification> getModifications(String decisionType, String year, String id, String date, int req) {
+    public List<Modification> getAllModifications(String decisionType, String year, String id, String date, int req) {
          
         List<Modification> modifications = new ArrayList<Modification>();
         String sesameServer ="";
@@ -1035,7 +1035,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
-                    "SELECT ?mod ?type ?patient ?part ?type2 ?text\n" +
+                    "SELECT ?mod ?type ?patient ?work ?title ?date ?gaztitle ?part ?type2 ?text\n" +
                     "WHERE{\n" +
                     " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                     " metalex:realizedBy  ?version.\n" +
@@ -1044,21 +1044,23 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     " ?mod metalex:patient ?patient.\n" +
                     " ?mod metalex:part+ ?part.\n" +
                     " ?part rdf:type ?type2.\n" +
-                    " ?mod  metalex:legislativeCompetenceGround ?work.\n" ;
+                    " ?mod  metalex:legislativeCompetenceGround ?work.\n" +
+                    " ?work  dc:title ?title.\n" +
+                    " ?work leg:gazette ?gazette.\n" +
+                    " ?work dc:created ?date.\n" +
+                    " ?gazette dc:title ?gaztitle.\n" ;
                     
                     if (date !=null) {
                         
                         if (req == 1) {
-                            queryString += " ?work dc:created ?date.\n" +
-                            "FILTER (?date <= \""+ date +"\"^^xsd:date)\n" +
+                            queryString += "FILTER (?date <= \""+ date +"\"^^xsd:date)\n" +
                             "OPTIONAL{\n" +
                             " ?part leg:text ?text.\n" +
                             "}.}\n" +
                             "ORDER BY ?mod";
                         }
                         else if (req == 2) {
-                            queryString += " ?work dc:created ?date.\n" +
-                            "FILTER (?date <= \""+ date +"\"^^xsd:date)\n" +        
+                            queryString += "FILTER (?date <= \""+ date +"\"^^xsd:date)\n" +        
                             "FILTER NOT EXISTS {FILTER(langMatches(lang(?text), \"html\"))}\n" +
                             "OPTIONAL{\n" +
                             " ?part leg:text ?text.\n" +
@@ -1070,15 +1072,13 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     else {
                         
                         if (req == 1) {
-                            queryString += " ?work dc:created ?date.\n" +
-                            "OPTIONAL{\n" +
+                            queryString += "OPTIONAL{\n" +
                             "?part leg:text ?text.\n" +
                             "}.}\n" +
                             "ORDER BY ?mod";
                         }
                         else if (req == 2) {
-                            queryString += " ?work dc:created ?date.\n" +
-                            "FILTER NOT EXISTS {FILTER(langMatches(lang(?text), \"html\"))}\n" +
+                            queryString += "FILTER NOT EXISTS {FILTER(langMatches(lang(?text), \"html\"))}\n" +
                             "OPTIONAL{\n" +
                             "?part leg:text ?text.\n" +
                             "}.}\n" +
@@ -1122,6 +1122,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 mod.setURI(bindingSet.getValue("mod").toString());
                                 mod.setType(bindingSet.getValue("type").toString());
                                 mod.setPatient(bindingSet.getValue("patient").toString());
+                                mod.getCompetenceGround().setURI(bindingSet.getValue("work").toString());
+                                String gaztitle = bindingSet.getValue("gaztitle").toString().replace("^^", "");
+                                mod.getCompetenceGround().setFEK(trimDoubleQuotes(gaztitle));
+                                String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
+                                mod.getCompetenceGround().setPublicationDate(trimDoubleQuotes(date2));
+                                mod.getCompetenceGround().setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
                                 current = bindingSet.getValue("mod").toString();
                                 frag = 0;
                                 
@@ -1139,6 +1145,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 count4 = -1;
                                 fragment = article;
                                 fragment.setStatus(1);
+                                fragment.setType("Article");
                                 frag = 1;
                                 
                             }
@@ -1153,6 +1160,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 if(frag == 0) {
                                     fragment = paragraph;
                                     fragment.setStatus(1);
+                                    fragment.setType("Paragraph");
                                     frag = 2;
                                 }
                                 else{
@@ -1188,6 +1196,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 if(frag == 0) {
                                     fragment = passage;
                                     fragment.setStatus(1);
+                                    fragment.setType("Passage");
                                 }
                                 else if (frag == 1) {
                                     Article article = (Article) fragment;
@@ -1234,6 +1243,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 if(frag == 0) {
                                     fragment = case1;
                                     fragment.setStatus(1);
+                                    fragment.setType("Case");
                                 }
                                 else if (frag == 1) {
                                     Article article = (Article) fragment;
@@ -1291,110 +1301,110 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             
     }
     
-    @Override
-    public List<LegalDocument> getAllModifications(String decisionType, String year, String id) {
-        
-        List<LegalDocument> legalds = new ArrayList<LegalDocument>();
-        String sesameServer ="";
-        String repositoryID ="";
-        
-        Properties props = new Properties();
-        InputStream fis = null;
-        
-        try {
-            
-            fis = getClass().getResourceAsStream("/properties.properties");
-            props.load(fis);
-            
-            // get the properties values
-            sesameServer = props.getProperty("SesameServer");
-            repositoryID = props.getProperty("SesameRepositoryID");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Connect to Sesame
-        Repository repo = new HTTPRepository(sesameServer, repositoryID);
-        
-        try {
-            repo.initialize();
-        } catch (RepositoryException ex) {
-            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        TupleQueryResult result;
-         
-        try {
-           
-            RepositoryConnection con = repo.getConnection();
-           
-            try {
-                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                "\n" +
-                "SELECT ?work ?title ?date ?gaztitle\n" +
-                "WHERE{\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-                "metalex:realizedBy  ?version.\n" +
-                "?version metalex:matterOf ?mod.\n" +
-                "?mod  metalex:legislativeCompetenceGround ?work.\n" +
-                "?work dc:title ?title.\n" +
-                "?work dc:created ?date.\n" +
-                "?work leg:gazette ?gazette.\n" +
-                "?gazette dc:title ?gaztitle.\n" +
-                "FILTER(langMatches(lang(?title), \"el\"))\n"+      
-                "}" + 
-                "GROUP BY ?work ?title ?date ?gaztitle\n" +
-                "ORDER BY ?date\n";
-
-                  
-                //System.out.println(queryString);
-                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-                result = tupleQuery.evaluate();
-
-                try {
-                    
-                    //iterate the result set
-                    while (result.hasNext()) {
-                        
-                        BindingSet bindingSet = result.next();
-                        LegalDocument legald = new LegalDocument();
-                        
-                        if (bindingSet.getValue("work")!=null) {
-                            legald.setURI(bindingSet.getValue("work").toString());
-                            legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
-                            String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
-                            legald.setPublicationDate(trimDoubleQuotes(date2));
-                            String fek = bindingSet.getValue("gaztitle").toString().replace("^^","");
-                            legald.setFEK(trimDoubleQuotes(fek));
-                            legalds.add(legald);
-                        }
-                        
-                   }
-                    
-                }
-                finally {
-                    result.close();
-                }
-                 
-            }
-            finally {
-                con.close();
-            }
-        }
-        catch (OpenRDFException e) {
-            // handle exception
-        }
-        
-        return legalds;
-    
-    }
+//    @Override
+//    public List<LegalDocument> getAllModifications(String decisionType, String year, String id) {
+//        
+//        List<LegalDocument> legalds = new ArrayList<LegalDocument>();
+//        String sesameServer ="";
+//        String repositoryID ="";
+//        
+//        Properties props = new Properties();
+//        InputStream fis = null;
+//        
+//        try {
+//            
+//            fis = getClass().getResourceAsStream("/properties.properties");
+//            props.load(fis);
+//            
+//            // get the properties values
+//            sesameServer = props.getProperty("SesameServer");
+//            repositoryID = props.getProperty("SesameRepositoryID");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Connect to Sesame
+//        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+//        
+//        try {
+//            repo.initialize();
+//        } catch (RepositoryException ex) {
+//            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        TupleQueryResult result;
+//         
+//        try {
+//           
+//            RepositoryConnection con = repo.getConnection();
+//           
+//            try {
+//                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+//                "\n" +
+//                "SELECT ?work ?title ?date ?gaztitle\n" +
+//                "WHERE{\n" +
+//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+//                "metalex:realizedBy  ?version.\n" +
+//                "?version metalex:matterOf ?mod.\n" +
+//                "?mod  metalex:legislativeCompetenceGround ?work.\n" +
+//                "?work dc:title ?title.\n" +
+//                "?work dc:created ?date.\n" +
+//                "?work leg:gazette ?gazette.\n" +
+//                "?gazette dc:title ?gaztitle.\n" +
+//                "FILTER(langMatches(lang(?title), \"el\"))\n"+      
+//                "}" + 
+//                "GROUP BY ?work ?title ?date ?gaztitle\n" +
+//                "ORDER BY ?date\n";
+//
+//                  
+//                //System.out.println(queryString);
+//                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+//                result = tupleQuery.evaluate();
+//
+//                try {
+//                    
+//                    //iterate the result set
+//                    while (result.hasNext()) {
+//                        
+//                        BindingSet bindingSet = result.next();
+//                        LegalDocument legald = new LegalDocument();
+//                        
+//                        if (bindingSet.getValue("work")!=null) {
+//                            legald.setURI(bindingSet.getValue("work").toString());
+//                            legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
+//                            String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
+//                            legald.setPublicationDate(trimDoubleQuotes(date2));
+//                            String fek = bindingSet.getValue("gaztitle").toString().replace("^^","");
+//                            legald.setFEK(trimDoubleQuotes(fek));
+//                            legalds.add(legald);
+//                        }
+//                        
+//                   }
+//                    
+//                }
+//                finally {
+//                    result.close();
+//                }
+//                 
+//            }
+//            finally {
+//                con.close();
+//            }
+//        }
+//        catch (OpenRDFException e) {
+//            // handle exception
+//        }
+//        
+//        return legalds;
+//    
+//    }
 
     @Override
     public List<LegalDocument> search(Map<String, String> params) {

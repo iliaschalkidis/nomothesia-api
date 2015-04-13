@@ -121,8 +121,8 @@
     <!-- Navigation Bar -->
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
         <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+            <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/en"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/en" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -134,27 +134,27 @@
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
+                        <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">Home</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                        <a href="${pageContext.servletContext.contextPath}/en/developer" style="font-family: 'Comfortaa', cursive;" >Information</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
+                        <a href="${pageContext.servletContext.contextPath}/en/aboutus" style="font-family: 'Comfortaa', cursive;" >About Us</a>
                     </li>
                     <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                            <a href="${pageContext.servletContext.contextPath}/en/legislation/search" style="font-family: 'Comfortaa', cursive;" >Search</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                        <a href="${pageContext.servletContext.contextPath}/en/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Statistics</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        <a href="${pageContext.servletContext.contextPath}/en/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">EN</a>
+                        <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">GR</a>
                     </li>
                 </ul>
             </div>
@@ -166,9 +166,9 @@
         <div class="row">
             <div class="col-md-3">  
                 <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
-                    <div align="center"><h4>ΓΕΝΙΚΑ ΣΤΟΙΧΕΙΑ</h4></div><br/>
-                    <u style="color:  #1087dd">ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
-                    <u style="color:  #1087dd">ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
+                    <div align="center"><h4>GENERAL INFORMATION</h4></div><br/>
+                    <u style="color:  #1087dd">ID:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
+                    <u style="color:  #1087dd">CREATED:</u> ${legaldoc.getPublicationDate()} <br/>
                     <c:set var="repl" value='"' />
                     <c:choose>
                         <c:when test="${fn:contains(legaldoc.getFEK(),repl)}">
@@ -180,8 +180,8 @@
                         </c:when>
                     </c:choose>
                     <c:set var="fek2" value="${fn:split(fek, '/')}" />
-                    <u style="color:  #1087dd">ΦΕΚ:</u> <a href="${pageContext.servletContext.contextPath}/legislation/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
-                    <u style="color:  #1087dd">ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/>
+                    <u style="color:  #1087dd">GAZETTE:</u> <a href="${pageContext.servletContext.contextPath}/en/legislation/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
+                    <u style="color:  #1087dd">SIGNERS:</u><br/>
                     <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                         ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
                     </c:forEach>
@@ -192,30 +192,30 @@
                     </c:forEach>
                     </div><br/>
                     <c:if test="${not empty legaldoc.getTags()}">
-                        <u style="color:  #1087dd">ΕΤΙΚΕΤΕΣ:</u> <br/>
+                        <u style="color:  #1087dd">TAGS:</u> <br/>
                         <c:forEach items="${legaldoc.getTags()}" var="tag" varStatus="loop">
                             ${tag}<c:if test="${!loop.last}">,&nbsp;</c:if>
                         </c:forEach>
                     </c:if><br/>
                     <c:if test="${not empty legaldoc.getPlace()}">
-                    <u style="color:  #1087dd">ΧΑΡΤΗΣ:</u><br/> <br/>
+                    <u style="color:  #1087dd">MAP:</u><br/> <br/>
                     <div id="map" style="width:200; height:200px;"></div>
                     </c:if>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Αρxική Έκδοση</a>
+                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Enacted Version</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-success btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή XML</a>
+                    <a class="btn btn-success btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή PDF</a>
+                    <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή RDF</a>
+                    <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export RDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-warning btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή JSON</a>
+                    <a class="btn btn-warning btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export JSON</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -229,10 +229,10 @@
 
               <!-- Nav tabs -->
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">KEIMENO</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">ΠΑΡΑΠΟΜΠΕΣ</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">ΠΕΡΙΕΧΟΜΕΝΑ</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">ΧΡΟΝΟΔΙΑΓΡΑΜΜΑ</a></li>
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">TEXT</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">CITATIONS</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">TABLE OF CONTENTS</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">TIMELINE</a></li>
               </ul>
 
               <!-- Tab panes -->
@@ -366,13 +366,13 @@
                         <% Article a = (Article) pageContext.getAttribute("article");
                         String[] URIs = a.getURI().toString().split("uoa.gr/");
                         pageContext.setAttribute("uri", URIs[1]); %>
-                        <li><a href="<c:url value="${pageContext.servletContext.contextPath}/legislation/${uri}"/>">Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
+                        <li><a href="<c:url value="${pageContext.servletContext.contextPath}/en/legislation/${uri}"/>">Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
                     <ul>
                         <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
                             <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
                             String[] URIs1 = p.getURI().toString().split("uoa.gr/");
                             pageContext.setAttribute("uri1", URIs1[1]); %>
-                            <li><a href="<c:url value="${pageContext.servletContext.contextPath}/legislation/${uri1}"/>">Παράγραφος ${paragraph.getId()}</a></li>
+                            <li><a href="<c:url value="${pageContext.servletContext.contextPath}/en/legislation/${uri1}"/>">Παράγραφος ${paragraph.getId()}</a></li>
                         </c:forEach>
                     </ul></li>
                     </c:forEach>
@@ -392,68 +392,12 @@
                             <td>${legaldoc.getFEK()}</td>
                         </tr>
                     <c:if test="${not empty legalmods}">
-                    <c:set var="currentTitle" value=""/>
-                    <c:forEach var="legalmod" items="${legalmods}" varStatus="loop">
-                        <c:if test="${legalmod.getCompetenceGround().getTitle()!=currentTitle}"> 
+                    <c:forEach var="version" items="${legalmods}" varStatus="loop">
                         <tr>
-                            <td>${legalmod.getCompetenceGround().getPublicationDate()}</td>
-                            <td>${legalmod.getCompetenceGround().getTitle()}</td>
-                            <td>${legalmod.getCompetenceGround().getFEK()}</td>
+                            <td>${version.getPublicationDate()}</td>
+                            <td>${version.getTitle()}</td>
+                            <td>${version.getFEK()}</td>
                         </tr>
-                        </c:if>
-                        <tr>
-                        <td colspan="3">
-                        <table id="example2" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
-                            <thead>
-                                <td>Τροποποίηση</td>
-                                <td>Τύπος</td>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                <c:choose>
-                                <c:when test="${legalmod.getFragment().getType() == 'Case'}">
-                                    <c:forEach var="passage13" items="${legalmod.getFragment().getPassages()}" varStatus="loop">
-                                    ${passage13.getText()}
-                                    </c:forEach>
-                                </c:when>
-                                <c:when test="${legalmod.getFragment().getType() == 'Passage'}">
-                                    ${legalmod.getFragment().getText()}
-                                </c:when>
-                                <c:when test="${legalmod.getFragment().getType() == 'Paragraph'}">
-                                    <c:forEach var="passage14" items="${legalmod.getFragment().getPassages()}" varStatus="loop">
-                                    ${passage14.getText()}
-                                    </c:forEach>
-                                    <c:if test="${legalmod.getFragment().getCaseList().size() > 0}">
-                                    <ol style="list-style-type: lower-greek;">    
-                                    <c:forEach var="case12" items="${legalmod.getFragment().getCaseList()}" varStatus="loop">
-                                        <c:forEach var="passage12" items="${case12.getPassages()}" varStatus="loop">
-                                        <li>${passage12.getText()}</li>
-                                        </c:forEach>
-                                    </c:forEach>
-                                    </ol>
-                                    </c:if>
-                                </c:when>
-                                </c:choose>
-                                </td>
-                                <td width="20%">
-                                    <c:choose>
-                                    <c:when test="${fn:endsWith(legalmod.getType(),'Edit')}">
-                                        Αντικατάσταση
-                                    </c:when>
-                                    <c:when test="${fn:endsWith(legalmod.getType(),'Creation')}">
-                                        Εισαγωγή
-                                    </c:when>
-                                    <c:when test="${fn:endsWith(legalmod.getType(),'Delete')}">
-                                        Διαγραφή
-                                    </c:when>
-                                    </c:choose>
-                                </td>
-                            </tr>
-                        </table>
-                        </td>
-                        </tr>
-                        <c:set var="currentTitle" value="${legalmod.getCompetenceGround().getTitle()}"/>
                     </c:forEach>
                     </c:if>
                         </tbody>
@@ -465,9 +409,9 @@
         </div>
         <div class="row"  style="height:400px;">&#160;&#160;</div>
     </div>
-    </div>               
+                        
     <div id="footer" style="text-align: center; font-family:'Jura';" >
-        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+        <h5>Νομοθεσί@ &copy; 2014 - Department of Informatics &amp; Telecommunications NKUA - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
     </div>                        
                             
 <c:if test="${not empty legaldoc.getPlace()}">

@@ -2,12 +2,22 @@
 package com.di.nomothesia.model;
 
 public class Modification {
-    
+
     private Fragment fragment;
     private String URI;
     private String Type;
     private String patient;
+    private LegalDocument competenceGround;
 
+    public Modification() {
+        this.competenceGround = new LegalDocument();
+    }
+    
+    //Setters-Getters for Modification
+    
+    public LegalDocument getCompetenceGround() {
+        return competenceGround;
+    }
 
     public String getPatient() {
         return patient;
@@ -17,12 +27,6 @@ public class Modification {
         this.patient = patient;
     }
     
-    public Modification() {
-        
-    }
-    
-    //Setters-Getters for Modification
-
     public Fragment getFragment() {
         return fragment;
     }

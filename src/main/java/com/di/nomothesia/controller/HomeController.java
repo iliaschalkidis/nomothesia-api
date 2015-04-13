@@ -45,6 +45,20 @@ public class HomeController {
 		return "home";
                 
 	}
+        
+        @RequestMapping(value = "/en", method = RequestMethod.GET)
+	public String homeEN(Model model) {
+                LegislationService lds = new LegislationService();
+		List<String> tags = lds.getTags();
+		List<LegalDocument> ldviewed = lds.MostViewed();
+                List<LegalDocument> ldrecent = lds.MostRecent();
+		model.addAttribute("tags",tags);
+                model.addAttribute("ldviewed",ldviewed);
+                model.addAttribute("ldrecent",ldrecent);
+                
+		return "home_en";
+                
+	}
 	
         @RequestMapping(value = "/aboutus", method = RequestMethod.GET)
 	public String aboutus(Locale locale, Model model) {	

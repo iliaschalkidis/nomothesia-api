@@ -11,6 +11,7 @@ public class Article implements Fragment{
     private String URI;
     List<Paragraph> paragraphs;
     private int status;
+    private String type;
     
     public Article() {
         
@@ -19,6 +20,15 @@ public class Article implements Fragment{
     }
     
     //Setters-Getters for Article
+    @Override
+    public void setType(String t) {
+        this.type = t;
+    }
+
+    @Override
+    public String getType() {
+        return type;
+    }
     
     public String getTitle() {
         return Title;

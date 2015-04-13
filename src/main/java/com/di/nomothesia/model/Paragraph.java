@@ -13,6 +13,7 @@ public class Paragraph implements Fragment{
     private String URI;
     private int id;
     private int status;
+    private String type;
     
     public Paragraph() {
         
@@ -24,6 +25,16 @@ public class Paragraph implements Fragment{
     }
     
     //Setters-Getters for Paragraph
+    @Override
+    public void setType(String t) {
+        this.type = t;
+    }
+
+    @Override
+    public String getType() {
+        return type;
+    }
+    
     @Override
     public int getStatus() {
         return status;

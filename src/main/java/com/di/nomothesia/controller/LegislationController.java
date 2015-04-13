@@ -2,6 +2,7 @@ package com.di.nomothesia.controller;
 
 import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.service.LegislationService;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +36,21 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 model.addAttribute("legaldoc", legaldoc);
-                List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
+	}
+        
+        @RequestMapping(value = "en/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
+	public String presentUpdatedLegalDocumentEN(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
+		LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, null);
+                model.addAttribute("legaldoc", legaldoc);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
+                model.addAttribute("legalmods", legalmods);
+                model.addAttribute("id","custom-bootstrap-menu");
+		return "basiclegislation_en";
 	}
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
@@ -46,7 +58,7 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, null);
                 model.addAttribute("legaldoc", legaldoc);
-                List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
@@ -77,7 +89,7 @@ public class LegislationController {
                 date += yyyy + "-" + mm + "-" + dd;
                 LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, date);
                 model.addAttribute("legaldoc", legaldoc);
-                List<LegalDocument> legalmods = lds.getAllModificationsById(type, year, id);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
                 model.addAttribute("legalmods", legalmods);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
@@ -238,6 +250,16 @@ public class LegislationController {
 		return "search";
 	}
         
+        @RequestMapping(value = "/en/legislation/endpoint", method = RequestMethod.GET)
+	public String endpointEN(@RequestParam Map<String,String> params, Model model) {
+		if(params.get("query") != null){
+                    LegislationService lds = new LegislationService();
+                    EndpointResultSet eprs = lds.sparqlQuery(params.get("query"),params.get("format"));
+                    model.addAttribute("endpointResults", eprs);
+                }
+		return "endpoint_en";
+	}
+        
         @RequestMapping(value = "/legislation/endpoint", method = RequestMethod.GET)
 	public String endpoint(@RequestParam Map<String,String> params, Model model) {
 		if(params.get("query") != null){
@@ -246,6 +268,17 @@ public class LegislationController {
                     model.addAttribute("endpointResults", eprs);
                 }
 		return "endpoint";
+	}
+        
+        
+        @RequestMapping(value = "/en/legislation/endpoint/query/{id}", method = RequestMethod.GET)
+	public String endpointEN( @PathVariable String id, Model model) {
+		if(id != null){
+                    LegislationService lds = new LegislationService();
+                    EndpointResultSet eprs = lds.sparqlQuery(id,"HTML");
+                    model.addAttribute("endpointResults", eprs);
+                }
+		return "endpoint_en";
 	}
         
         @RequestMapping(value = "/legislation/endpoint/query/{id}", method = RequestMethod.GET)
@@ -258,12 +291,12 @@ public class LegislationController {
 		return "endpoint";
 	}
 	
-       @ExceptionHandler(Exception.class)
-	public String handleAllException(Exception ex) {
- 
-		//ModelAndView model = new ModelAndView("error/exception_error");
-		return "home";
- 
-	}
+//       @ExceptionHandler(Exception.class)
+//	public String handleAllException(Exception ex) {
+// 
+//		//ModelAndView model = new ModelAndView("error/exception_error");
+//		return "home";
+// 
+//	}
         
 }

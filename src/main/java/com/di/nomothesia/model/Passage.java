@@ -7,6 +7,7 @@ public class Passage implements Fragment {
     private String text;
     private int id;
     private int status;
+    private String type;
     
     public Passage() {
 
@@ -46,6 +47,16 @@ public class Passage implements Fragment {
     
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public void setType(String t) {
+        this.type = t;
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
     
 }

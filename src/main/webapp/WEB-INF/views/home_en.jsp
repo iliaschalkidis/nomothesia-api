@@ -49,8 +49,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/en"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/en" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -62,28 +62,28 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
+                            <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">Home</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                            <a href="${pageContext.servletContext.contextPath}/en/developer" style="font-family: 'Comfortaa', cursive;" >Information</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
+                            <a href="${pageContext.servletContext.contextPath}/en/aboutus" style="font-family: 'Comfortaa', cursive;" >About Us</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                            <a href="${pageContext.servletContext.contextPath}/en/legislation/search" style="font-family: 'Comfortaa', cursive;" >Search</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                            <a href="${pageContext.servletContext.contextPath}/en/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Statistics</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/en/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                     </ul>
                     
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">EN</a>
+                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">GR</a>
                         </li>
                     </ul>
                 </div>
@@ -96,27 +96,26 @@
                 <div class="col-md-6">
                     <div class="row" style="padding:10px;">
                         <div class="jumbotron" style="padding: 20px 20px 20px 20px;">
-                            <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
+                            <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/en/legislation/search">
                                 <table width="100%">
                                     <tr>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Λέξεις Κλειδιά:</label>
-                                                <input type="text" id="keywords" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε λέξεις χωρισμένες με (,)...">
+                                                <label for="exampleInputEmail1">Keywords:</label>
+                                                <input type="text" id="keywords" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Type keywords separated with (,)...">
                                             </div>
                                         </td>
                                         <td width="5%"></td>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputPassword1">Τύπος Νομοθεσίας:</label>
+                                                <label for="exampleInputPassword1">Legislation Type:</label>
                                                 <select class="form-control" name="type">
                                                     <option value="">-</option>
-                                                    <option value="con">Σύνταγμα</option>
-                                                    <option value="law">Νόμος</option>
-                                                    <option value="pd">Προεδρικό Διάταγμα (ΠΔ)</option>
-                                                    <option value="amc">Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</option>
-                                                    <option value="md">Υπουργική Απόφαση (ΥΑ)</option>
-                                                    <option value="rd">Βασιλικό Διάταγμα (ΒΔ)</option>
+                                                    <option value="con">Constitution</option>
+                                                    <option value="law">Law</option>
+                                                    <option value="pd">PresidentiaL Decree (PD)</option>
+                                                    <option value="amc">Act of Ministerial Cabinet (AMC)</option>
+                                                    <option value="md">Ministerial Decision (MD)</option>
                                                 </select>
                                             </div>
                                         </td>
@@ -125,7 +124,7 @@
                                     <tr>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputPassword2">Αριθμός Κυκλοφορίας:</label>
+                                                <label for="exampleInputPassword2">Publication ID:</label>
                                                 <div class="row">
                                                     <div class="col-md-5">
                                                         <input class="form-control" value="" type="number" name="year" min="1976" max="2015" step="1">
@@ -140,9 +139,9 @@
                                         <td width="5%"></td>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputPassword2">Ημερομηνία Κυκλοφορίας:</label>
+                                                <label for="exampleInputPassword2">Publication Date:</label>
                                                 <div class='input-group date' >
-                                                    <input type='text'  name="date" id='datepicker' class="form-control" placeholder="Ημερομηνία"/>
+                                                    <input type='text'  name="date" id='datepicker' class="form-control" placeholder="Date"/>
                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                                 </div> 
                                             </div>
@@ -153,7 +152,7 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align: right;">
-                                            <button type="submit" class="btn btn-primary btn-lg">Αναζήτηση</button>
+                                            <button type="submit" class="btn btn-primary btn-lg">Search</button>
                                         </td>
                                     </tr>
                                     
@@ -161,7 +160,7 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align: right; margin-top: 5px;">
-                                            <a href="${pageContext.servletContext.contextPath}/legislation/search">Σύνθετη Αναζήτηση</a> 
+                                            <a href="${pageContext.servletContext.contextPath}/en/legislation/search">Advanced Search</a> 
                                         </td>
                                     </tr>
                                 </table>
@@ -179,8 +178,8 @@
                         <div role="tabpanel">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">ΝΕΕΣ ΕΚΔΟΣΕΙΣ</a></li>
-                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">ΠΙΟ ΔΗΜΟΦΙΛΗ</a></li>
+                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">NEW LEGISLATION</a></li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">MOST REQUESTED ACTS</a></li>
                             </ul>
 
                             <!-- Tab panes -->
@@ -190,18 +189,18 @@
                                     <table id="example" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Τίτλος</th>
-                                                <th>Κωδικός</th>
-                                                <th>Ημερομηνία</th>
+                                                <th>Title</th>
+                                                <th>ID</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="ldrecent" items="${ldrecent}" varStatus="loop">
                                                 <% LegalDocument ldr = (LegalDocument) pageContext.getAttribute("ldrecent");
-                                                String[] URIsr = ldr.getURI().toString().split("uoa.gr/nomothesia/");
+                                                String[] URIsr = ldr.getURI().toString().split("uoa.gr/");
                                                 pageContext.setAttribute("urir", URIsr[1]); %>
                                                 <tr>
-                                                    <td><a href="<c:url value="${pageContext.servletContext.contextPath}/legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="${pageContext.servletContext.contextPath}/en/legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
                                                     <td>${ldrecent.getDecisionType()} ${ldrecent.getYear()}/${ldrecent.getId()}</td>
                                                     <td>${ldrecent.getPublicationDate()}</td>
                                                 </tr>
@@ -215,18 +214,18 @@
                                     <table id="example2" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Τίτλος</th>
-                                                <th>Κωδικός</th>
-                                                <th>Ημερομηνία</th>
+                                                <th>Title</th>
+                                                <th>ID</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="ldviewed" items="${ldviewed}" varStatus="loop">
                                                 <% LegalDocument ldv = (LegalDocument) pageContext.getAttribute("ldviewed");
-                                                String[] URIs = ldv.getURI().toString().split("uoa.gr/nomothesia/");
+                                                String[] URIs = ldv.getURI().toString().split("uoa.gr/");
                                                 pageContext.setAttribute("uri", URIs[1]); %>
                                                 <tr>
-                                                    <td><a href="<c:url value="${pageContext.servletContext.contextPath}/legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="${pageContext.servletContext.contextPath}/en/legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
                                                     <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
                                                     <td>${ldviewed.getPublicationDate()}</td>
                                                 </tr>
@@ -247,15 +246,15 @@
                         <p>
                         Παρόμοιες πρωτοβουλίες στο εξωτερικό:
                             <ul>
-                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> (Ολλανδία)</li>
-                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> (Ηνωμένο Βασίλειο)</li>
+                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> (Netherlands)</li>
+                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> (United Kingdom)</li>
                             </ul>
                         </p>
                         <div align="center" style="padding:10px;">
-                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
+                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/en/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
                         </div>
                         <div align="center" style="padding:10px;">
-                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
+                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/en/legislation/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
                         </div>
                     </div>
                 </div>
@@ -263,7 +262,7 @@
         </div>
 
         <div id="footer" style="text-align: center; font-family:'Jura';" >
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5>Νομοθεσί@ &copy; 2014 - Department of Informatics &amp; Telecommunications NKUA - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -275,30 +274,7 @@
         <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 
-        <script>
-            $(function() {
-                $( "#datepicker" ).datepicker({
-
-                    closeText: 'Κλείσιμο',
-                    prevText: 'Προηγούμενος',
-                    nextText: 'Επόμενος',
-                    currentText: 'Τρέχων Μήνας',
-                    monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
-                    'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
-                    monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
-                    'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
-                    dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
-                    dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
-                    dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
-                    dateFormat: 'yy-mm-dd', 
-                    firstDay: 1,
-                    maxDate: '0',
-                    isRTL: false
-
-                });
-
-            });
-        </script>
+        
       
         <script>
             $(document).ready(function() {
@@ -320,21 +296,7 @@
 
                     "bLengthChange": false,
 
-                    "oLanguage": {
-
-                        "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-                        "sZeroRecords": "Δεν βρέθηκε τίποτα",
-                        "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-                        "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-                        "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-
-                        "oPaginate": {
-                            "sNext": "Επόμενη",
-                            "sPrevious": "Προηγούμενη"
-                        }
-
-                    }
+                    
 
                 });
 
@@ -355,21 +317,7 @@
 
                     "bLengthChange": false,
 
-                    "oLanguage": {
-
-                        "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-                        "sZeroRecords": "Δεν βρέθηκε τίποτα",
-                        "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-                        "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-                        "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-
-                        "oPaginate": {
-                            "sNext": "Επόμενη",
-                            "sPrevious": "Προηγούμενη"
-                        }
-
-                    }    
+                    
                 });
 
             });

@@ -11,6 +11,7 @@ public class Case implements Fragment{
     private List<Passage> passages;
     private List<Case> caseList;
     private int status;
+    private String type;
     
     public Case() {
         
@@ -22,6 +23,16 @@ public class Case implements Fragment{
     }
     
     //Setters-Getters for Case
+    @Override
+    public void setType(String t) {
+        this.type = t;
+    }
+
+    @Override
+    public String getType() {
+        return type;
+    }
+    
     @Override
     public int getStatus() {
         return status;
