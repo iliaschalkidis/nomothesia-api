@@ -1,6 +1,7 @@
 package com.di.nomothesia.controller;
 
 import com.di.nomothesia.model.EndpointResultSet;
+import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.service.LegislationService;
@@ -47,8 +48,9 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
-                lds.getUpdatedById(legaldoc, legalmods);
+                List<Fragment> frags = lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("fragschanced", frags);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation_en";
@@ -59,9 +61,9 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
-                lds.getUpdatedById(legaldoc, legalmods);
-                lds.getUpdatedById(legaldoc, legalmods);
+                List<Fragment> frags = lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("fragschanced", frags);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
@@ -72,9 +74,10 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
-                lds.getUpdatedById(legaldoc, legalmods);
-                 model.addAttribute("legaldoc", legaldoc);
+                List<Fragment> frags = lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("fragschanced", frags);
+                model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id", type1 + "-" + id1 + "-" +type2 + "-" + id2);
 		return "basiclegislation";
 	}
@@ -84,8 +87,9 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
-                lds.getUpdatedById(legaldoc, legalmods);
+                List<Fragment> frags = lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("fragschanced", frags);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id", type1 + "-" + id1);
 		return "basiclegislation";
@@ -101,8 +105,9 @@ public class LegislationController {
                  legaldoc = null;
                 }
                 List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, date);
-                lds.getUpdatedById(legaldoc, legalmods);
+                List<Fragment> frags = lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("fragschanced", frags);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id","custom-bootstrap-menu");
 

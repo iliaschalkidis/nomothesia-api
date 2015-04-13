@@ -1144,7 +1144,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 count3 = -1;
                                 count4 = -1;
                                 fragment = article;
-                                fragment.setStatus(1);
+                                if(mod.getType().contains("Edit")){
+                                    fragment.setStatus(2);
+                                }
+                                else{
+                                    fragment.setStatus(1);
+                                }
                                 fragment.setType("Article");
                                 frag = 1;
                                 
@@ -1159,7 +1164,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 
                                 if(frag == 0) {
                                     fragment = paragraph;
-                                    fragment.setStatus(1);
+                                    if(mod.getType().contains("Edit")){
+                                        fragment.setStatus(2);
+                                    }
+                                    else{
+                                        fragment.setStatus(1);
+                                    }
                                     fragment.setType("Paragraph");
                                     frag = 2;
                                 }
@@ -1167,7 +1177,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                     Article article = (Article) fragment;
                                     article.getParagraphs().add(paragraph);
                                     fragment = article;
-                                    fragment.setStatus(1);
                                 }
                                 
                                 count2++;
@@ -1195,26 +1204,28 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 
                                 if(frag == 0) {
                                     fragment = passage;
-                                    fragment.setStatus(1);
+                                    if(mod.getType().contains("Edit")){
+                                        fragment.setStatus(2);
+                                    }
+                                    else{
+                                        fragment.setStatus(1);
+                                    }
                                     fragment.setType("Passage");
                                 }
                                 else if (frag == 1) {
                                     Article article = (Article) fragment;
                                     article.getParagraphs().get(count2).getPassages().add(passage);
                                     fragment = article;
-                                    fragment.setStatus(1);
                                 }
                                 else if (frag == 2) {
                                     Paragraph paragraph = (Paragraph) fragment;
                                     paragraph.getPassages().add(passage);
                                     fragment = paragraph;
-                                    fragment.setStatus(1);
                                 }
                                 else {
                                     Paragraph paragraph = (Paragraph) fragment;
                                     paragraph.getPassages().add(passage);
                                     fragment = paragraph;
-                                    fragment.setStatus(1);
                                 }
 
                                 count3 ++;
@@ -1242,26 +1253,28 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 
                                 if(frag == 0) {
                                     fragment = case1;
-                                    fragment.setStatus(1);
+                                    if(mod.getType().contains("Edit")){
+                                        fragment.setStatus(2);
+                                    }
+                                    else{
+                                        fragment.setStatus(1);
+                                    }
                                     fragment.setType("Case");
                                 }
                                 else if (frag == 1) {
                                     Article article = (Article) fragment;
                                     article.getParagraphs().get(count2).getCaseList().add(case1);
                                     fragment = article;
-                                    fragment.setStatus(1);
                                 }
                                 else if (frag == 2) {
                                     Paragraph paragraph = (Paragraph) fragment;
                                     paragraph.getCaseList().add(case1);
                                     fragment = paragraph;
-                                    fragment.setStatus(1);
                                 }
                                 else {
                                     Paragraph paragraph = (Paragraph) fragment;
                                     paragraph.getCaseList().add(case1);
                                     fragment = paragraph;
-                                    fragment.setStatus(1);
                                 }
 
                                 count4 ++;
