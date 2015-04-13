@@ -93,6 +93,11 @@
         <!-- Search Form -->
         <div class="container">
             <div class="row">
+                <div class="jumbotron" style="padding: 10px 10px 10px 10px;">
+                    <b>Βρεθήκατε σε αυτή τη σελίδα λόγο λάθους!</b>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="row" style="padding:10px;">
                         <div class="jumbotron" style="padding: 20px 20px 20px 20px;">

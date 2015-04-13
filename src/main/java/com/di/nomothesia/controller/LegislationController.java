@@ -36,7 +36,7 @@ public class LegislationController {
 		LegislationService lds = new LegislationService();
                 LegalDocument legaldoc = lds.getById(type, year, id, 1);
                 model.addAttribute("legaldoc", legaldoc);
-                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
                 model.addAttribute("legalmods", legalmods);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
@@ -45,10 +45,11 @@ public class LegislationController {
         @RequestMapping(value = "en/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
 	public String presentUpdatedLegalDocumentEN(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, null);
-                model.addAttribute("legaldoc", legaldoc);
-                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
+                lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation_en";
 	}
@@ -56,10 +57,12 @@ public class LegislationController {
         @RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
 	public String presentUpdatedLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, null);
-                model.addAttribute("legaldoc", legaldoc);
-                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
+                lds.getUpdatedById(legaldoc, legalmods);
+                lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id","custom-bootstrap-menu");
 		return "basiclegislation";
 	}
@@ -67,8 +70,11 @@ public class LegislationController {
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}/{type2}/{id2}", method = RequestMethod.GET)
 	public String presentLegalFragment(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, @PathVariable String type2, @PathVariable String id2, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getById(type, year, id , 1);
-                model.addAttribute("legaldoc", legaldoc);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
+                lds.getUpdatedById(legaldoc, legalmods);
+                 model.addAttribute("legaldoc", legaldoc);
+                model.addAttribute("legalmods", legalmods);
                 model.addAttribute("id", type1 + "-" + id1 + "-" +type2 + "-" + id2);
 		return "basiclegislation";
 	}
@@ -76,7 +82,10 @@ public class LegislationController {
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}", method = RequestMethod.GET)
 	public String presentLegalFragmentless(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, Model model) {
 		LegislationService lds = new LegislationService();
-                LegalDocument legaldoc = lds.getById(type, year, id , 1);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
+                lds.getUpdatedById(legaldoc, legalmods);
+                model.addAttribute("legalmods", legalmods);
                 model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id", type1 + "-" + id1);
 		return "basiclegislation";
@@ -84,14 +93,19 @@ public class LegislationController {
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}", method = RequestMethod.GET)
         public String presentModificationByDate(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Model model) {
-		LegislationService lds = new LegislationService();
                 String date = "";
                 date += yyyy + "-" + mm + "-" + dd;
-                LegalDocument legaldoc = lds.getUpdatedById(type, year, id, 1, date);
-                model.addAttribute("legaldoc", legaldoc);
-                List<Modification> legalmods = lds.getAllModificationsById(type, year, id);
+                LegislationService lds = new LegislationService();
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                if (legaldoc.getPublicationDate().compareTo(date) > 0){
+                 legaldoc = null;
+                }
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, date);
+                lds.getUpdatedById(legaldoc, legalmods);
                 model.addAttribute("legalmods", legalmods);
+                model.addAttribute("legaldoc", legaldoc);
                 model.addAttribute("id","custom-bootstrap-menu");
+
 		return "basiclegislation";
 	}
         
@@ -119,9 +133,14 @@ public class LegislationController {
                 LegislationService lds = new LegislationService();
                 String date = "";
                 date += yyyy + "-" + mm + "-" + dd;
-		LegalDocument legal = lds.getUpdatedById(type,year,id,2,date);
-                legal.setPlace(null);
-		return legal;
+		LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                if (legaldoc.getPublicationDate().compareTo(date) > 0){
+                 legaldoc = null;
+                }
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 2, date);
+                lds.getUpdatedById(legaldoc, legalmods);
+                legaldoc.setPlace(null);
+		return legaldoc;
  
 	}
         
@@ -130,8 +149,13 @@ public class LegislationController {
                 LegislationService lds = new LegislationService();
                 String date = "";
                 date += yyyy + "-" + mm + "-" + dd;
-                LegalDocument legal = lds.getUpdatedById(type,year,id,2,date);
-		return new ModelAndView("pdfView", "legaldocument", legal);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                if (legaldoc.getPublicationDate().compareTo(date) > 0){
+                 legaldoc = null;
+                }
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 2, date);
+                lds.getUpdatedById(legaldoc, legalmods);
+		return new ModelAndView("pdfView", "legaldocument", legaldoc);
 	}
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.xml", method = RequestMethod.GET, produces={"application/xml"})
@@ -189,17 +213,21 @@ public class LegislationController {
         @RequestMapping(value="/legislation/{type}/{year}/{id}/data.json", method = RequestMethod.GET)
 	public @ResponseBody LegalDocument exportUpdatedToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegislationService lds = new LegislationService();
-		LegalDocument legal = lds.getUpdatedById(type,year,id,2,null);
-                legal.setPlace(null);
-		return legal;
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 2, null);
+                lds.getUpdatedById(legaldoc, legalmods);
+                legaldoc.setPlace(null);
+		return legaldoc;
  
 	}
         
         @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportUpdatedToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id) {
                 LegislationService lds = new LegislationService();
-                LegalDocument legal = lds.getUpdatedById(type,year,id,2,null);
-		return new ModelAndView("pdfView", "legaldocument", legal);
+                LegalDocument legaldoc = lds.getById(type, year, id, 1);
+                List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 1, null);
+                lds.getUpdatedById(legaldoc, legalmods);
+		return new ModelAndView("pdfView", "legaldocument", legaldoc);
 	}
         
         @RequestMapping(value = "/legislation/search", method = RequestMethod.GET)
@@ -291,12 +319,12 @@ public class LegislationController {
 		return "endpoint";
 	}
 	
-//       @ExceptionHandler(Exception.class)
-//	public String handleAllException(Exception ex) {
-// 
-//		//ModelAndView model = new ModelAndView("error/exception_error");
-//		return "home";
-// 
-//	}
+       @ExceptionHandler(Exception.class)
+	public String handleAllException(Exception ex) {
+ 
+		//ModelAndView model = new ModelAndView("error/exception_error");
+		return "error";
+ 
+	}
         
 }
