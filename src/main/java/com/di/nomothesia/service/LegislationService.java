@@ -3,6 +3,7 @@ package com.di.nomothesia.service;
 import com.di.nomothesia.controller.XMLBuilder;
 import com.di.nomothesia.dao.LegalDocumentDAO;
 import com.di.nomothesia.model.EndpointResultSet;
+import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import java.util.List;
@@ -187,7 +188,7 @@ public class LegislationService {
         return legalDocumentDAO.getTags();
     }
 
-    public LegalDocument getUpdatedById(LegalDocument legald, List<Modification> mods) {
+    public List<Fragment> getUpdatedById(LegalDocument legald, List<Modification> mods) {
          //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
          
@@ -195,9 +196,8 @@ public class LegislationService {
         LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
 
         //Apply Modifications
-        legald.applyModifications(mods);
-        
-        return legald;
+       return legald.applyModifications(mods);
+
     }
 
     public String getUpdatedXMLById(String type, String year, String id, int request) throws TransformerException {

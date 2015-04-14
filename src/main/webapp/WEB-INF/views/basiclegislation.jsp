@@ -247,57 +247,57 @@
                     <br/>
                     <ol>
                     <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
-                        <c:if test="${paragraph.getStatus() == 1}">
+                        <c:if test="${paragraph.getStatus() >= 1}">
                             <div id="modification">
                         </c:if>
                         <li><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
                             <c:forEach var="passage" items="${paragraph.getPassages()}" varStatus="loop">
-                                <c:if test="${passage.getStatus() == 1}">
+                                <c:if test="${passage.getStatus() >= 1}">
                                     <div id="modification">
                                 </c:if>
                                 ${passage.getText()}
-                                <c:if test="${passage.getStatus() == 1}">
+                                <c:if test="${passage.getStatus() >= 1}">
                                     </div>
                                 </c:if>
                             </c:forEach>
                             <ol style="list-style-type: lower-greek;">    
                             <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
-                                <c:if test="${case1.getStatus() == 1}">
+                                <c:if test="${case1.getStatus() >= 1}">
                                     <div id="modification">
                                 </c:if>
                                 <li>
                                 <c:forEach var="passage2" items="${case1.getPassages()}" varStatus="loop">
-                                <c:if test="${passage2.getStatus() == 1}">
+                                    <c:if test="${passage2.getStatus() >= 1}">
                                     <div id="modification">
                                 </c:if>
                                 ${passage2.getText()}
-                                <c:if test="${passage2.getStatus() == 1}">
+                                <c:if test="${passage2.getStatus() >= 1}">
                                     </div>
                                 </c:if>
                                 </c:forEach>
                                 <c:if test="${not empty case1.getCaseList()}">
                                     <ol style="list-style-type: lower-greek;">
                                 <c:forEach var="case2" items="${case1.getCaseList()}" varStatus="loop">
-                                    <c:if test="${case2.getStatus() == 1}">
+                                    <c:if test="${case2.getStatus() >= 1}">
                                         <div id="modification">
                                     </c:if>
                                     <c:forEach var="passage3" items="${case2.getPassages()}" varStatus="loop">
-                                    <c:if test="${passage3.getStatus() == 1}">
+                                        <c:if test="${passage3.getStatus() >= 1}">
                                         <div id="modification">
                                     </c:if>
                                     <li>${passage3.getText()}</li>
-                                    <c:if test="${passage3.getStatus() == 1}">
+                                    <c:if test="${passage3.getStatus() >= 1}">
                                         </div>
                                     </c:if>
                                     </c:forEach>
-                                    <c:if test="${case2.getStatus() == 1}">
+                                    <c:if test="${case2.getStatus() >= 1}">
                                     </div>
                                     </c:if>
                                 </c:forEach>
                                     </ol>
                                 </c:if>
                                 </li>
-                                <c:if test="${case1.getStatus() == 1}">
+                                <c:if test="${case1.getStatus() >= 1}">
                                     </div>
                                 </c:if>
                             </c:forEach>
@@ -333,7 +333,7 @@
                                 </c:choose>
                             </c:if>
                             </div></li>
-                            <c:if test="${paragraph.getStatus() == 1}">
+                            <c:if test="${paragraph.getStatus() >= 1}">
                             </div>
                             </c:if>
                             <br/>
@@ -364,15 +364,15 @@
                     <ul id="messagescol">
                     <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
                         <% Article a = (Article) pageContext.getAttribute("article");
-                        String[] URIs = a.getURI().toString().split("uoa.gr/");
+                        String[] URIs = a.getURI().toString().split("/article/");
                         pageContext.setAttribute("uri", URIs[1]); %>
-                        <li><a href="<c:url value="${pageContext.servletContext.contextPath}/legislation/${uri}"/>">Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
+                        <li><a href="<c:url value="article/${uri}"/>">Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
                     <ul>
                         <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
                             <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
-                            String[] URIs1 = p.getURI().toString().split("uoa.gr/");
+                            String[] URIs1 = p.getURI().toString().split("/article/");
                             pageContext.setAttribute("uri1", URIs1[1]); %>
-                            <li><a href="<c:url value="${pageContext.servletContext.contextPath}/legislation/${uri1}"/>">Παράγραφος ${paragraph.getId()}</a></li>
+                            <li><a href="<c:url value="article/${uri1}"/>">Παράγραφος ${paragraph.getId()}</a></li>
                         </c:forEach>
                     </ul></li>
                     </c:forEach>
