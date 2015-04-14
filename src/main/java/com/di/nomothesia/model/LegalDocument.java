@@ -146,8 +146,8 @@ public class LegalDocument {
                     int count1 = Integer.parseInt(hierarchy[hierarchy.length-5]) - 1;
                     Passage passage = (Passage) mod.getFragment();
                     passage.setId(this.articles.get(count1).getParagraphs().get(count2).getPassages().get(count3).getId());
-                    this.articles.get(count1).getParagraphs().get(count2).getPassages().set(count3, passage);
                     frags.add(this.articles.get(count1).getParagraphs().get(count2).getPassages().get(count3));
+                    this.articles.get(count1).getParagraphs().get(count2).getPassages().set(count3, passage);
                 }
                 else if(hierarchy[hierarchy.length-2].equals("case")){
                     int count3 = Integer.parseInt(hierarchy[hierarchy.length-1]) - 1;
@@ -155,16 +155,16 @@ public class LegalDocument {
                     int count1 = Integer.parseInt(hierarchy[hierarchy.length-5]) - 1;
                     Case case1 = (Case) mod.getFragment();
                     case1.setId(this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(count3).getId());
-                    this.articles.get(count1).getParagraphs().get(count2).getCaseList().set(count3, case1);
                     frags.add(this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(count3));
+                    this.articles.get(count1).getParagraphs().get(count2).getCaseList().set(count3, case1);
                 }
                 else if(hierarchy[hierarchy.length-2].equals("paragraph")){
                     int count2 = Integer.parseInt(hierarchy[hierarchy.length-1]) - 1;
                     int count1 = Integer.parseInt(hierarchy[hierarchy.length-3]) - 1;
                     Paragraph paragraph = (Paragraph) mod.getFragment();
                     paragraph.setId(this.articles.get(count1).getParagraphs().get(count2).getId());
-                    this.articles.get(count1).getParagraphs().set(count2, paragraph);
                     frags.add(this.articles.get(count1).getParagraphs().get(count2));
+                    this.articles.get(count1).getParagraphs().set(count2, paragraph);
                 }
             }
             else if(mod.getType().contains("Creation")){

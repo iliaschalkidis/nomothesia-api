@@ -238,7 +238,9 @@
               <!-- Tab panes -->
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="home">
+                <c:set var="artcount" value="0"/>
                 <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
+                    <c:set var="artcount" value="${artcount+1}"/>
                     <div id="article-${article.getId()}">
                     <span style="text-align: center; font-size: 12px;"><h4>Άρθρο ${article.getId()}</h4></span>
                     <c:if test="${not empty article.getTitle()}">
@@ -246,22 +248,39 @@
                     </c:if>
                     <br/>
                     <ol>
+                        <c:set var="parcount" value="0"/>
                     <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
+                        <c:set var="parcount" value="${parcount+1}"/>
                         <c:if test="${paragraph.getStatus() >= 1}">
                             <div id="modification">
                         </c:if>
                         <li><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
+                            <c:set var="pascount" value="0"/>
                             <c:forEach var="passage" items="${paragraph.getPassages()}" varStatus="loop">
+                            <c:set var="pascount" value="${pascount+1}"/>
                                 <c:if test="${passage.getStatus() >= 1}">
                                     <div id="modification">
                                 </c:if>
                                 ${passage.getText()}
                                 <c:if test="${passage.getStatus() >= 1}">
+                                    <c:if test="${passage.getStatus() ==2}">
+                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                    <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/passage/${pascount}"/>
+                                    <div class="collapse out budgets ${artcount}${parcount}${pascount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                     <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
+                                         <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
+                                            ${frag.getText()}
+                                         </c:if>
+                                     </c:forEach>
+                                     </div>
+                                     </c:if>
                                     </div>
                                 </c:if>
                             </c:forEach>
-                            <ol style="list-style-type: lower-greek;">    
+                            <ol style="list-style-type: lower-greek;">
+                            <c:set var="casecount" value="0"/>
                             <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
+                                <c:set var="casecount" value="${casecount+1}"/>
                                 <c:if test="${case1.getStatus() >= 1}">
                                     <div id="modification">
                                 </c:if>
@@ -298,6 +317,19 @@
                                 </c:if>
                                 </li>
                                 <c:if test="${case1.getStatus() >= 1}">
+                                    <c:if test="${case1.getStatus() ==2}">
+                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount}" data-target=".${artcount}${parcount}0${casecount}collapsed" style="text-align:right;"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                    <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/case/${casecount}"/>
+                                    <div class="collapse out budgets ${artcount}${parcount}0${casecount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                     <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
+                                         <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
+                                           <c:forEach var="passage23" items="${frag.getPassages()}" varStatus="loop">
+                                                ${passage23.getText()}
+                                           </c:forEach>
+                                         </c:if>
+                                     </c:forEach>
+                                     </div>
+                                     </c:if>
                                     </div>
                                 </c:if>
                             </c:forEach>
@@ -334,6 +366,28 @@
                             </c:if>
                             </div></li>
                             <c:if test="${paragraph.getStatus() >= 1}">
+                                <c:if test="${paragraph.getStatus() ==2}">
+                                    <span class="clickable" data-toggle="collapse" id="${parcount}" data-target=".${parcount}collapsed" style="text-align:right;"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                    <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}"/>
+                                    <div class="collapse out budgets ${parcount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                     <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
+                                         <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
+                                            <c:forEach var="passage24" items="${frag.getPassages()}" varStatus="loop">
+                                            ${passage24.getText()}
+                                            </c:forEach>
+                                            <c:if test="${frag.getCaseList().size() > 0}">
+                                            <ol style="list-style-type: lower-greek;">    
+                                            <c:forEach var="case22" items="${frag.getCaseList()}" varStatus="loop">
+                                                <c:forEach var="passage22" items="${case22.getPassages()}" varStatus="loop">
+                                                <li>${passage22.getText()}</li>
+                                                </c:forEach>
+                                            </c:forEach>
+                                            </ol>
+                                            </c:if>
+                                         </c:if>
+                                     </c:forEach>
+                                     </div>
+                                </c:if>
                             </div>
                             </c:if>
                             <br/>
