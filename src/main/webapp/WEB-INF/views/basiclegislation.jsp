@@ -395,13 +395,14 @@
                     <c:set var="currentTitle" value=""/>
                     <c:forEach var="legalmod" items="${legalmods}" varStatus="loop">
                         <c:if test="${legalmod.getCompetenceGround().getTitle()!=currentTitle}"> 
-                        <tr>
-                            <td>${legalmod.getCompetenceGround().getPublicationDate()}</td>
+                            
+                        <tr class="clickable" data-toggle="collapse" id="68" data-target=".68collapsed">
+                            <td>${legalmod.getCompetenceGround().getPublicationDate()} (see more)</td>
                             <td>${legalmod.getCompetenceGround().getTitle()}</td>
                             <td>${legalmod.getCompetenceGround().getFEK()}</td>
                         </tr>
                         </c:if>
-                        <tr>
+                        <tr class="collapse out budgets 68collapsed">
                         <td colspan="3">
                         <table id="example2" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                             <thead>
