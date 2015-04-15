@@ -289,6 +289,7 @@ public class LegislationController {
                     LegislationService lds = new LegislationService();
                     EndpointResultSet eprs = lds.sparqlQuery(params.get("query"),params.get("format"));
                     model.addAttribute("endpointResults", eprs);
+                    model.addAttribute("format", params.get("format"));
                 }
 		return "endpoint_en";
 	}
@@ -299,6 +300,7 @@ public class LegislationController {
                     LegislationService lds = new LegislationService();
                     EndpointResultSet eprs = lds.sparqlQuery(params.get("query"),params.get("format"));
                     model.addAttribute("endpointResults", eprs);
+                    model.addAttribute("format", params.get("format"));
                 }
 		return "endpoint";
 	}
@@ -310,6 +312,7 @@ public class LegislationController {
                     LegislationService lds = new LegislationService();
                     EndpointResultSet eprs = lds.sparqlQuery(id,"HTML");
                     model.addAttribute("endpointResults", eprs);
+                    //model.addAttribute("format", params.get("format"));
                 }
 		return "endpoint_en";
 	}
@@ -320,6 +323,7 @@ public class LegislationController {
                     LegislationService lds = new LegislationService();
                     EndpointResultSet eprs = lds.sparqlQuery(id,"HTML");
                     model.addAttribute("endpointResults", eprs);
+                    //model.addAttribute("format", params.get("format"));
                 }
 		return "endpoint";
 	}

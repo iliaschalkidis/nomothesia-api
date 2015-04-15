@@ -65,19 +65,19 @@
                             <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
-                        </li>
-                        <li>
-                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
-                        </li>
-                        <li>
                             <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
                         </li>
                     </ul>
                     
@@ -242,7 +242,7 @@
                 <div class="col-md-6">
                     <div style="text-align: justify;padding:10px;">
                         <p><img style="width:40%; margin-left: 10px; margin-bottom: 10px;" align="right" src="${pageContext.servletContext.contextPath}/resources/images/greekcloud.png"</img>
-                        Στις μέρες μας, σε αντίθεση με πολλές χώρες της Ευρωπαϊκής Ένωσης, δεν υπάρχει κάποιο μηχανικά αναγνώσιμο πρότυπο για την ελληνική νομοθεσία και επομένως δεν μπορούν να προκύψουν προηγμένες διαδικτυακές νομικές υπηρεσίες. Στόχος μας είναι να συνεισφέρουμε στον τομέα της αναπαράστασης νομικής γνώσης και στην ενσωμάτωση αυτής στην περιοχή των ανοιχτών δεδομένων (open data) στην Ελλάδα, τόσο από τεχνολογική σκοπιά όσο και από άποψη διαφάνειας. Η συγκεκριμένη εργασία παρουσιάζει την Νομοθεσί@, μια πλατφόρμα, που σκοπό έχει να δώσει πρόσβαση στην ελληνική νομοθεσία, με την χρήση τεχνολογιών του <a href ="http://semanticweb.org/">Σημασιολογικού Ιστού (Semantic Web)</a> και την διασύνδεση τους με άλλα σύνολα δεδομένων (Καλλικράτης κ.α.) στα πλαίσια προώθησης της ηλεκτρονικής διακυβέρνησης. Η Νομοθεσί@ υιοθετεί την OWL οντολογία <a href="http://www.metalex.eu/">CEN Metalex</a>, ενώ παράλληλα επεξεργάζεται μια επέκταση της στα πλαίσια αναπαράστασης της ελληνική νομοθεσίας με τις όποιες ιδιορρυθμίες παρουσιάζει. Βασικός σκοπός είναι η αναπαράσταση των νομοθετικών σχέσεων και γεγονότων ως προς το περιεχόμενο (content) και τον χρόνο (temporal). Παράλληλα υψίστης σημασίας είναι η διασύνδεση των δεδομένων (linked data), η οποία αφορά τόσο στην διασύνδεση με άλλα δημόσια σύνολα δεδομένων <a href="http://www.linkedopendata.gr/">(Greek Linked Open Data)</a>, όσο και στην προώθηση της διασύνδεσης με το κοινοτικό δίκαιο στα πλαίσια της προώθηση του <a href="http://europa.eu/legislation_summaries/justice_freedom_security/judicial_cooperation_in_civil_matters/jl0068_en.htm">ELI (European Legislation Identifier)</a>. Πάνω σε αυτές τις αρχές, χτίζουμε μία διαδικτυακή διεπαφή προγραμματισμού εφαρμογών (αγγλ. API, από το Application Programming Interface) που στόχο έχει τόσο την δημοσίευση και παρουσίαση της ελληνικής νομοθεσίας στο εύρη κοινό μέσα από την συγκεκριμένη εύχρηστη μοντέρνα διαδικτυακή εφαρμογή, όσο και την δυνατότητα της χρήσης των ανοιχτών δεδομένων που προσφέρει το Νομοθεσί@ ως REST υπηρεσίες (εξαγωγή XML – RDF – PDF) με σκοπό την ανάπτυξη εφαρμογών ειδικού ενδιαφέροντος (νομικού, οικονομικού, δικαιωμάτων) από τρίτους.                        
+                        Στις μέρες μας, σε αντίθεση με πολλές χώρες της Ευρωπαϊκής Ένωσης, δεν υπάρχει κάποιο μηχανικά αναγνώσιμο πρότυπο για την ελληνική νομοθεσία και επομένως δεν μπορούν να προκύψουν προηγμένες διαδικτυακές νομικές υπηρεσίες. Στόχος μας είναι να συνεισφέρουμε στον τομέα της αναπαράστασης νομικής γνώσης και στην ενσωμάτωση αυτής στην περιοχή των ανοιχτών δεδομένων (open data) στην Ελλάδα, τόσο από τεχνολογική σκοπιά όσο και από άποψη διαφάνειας. Η συγκεκριμένη εργασία παρουσιάζει την Νομοθεσί@, μια πλατφόρμα, που σκοπό έχει να δώσει πρόσβαση στην ελληνική νομοθεσία, με την χρήση τεχνολογιών του <a target="_blank" href ="http://semanticweb.org/">Σημασιολογικού Ιστού (Semantic Web)</a> και την διασύνδεση τους με άλλα σύνολα δεδομένων (Καλλικράτης κ.α.) στα πλαίσια προώθησης της ηλεκτρονικής διακυβέρνησης. Η Νομοθεσί@ υιοθετεί την OWL οντολογία <a target="_blank" href="http://www.metalex.eu/">CEN Metalex</a>, ενώ παράλληλα επεξεργάζεται μια επέκταση της στα πλαίσια αναπαράστασης της ελληνική νομοθεσίας με τις όποιες ιδιορρυθμίες παρουσιάζει. Βασικός σκοπός είναι η αναπαράσταση των νομοθετικών σχέσεων και γεγονότων ως προς το περιεχόμενο (content) και τον χρόνο (temporal). Παράλληλα υψίστης σημασίας είναι η διασύνδεση των δεδομένων (linked data), η οποία αφορά τόσο στην διασύνδεση με άλλα δημόσια σύνολα δεδομένων <a target="_blank" href="http://www.linkedopendata.gr/">(Greek Linked Open Data)</a>, όσο και στην προώθηση της διασύνδεσης με το κοινοτικό δίκαιο στα πλαίσια της προώθηση του <a target="_blank" href="http://europa.eu/legislation_summaries/justice_freedom_security/judicial_cooperation_in_civil_matters/jl0068_en.htm">ELI (European Legislation Identifier)</a>. Πάνω σε αυτές τις αρχές, χτίζουμε μία διαδικτυακή διεπαφή προγραμματισμού εφαρμογών (αγγλ. API, από το Application Programming Interface) που στόχο έχει τόσο την δημοσίευση και παρουσίαση της ελληνικής νομοθεσίας στο εύρη κοινό μέσα από την συγκεκριμένη εύχρηστη μοντέρνα διαδικτυακή εφαρμογή, όσο και την δυνατότητα της χρήσης των ανοιχτών δεδομένων που προσφέρει το Νομοθεσί@ ως REST υπηρεσίες (εξαγωγή XML – RDF – PDF) με σκοπό την ανάπτυξη εφαρμογών ειδικού ενδιαφέροντος (νομικού, οικονομικού, δικαιωμάτων) από τρίτους.                        
                         </p>
                         <p>
                         Παρόμοιες πρωτοβουλίες στο εξωτερικό:
@@ -302,7 +302,13 @@
       
         <script>
             $(document).ready(function() {
-
+                
+                $("#tabs").tabs( {
+        "activate": function(event, ui) {
+            $( $.fn.dataTable.tables( true ) ).DataTable().columns.adjust();
+        }
+    } );
+                
                 $("#example").dataTable({
 
                     "autoWidth": false,    

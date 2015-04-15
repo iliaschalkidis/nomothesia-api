@@ -112,6 +112,16 @@
             height:60px;   /* Height of the footer */
             /*background:#6cf;*/
         }
+        
+        #share-buttons img {
+            width: 35px;
+            padding: 5px;
+            border: 0;
+            box-shadow: 0;
+            display: inline;
+        }
+ 
+</style>
     </style>
     
 </head>
@@ -137,19 +147,19 @@
                         <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
-                    </li>
-                    <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -206,23 +216,23 @@
                     <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Αρxική Έκδοση</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-success btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή XML</a>
+                    <a class="btn btn-success btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-danger btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή PDF</a>
+                    <a class="btn btn-danger btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-primary btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή RDF</a>
+                    <a class="btn btn-primary btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή RDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-warning btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή JSON</a>
+                    <a class="btn btn-warning btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή JSON</a>
                 </div>
             </div>
             <div class="col-md-9">
-                <ul style="margin: 0; padding: 0; list-style-type: none; text-align: right;">
-                    <li style="display: inline;"><a class="btn btn-social btn-xs btn-facebook"><i class="fa fa-facebook"></i>Share</a><!--<div class="fb-share-button" data-href="https://legislation.di.uoa.gr" data-layout="button_count"></div>--></li>
-                    <li style="display: inline;"><a class="btn btn-social btn-xs btn-twitter"><i class="fa fa-twitter"></i>Tweet</a><!--<a class="twitter-share-button" href="https://twitter.com/share" data-related="twitterdev" data-count="horizontal">Tweet</a>--></li>
-                </ul>
+                <!-- <ul style="margin: 0; padding: 0; list-style-type: none; text-align: right;">
+                    <li style="display: inline;"><a class="btn btn-social btn-xs btn-facebook"><i class="fa fa-facebook"></i>Share</a><div class="fb-share-button" data-href="https://legislation.di.uoa.gr" data-layout="button_count"></div></li>
+                    <li style="display: inline;"><a class="btn btn-social btn-xs btn-twitter"><i class="fa fa-twitter"></i>Tweet</a><a class="twitter-share-button" href="https://twitter.com/share" data-related="twitterdev" data-count="horizontal">Tweet</a></li>
+                </ul>-->
             <a href="#" class="scrollToTop"><img src="${pageContext.servletContext.contextPath}/resources/images/newup.png"/></a>
             <span style="text-align: center;"><h4>${legaldoc.getTitle()}</h4></span>
             <div role="tabpanel">
@@ -233,6 +243,24 @@
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">ΠΑΡΑΠΟΜΠΕΣ</a></li>
                 <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">ΠΕΡΙΕΧΟΜΕΝΑ</a></li>
                 <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">ΧΡΟΝΟΔΙΑΓΡΑΜΜΑ</a></li>
+                <div id="share-buttons">
+                    <li style="display: inline;">
+                        <!-- Facebook -->
+                        <a href="http://www.facebook.com/sharer.php?u=http://www.simplesharebuttons.com" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></a>
+                    </li>
+                    <li style="display: inline;">
+                        <!-- Twitter -->
+                        <a href="http://twitter.com/share?url=http://www.simplesharebuttons.com&text=Simple Share Buttons&hashtags=simplesharebuttons" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" /></a>
+                    </li>
+                    <li style="display: inline;">
+                        <!-- Google+ -->
+                        <a href="https://plus.google.com/share?url=http://www.simplesharebuttons.com" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/google.png" alt="Google" /></a>
+                    </li>
+                    <li style="display: inline;">
+                        <!-- LinkedIn -->
+                        <a href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.simplesharebuttons.com" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" /></a>
+                    </li>
+                </div>
               </ul>
 
               <!-- Tab panes -->
@@ -264,7 +292,7 @@
                                 ${passage.getText()}
                                 <c:if test="${passage.getStatus() >= 1}">
                                     <c:if test="${passage.getStatus() ==2}">
-                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
                                     <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/passage/${pascount}"/>
                                     <div class="collapse out budgets ${artcount}${parcount}${pascount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
                                      <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
@@ -318,7 +346,7 @@
                                 </li>
                                 <c:if test="${case1.getStatus() >= 1}">
                                     <c:if test="${case1.getStatus() ==2}">
-                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount}" data-target=".${artcount}${parcount}0${casecount}collapsed" style="text-align:right;"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount}" data-target=".${artcount}${parcount}0${casecount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
                                     <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/case/${casecount}"/>
                                     <div class="collapse out budgets ${artcount}${parcount}0${casecount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
                                      <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
@@ -367,7 +395,7 @@
                             </div></li>
                             <c:if test="${paragraph.getStatus() >= 1}">
                                 <c:if test="${paragraph.getStatus() ==2}">
-                                    <span class="clickable" data-toggle="collapse" id="${parcount}" data-target=".${parcount}collapsed" style="text-align:right;"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                    <span class="clickable" data-toggle="collapse" id="${parcount}" data-target=".${parcount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
                                     <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}"/>
                                     <div class="collapse out budgets ${parcount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
                                      <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
@@ -450,13 +478,13 @@
                     <c:forEach var="legalmod" items="${legalmods}" varStatus="loop">
                         <c:if test="${legalmod.getCompetenceGround().getTitle()!=currentTitle}"> 
                             
-                        <tr class="clickable" data-toggle="collapse" id="68" data-target=".68collapsed">
-                            <td>${legalmod.getCompetenceGround().getPublicationDate()} (see more)</td>
-                            <td>${legalmod.getCompetenceGround().getTitle()}</td>
+                        <tr class="clickable" data-toggle="collapse" id="mod" data-target=".modcollapsed">
+                            <td>${legalmod.getCompetenceGround().getPublicationDate()}</td>
+                            <td>${legalmod.getCompetenceGround().getTitle()} <span style="cursor: pointer;" class="glyphicon glyphicon-download" aria-hidden="true"></span></td>
                             <td>${legalmod.getCompetenceGround().getFEK()}</td>
                         </tr>
                         </c:if>
-                        <tr class="collapse out budgets 68collapsed">
+                        <tr class="collapse out budgets modcollapsed">
                         <td colspan="3">
                         <table id="example2" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                             <thead>

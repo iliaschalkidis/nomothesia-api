@@ -65,19 +65,19 @@
                         <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
-                    </li>
-                    <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -122,8 +122,8 @@ PREFIX dc: <http://purl.org/dc/terms/></c:when>
                       <div class="col-md-3" style="text-align:left;">
                         <label for="format">Mορφή αποτελέσματος:</label>
                         <select class="form-control" name="format">
-                            <option value="HTML">HTML</option>
-                            <option value="XML">SPARQL/XML</option>
+                            <option value="HTML" <c:if test="${format != null && fn:contains(format, 'HTML')}">selected</c:if>>HTML</option>
+                            <option value="XML" <c:if test="${format != null && fn:contains(format, 'XML')}">selected</c:if>>SPARQL/XML</option>
                         </select>
                     </div>
                     <div class="col-md-4"></div>
