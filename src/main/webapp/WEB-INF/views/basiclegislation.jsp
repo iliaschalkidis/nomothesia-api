@@ -5,6 +5,7 @@
 <%@ page session="false"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
-    <title>NOMOΘΕΣΙΑ</title>
+    <title><spring:message code="title"/></title>
     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -132,7 +133,7 @@
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
         <div class="container-fluid">
             <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -142,32 +143,43 @@
             </div>
         
             <div class="collapse navbar-collapse navbar-menubuilder">
-                <ul class="nav navbar-nav navbar-left">
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">EN</a>
-                    </li>
-                </ul>
-            </div>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <c:set var="localeCode" value="${pageContext.response.locale}" />
+                        <c:choose>
+                            <c:when test="${localeCode == 'en' }"> 
+                                <li>
+                                    <a href="?language=el_GR" style="font-family: 'Comfortaa', cursive;">EL</a>
+                                </li>
+                            </c:when>
+                            <c:when test="${localeCode == 'el_GR' }">
+                                <li>
+                                    <a href="?language=en" style="font-family: 'Comfortaa', cursive;">EN</a>
+                                </li>
+                            </c:when>
+                        </c:choose>
+                    </ul>
+                </div>
         </div>
     </div>
       
@@ -176,9 +188,9 @@
         <div class="row">
             <div class="col-md-3">  
                 <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
-                    <div align="center"><h4>ΓΕΝΙΚΑ ΣΤΟΙΧΕΙΑ</h4></div><br/>
-                    <u style="color:  #1087dd">ΚΩΔΙΚΟΣ:</u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
-                    <u style="color:  #1087dd">ΗΜΕΡΟΜΗΝΙΑ:</u> ${legaldoc.getPublicationDate()} <br/>
+                    <div align="center"><h4><spring:message code="basic.data"/></h4></div><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.code"/></u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.date"/></u> ${legaldoc.getPublicationDate()} <br/>
                     <c:set var="repl" value='"' />
                     <c:choose>
                         <c:when test="${fn:contains(legaldoc.getFEK(),repl)}">
@@ -190,8 +202,8 @@
                         </c:when>
                     </c:choose>
                     <c:set var="fek2" value="${fn:split(fek, '/')}" />
-                    <u style="color:  #1087dd">ΦΕΚ:</u> <a href="${pageContext.servletContext.contextPath}/legislation/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
-                    <u style="color:  #1087dd">ΥΠΟΓΡΑΦΟΝΤΕΣ:</u><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="${pageContext.servletContext.contextPath}/legislation/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.signer"/></u><br/>
                     <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                         ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
                     </c:forEach>
@@ -202,30 +214,30 @@
                     </c:forEach>
                     </div><br/>
                     <c:if test="${not empty legaldoc.getTags()}">
-                        <u style="color:  #1087dd">ΕΤΙΚΕΤΕΣ:</u> <br/>
+                        <u style="color:  #1087dd"><spring:message code="basic.labels"/></u> <br/>
                         <c:forEach items="${legaldoc.getTags()}" var="tag" varStatus="loop">
                             ${tag}<c:if test="${!loop.last}">,&nbsp;</c:if>
                         </c:forEach>
                     </c:if><br/>
                     <c:if test="${not empty legaldoc.getPlace()}">
-                    <u style="color:  #1087dd">ΧΑΡΤΗΣ:</u><br/> <br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.map"/></u><br/> <br/>
                     <div id="map" style="width:200; height:200px;"></div>
                     </c:if>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%">Αρxική Έκδοση</a>
+                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%"><spring:message code="basic.enacted"/></a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-success btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή XML</a>
+                    <a class="btn btn-success btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-danger btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή PDF</a>
+                    <a class="btn btn-danger btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-primary btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή RDF</a>
+                    <a class="btn btn-primary btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> RDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-warning btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Εξαγωγή JSON</a>
+                    <a class="btn btn-warning btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> JSON</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -239,26 +251,26 @@
 
               <!-- Nav tabs -->
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">KEIMENO</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">ΠΑΡΑΠΟΜΠΕΣ</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">ΠΕΡΙΕΧΟΜΕΝΑ</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">ΧΡΟΝΟΔΙΑΓΡΑΜΜΑ</a></li>
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><spring:message code="basic.text"/></a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><spring:message code="basic.cit"/></a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><spring:message code="basic.content"/></a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><spring:message code="basic.timeline"/></a></li>
                 <div id="share-buttons">
                     <li style="display: inline;">
                         <!-- Facebook -->
-                        <a href="http://www.facebook.com/sharer.php?u=http://www.simplesharebuttons.com" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></a>
+                        <a href="http://www.facebook.com/sharer.php?u=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></a>
                     </li>
                     <li style="display: inline;">
                         <!-- Twitter -->
-                        <a href="http://twitter.com/share?url=http://www.simplesharebuttons.com&text=Simple Share Buttons&hashtags=simplesharebuttons" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" /></a>
+                        <a href="http://twitter.com/share?url=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" /></a>
                     </li>
                     <li style="display: inline;">
                         <!-- Google+ -->
-                        <a href="https://plus.google.com/share?url=http://www.simplesharebuttons.com" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/google.png" alt="Google" /></a>
+                        <a href="https://plus.google.com/share?url=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/google.png" alt="Google" /></a>
                     </li>
                     <li style="display: inline;">
                         <!-- LinkedIn -->
-                        <a href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.simplesharebuttons.com" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" /></a>
+                        <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" /></a>
                     </li>
                 </div>
               </ul>
@@ -270,7 +282,7 @@
                 <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
                     <c:set var="artcount" value="${artcount+1}"/>
                     <div id="article-${article.getId()}">
-                    <span style="text-align: center; font-size: 12px;"><h4>Άρθρο ${article.getId()}</h4></span>
+                    <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.article"/> ${article.getId()}</h4></span>
                     <c:if test="${not empty article.getTitle()}">
                     <span style="text-align: center; font-size: 12px;"><h4>${article.getTitle()}</h4></span>
                     </c:if>
@@ -292,7 +304,7 @@
                                 ${passage.getText()}
                                 <c:if test="${passage.getStatus() >= 1}">
                                     <c:if test="${passage.getStatus() ==2}">
-                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                        <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
                                     <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/passage/${pascount}"/>
                                     <div class="collapse out budgets ${artcount}${parcount}${pascount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
                                      <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
@@ -346,7 +358,7 @@
                                 </li>
                                 <c:if test="${case1.getStatus() >= 1}">
                                     <c:if test="${case1.getStatus() ==2}">
-                                    <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount}" data-target=".${artcount}${parcount}0${casecount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                        <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount}" data-target=".${artcount}${parcount}0${casecount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
                                     <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/case/${casecount}"/>
                                     <div class="collapse out budgets ${artcount}${parcount}0${casecount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
                                      <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
@@ -428,7 +440,7 @@
                   <div role="tabpanel" class="tab-pane" id="profile">
                       <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                         <thead>
-                            <td>Έχοντας υπόψη:</td>
+                            <td><spring:message code="basic.mind"/></td>
                         </thead>
                         <tbody>
                             <c:if test="${not empty legaldoc.getCitations()}">
@@ -448,13 +460,13 @@
                         <% Article a = (Article) pageContext.getAttribute("article");
                         String[] URIs = a.getURI().toString().split("/article/");
                         pageContext.setAttribute("uri", URIs[1]); %>
-                        <li><a href="<c:url value="article/${uri}"/>">Άρθρο ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
+                        <li><a href="<c:url value="article/${uri}"/>"><spring:message code="basic.article"/> ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
                     <ul>
                         <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
                             <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
                             String[] URIs1 = p.getURI().toString().split("/article/");
                             pageContext.setAttribute("uri1", URIs1[1]); %>
-                            <li><a href="<c:url value="article/${uri1}"/>">Παράγραφος ${paragraph.getId()}</a></li>
+                            <li><a href="<c:url value="article/${uri1}"/>"><spring:message code="basic.par"/> ${paragraph.getId()}</a></li>
                         </c:forEach>
                     </ul></li>
                     </c:forEach>
@@ -463,9 +475,9 @@
                 <div role="tabpanel" class="tab-pane" id="settings">
                     <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                         <thead>
-                            <td>Ημερομηνία</td>
-                            <td>Τίτλος</td>
-                            <td>ΦΕΚ</td>
+                            <td><spring:message code="home.datesimple"/></td>
+                            <td><spring:message code="home.title"/></td>
+                            <td><spring:message code="basic.fek2"/></td>
                         </thead>
                         <tbody>
                         <tr>
@@ -488,8 +500,8 @@
                         <td colspan="3">
                         <table id="example2" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                             <thead>
-                                <td>Τροποποίηση</td>
-                                <td>Τύπος</td>
+                                <td><spring:message code="basic.mod"/></td>
+                                <td><spring:message code="basic.type"/></td>
                             </thead>
                             <tbody>
                             <tr>
@@ -522,13 +534,13 @@
                                 <td width="20%">
                                     <c:choose>
                                     <c:when test="${fn:endsWith(legalmod.getType(),'Edit')}">
-                                        Αντικατάσταση
+                                        <spring:message code="basic.rep"/>
                                     </c:when>
                                     <c:when test="${fn:endsWith(legalmod.getType(),'Creation')}">
-                                        Εισαγωγή
+                                        <spring:message code="basic.ins"/>
                                     </c:when>
                                     <c:when test="${fn:endsWith(legalmod.getType(),'Delete')}">
-                                        Διαγραφή
+                                        <spring:message code="basic.del"/>
                                     </c:when>
                                     </c:choose>
                                 </td>
@@ -550,7 +562,7 @@
     </div>
     </div>               
     <div id="footer" style="text-align: center; font-family:'Jura';" >
-        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+        <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
     </div>                        
                             
 <c:if test="${not empty legaldoc.getPlace()}">

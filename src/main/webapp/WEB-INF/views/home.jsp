@@ -4,6 +4,7 @@
 <%@ page session="false" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
-        <title>NOMOΘΕΣΙΑ</title>
+        <title><spring:message code="title"/></title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -45,12 +46,11 @@
 
     </head>
     <body>
-
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -62,29 +62,39 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
+                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
+                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
+                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
                     </ul>
                     
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">EN</a>
-                        </li>
+                        <c:set var="localeCode" value="${pageContext.response.locale}" />
+                        <c:choose>
+                            <c:when test="${localeCode == 'en' }"> 
+                                <li>
+                                    <a href="?language=el_GR" style="font-family: 'Comfortaa', cursive;">EL</a>
+                                </li>
+                            </c:when>
+                            <c:when test="${localeCode == 'el_GR' }">
+                                <li>
+                                    <a href="?language=en" style="font-family: 'Comfortaa', cursive;">EN</a>
+                                </li>
+                            </c:when>
+                        </c:choose>
                     </ul>
                 </div>
             </div>
@@ -101,22 +111,22 @@
                                     <tr>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Λέξεις Κλειδιά:</label>
-                                                <input type="text" id="keywords" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="Εισάγετε λέξεις χωρισμένες με (,)...">
+                                                <label for="exampleInputEmail1"><spring:message code="home.keywords"/></label>
+                                                <input type="text" id="keywords" name="keywords" class="form-control" id="exampleInputEmail1" placeholder="<spring:message code="home.placeholder"/>">
                                             </div>
                                         </td>
                                         <td width="5%"></td>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputPassword1">Τύπος Νομοθεσίας:</label>
+                                                <label for="exampleInputPassword1"><spring:message code="home.type"/></label>
                                                 <select class="form-control" name="type">
                                                     <option value="">-</option>
-                                                    <option value="con">Σύνταγμα</option>
-                                                    <option value="law">Νόμος</option>
-                                                    <option value="pd">Προεδρικό Διάταγμα (ΠΔ)</option>
-                                                    <option value="amc">Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</option>
-                                                    <option value="md">Υπουργική Απόφαση (ΥΑ)</option>
-                                                    <option value="rd">Βασιλικό Διάταγμα (ΒΔ)</option>
+                                                    <option value="con"><spring:message code="home.con"/></option>
+                                                    <option value="law"><spring:message code="home.law"/></option>
+                                                    <option value="pd"><spring:message code="home.pd"/></option>
+                                                    <option value="amc"><spring:message code="home.amc"/></option>
+                                                    <option value="md"><spring:message code="home.md"/></option>
+                                                    <option value="rd"><spring:message code="home.rd"/></option>
                                                 </select>
                                             </div>
                                         </td>
@@ -125,7 +135,7 @@
                                     <tr>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputPassword2">Αριθμός Κυκλοφορίας:</label>
+                                                <label for="exampleInputPassword2"><spring:message code="home.serial"/></label>
                                                 <div class="row">
                                                     <div class="col-md-5">
                                                         <input class="form-control" value="" type="number" name="year" min="1976" max="2015" step="1">
@@ -140,9 +150,9 @@
                                         <td width="5%"></td>
                                         <td width="45%">
                                             <div class="form-group">
-                                                <label for="exampleInputPassword2">Ημερομηνία Κυκλοφορίας:</label>
+                                                <label for="exampleInputPassword2"><spring:message code="home.date"/></label>
                                                 <div class='input-group date' >
-                                                    <input type='text'  name="date" id='datepicker' class="form-control" placeholder="Ημερομηνία"/>
+                                                    <input type='text'  name="date" id='datepicker' class="form-control" placeholder="<spring:message code="home.dateplaceholder"/>"/>
                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                                 </div> 
                                             </div>
@@ -153,7 +163,7 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align: right;">
-                                            <button type="submit" class="btn btn-primary btn-lg">Αναζήτηση</button>
+                                            <button type="submit" class="btn btn-primary btn-lg"><spring:message code="navbar.search"/></button>
                                         </td>
                                     </tr>
                                     
@@ -161,7 +171,7 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align: right; margin-top: 5px;">
-                                            <a href="${pageContext.servletContext.contextPath}/legislation/search">Σύνθετη Αναζήτηση</a> 
+                                            <a href="${pageContext.servletContext.contextPath}/legislation/search"><spring:message code="home.advancedsearch"/></a> 
                                         </td>
                                     </tr>
                                 </table>
@@ -179,8 +189,8 @@
                         <div role="tabpanel">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">ΝΕΕΣ ΕΚΔΟΣΕΙΣ</a></li>
-                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;">ΠΙΟ ΔΗΜΟΦΙΛΗ</a></li>
+                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="home.new"/></a></li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="home.most"/></a></li>
                             </ul>
 
                             <!-- Tab panes -->
@@ -190,9 +200,9 @@
                                     <table id="example" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Τίτλος</th>
-                                                <th>Κωδικός</th>
-                                                <th>Ημερομηνία</th>
+                                                <th><spring:message code="home.title"/></th>
+                                                <th><spring:message code="home.code"/></th>
+                                                <th><spring:message code="home.datesimple"/></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -215,9 +225,9 @@
                                     <table id="example2" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Τίτλος</th>
-                                                <th>Κωδικός</th>
-                                                <th>Ημερομηνία</th>
+                                                <th><spring:message code="home.title"/></th>
+                                                <th><spring:message code="home.code"/></th>
+                                                <th><spring:message code="home.datesimple"/></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -242,20 +252,20 @@
                 <div class="col-md-6">
                     <div style="text-align: justify;padding:10px;">
                         <p><img style="width:40%; margin-left: 10px; margin-bottom: 10px;" align="right" src="${pageContext.servletContext.contextPath}/resources/images/greekcloud.png"</img>
-                        Στις μέρες μας, σε αντίθεση με πολλές χώρες της Ευρωπαϊκής Ένωσης, δεν υπάρχει κάποιο μηχανικά αναγνώσιμο πρότυπο για την ελληνική νομοθεσία και επομένως δεν μπορούν να προκύψουν προηγμένες διαδικτυακές νομικές υπηρεσίες. Στόχος μας είναι να συνεισφέρουμε στον τομέα της αναπαράστασης νομικής γνώσης και στην ενσωμάτωση αυτής στην περιοχή των ανοιχτών δεδομένων (open data) στην Ελλάδα, τόσο από τεχνολογική σκοπιά όσο και από άποψη διαφάνειας. Η συγκεκριμένη εργασία παρουσιάζει την Νομοθεσί@, μια πλατφόρμα, που σκοπό έχει να δώσει πρόσβαση στην ελληνική νομοθεσία, με την χρήση τεχνολογιών του <a target="_blank" href ="http://semanticweb.org/">Σημασιολογικού Ιστού (Semantic Web)</a> και την διασύνδεση τους με άλλα σύνολα δεδομένων (Καλλικράτης κ.α.) στα πλαίσια προώθησης της ηλεκτρονικής διακυβέρνησης. Η Νομοθεσί@ υιοθετεί την OWL οντολογία <a target="_blank" href="http://www.metalex.eu/">CEN Metalex</a>, ενώ παράλληλα επεξεργάζεται μια επέκταση της στα πλαίσια αναπαράστασης της ελληνική νομοθεσίας με τις όποιες ιδιορρυθμίες παρουσιάζει. Βασικός σκοπός είναι η αναπαράσταση των νομοθετικών σχέσεων και γεγονότων ως προς το περιεχόμενο (content) και τον χρόνο (temporal). Παράλληλα υψίστης σημασίας είναι η διασύνδεση των δεδομένων (linked data), η οποία αφορά τόσο στην διασύνδεση με άλλα δημόσια σύνολα δεδομένων <a target="_blank" href="http://www.linkedopendata.gr/">(Greek Linked Open Data)</a>, όσο και στην προώθηση της διασύνδεσης με το κοινοτικό δίκαιο στα πλαίσια της προώθηση του <a target="_blank" href="http://europa.eu/legislation_summaries/justice_freedom_security/judicial_cooperation_in_civil_matters/jl0068_en.htm">ELI (European Legislation Identifier)</a>. Πάνω σε αυτές τις αρχές, χτίζουμε μία διαδικτυακή διεπαφή προγραμματισμού εφαρμογών (αγγλ. API, από το Application Programming Interface) που στόχο έχει τόσο την δημοσίευση και παρουσίαση της ελληνικής νομοθεσίας στο εύρη κοινό μέσα από την συγκεκριμένη εύχρηστη μοντέρνα διαδικτυακή εφαρμογή, όσο και την δυνατότητα της χρήσης των ανοιχτών δεδομένων που προσφέρει το Νομοθεσί@ ως REST υπηρεσίες (εξαγωγή XML – RDF – PDF) με σκοπό την ανάπτυξη εφαρμογών ειδικού ενδιαφέροντος (νομικού, οικονομικού, δικαιωμάτων) από τρίτους.                        
+                        <spring:message code="home.text"/>                        
                         </p>
                         <p>
-                        Παρόμοιες πρωτοβουλίες στο εξωτερικό:
+                        <spring:message code="home.text2"/>
                             <ul>
-                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> (Ολλανδία)</li>
-                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> (Ηνωμένο Βασίλειο)</li>
+                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> <spring:message code="home.text3"/></li>
+                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> <spring:message code="home.text4"/></li>
                             </ul>
                         </p>
                         <div align="center" style="padding:10px;">
-                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download OWL Ontology</a>
+                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button1"/></a>
                         </div>
                         <div align="center" style="padding:10px;">
-                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download RDF Data Set</a>
+                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button2"/></a>
                         </div>
                     </div>
                 </div>
@@ -263,7 +273,7 @@
         </div>
 
         <div id="footer" style="text-align: center; font-family:'Jura';" >
-            <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
         </div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -274,125 +284,143 @@
         <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
         <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+        
+        
+        
+                <script type="text/javascript">
+            var is_profile_inited = false;
+            $(document).on('shown.bs.tab', '[data-toggle="tab"]', function (e) {
+                if ($(this).attr("href") == '#profile' && is_profile_inited == false) {
+                    is_profile_inited = true;
+                    $("#example2").dataTable({
+                        "autoWidth": false,
+                        "scrollY": "333px",
+                        "scrollCollapse": true,
+                        "paging": true,
+                        "iDisplayLength": 4,
+                        "aaSorting": [],
+                        "bSortable": true,
+                        "aoColumnDefs": [
+                            {"aTargets": [0], "bSortable": true},
+                            {"aTargets": [1], "bSortable": true},
+                            {"aTargets": [2], "bSortable": true}],
+                        
+                        <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }"> 
+                        "bLengthChange": false
+                    </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
+                        "bLengthChange": false,
+                        "oLanguage": {
+                            "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
+                            "sZeroRecords": "Δεν βρέθηκε τίποτα",
+                            "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
+                            "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
+                            "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
+                            "sSearch": "Αναζήτηση",
+                            "oPaginate": {
+                                "sNext": "Επόμενη",
+                                "sPrevious": "Προηγούμενη"
+                            }
 
+                        }
+                    </c:when>
+                </c:choose>
+                        
+                    });
+                }
+            });
+        </script>
+        
         <script>
-            $(function() {
-                $( "#datepicker" ).datepicker({
-
+            $(function () {
+                $("#datepicker").datepicker({
+                    <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }">
+                        dateFormat: 'yy-mm-dd',
+                    firstDay: 1,
+                    maxDate: '0',
+                    isRTL: false
+            </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
                     closeText: 'Κλείσιμο',
                     prevText: 'Προηγούμενος',
                     nextText: 'Επόμενος',
                     currentText: 'Τρέχων Μήνας',
-                    monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
-                    'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
-                    monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
-                    'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
-                    dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
-                    dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
-                    dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
-                    dateFormat: 'yy-mm-dd', 
+                    monthNames: ['Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος',
+                        'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος'],
+                    monthNamesShort: ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαι', 'Ιουν',
+                        'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ'],
+                    dayNames: ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'],
+                    dayNamesShort: ['Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ'],
+                    dayNamesMin: ['Κυ', 'Δε', 'Τρ', 'Τε', 'Πε', 'Πα', 'Σα'],
+                    dateFormat: 'yy-mm-dd',
                     firstDay: 1,
                     maxDate: '0',
                     isRTL: false
-
+            </c:when>
+                </c:choose>
                 });
 
             });
         </script>
       
         <script>
-            $(document).ready(function() {
-                
-                $("#tabs").tabs( {
-        "activate": function(event, ui) {
-            $( $.fn.dataTable.tables( true ) ).DataTable().columns.adjust();
-        }
-    } );
-                
-                $("#example").dataTable({
+            $(document).ready(function () {
 
-                    "autoWidth": false,    
+                $("#example").dataTable({
+                    "autoWidth": false,
                     "scrollY": "333px",
                     "scrollCollapse": true,
                     "paging": true,
                     "iDisplayLength": 4,
                     "aaSorting": [],
                     "bSortable": true,
-
                     "aoColumnDefs": [
-                        { "aTargets": [ 0 ], "bSortable": true },
-                        { "aTargets": [ 1 ], "bSortable": true },
-                        { "aTargets": [ 2 ], "bSortable": true }],
-
+                        {"aTargets": [0], "bSortable": true},
+                        {"aTargets": [1], "bSortable": true},
+                        {"aTargets": [2], "bSortable": true}],
+                    <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }"> 
+                        "bLengthChange": false
+                        </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
                     "bLengthChange": false,
-
                     "oLanguage": {
-
                         "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
                         "sZeroRecords": "Δεν βρέθηκε τίποτα",
                         "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
                         "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
                         "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
                         "sSearch": "Αναζήτηση",
-
                         "oPaginate": {
                             "sNext": "Επόμενη",
                             "sPrevious": "Προηγούμενη"
                         }
 
                     }
-
-                });
-
-                $("#example2").dataTable({
-
-                    "autoWidth": false,    
-                    "scrollY": "333px",
-                    "scrollCollapse": true,
-                    "paging": true,
-                    "iDisplayLength": 4,
-                    "aaSorting": [],
-                    "bSortable": true,
-
-                    "aoColumnDefs": [
-                        { "aTargets": [ 0 ], "bSortable": true },
-                        { "aTargets": [ 1 ], "bSortable": true },
-                        { "aTargets": [ 2 ], "bSortable": true }],
-
-                    "bLengthChange": false,
-
-                    "oLanguage": {
-
-                        "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-                        "sZeroRecords": "Δεν βρέθηκε τίποτα",
-                        "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-                        "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-                        "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-
-                        "oPaginate": {
-                            "sNext": "Επόμενη",
-                            "sPrevious": "Προηγούμενη"
-                        }
-
-                    }    
+                   </c:when>
+                </c:choose>
                 });
 
             });
         </script>
    
         <script>
-            $(function() {
-                
+            $(function () {
+
                 var availableTags = [
-                <c:forEach var="tag" items="${tags}" >  
-                    "${tag}", 
-                </c:forEach>];
-                    
-                $( "#keywords" ).autocomplete({
+            <c:forEach var="tag" items="${tags}" >
+                    "${tag}",
+            </c:forEach>];
+
+                $("#keywords").autocomplete({
                     source: availableTags
                 });
-            
+
             });
         </script>
     </body>

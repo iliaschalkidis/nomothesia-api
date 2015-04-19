@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -33,7 +31,7 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 **/
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
+	public String home(Model model, Locale locale) {
                 LegislationService lds = new LegislationService();
 		List<String> tags = lds.getTags();
 		List<LegalDocument> ldviewed = lds.MostViewed();
@@ -41,40 +39,47 @@ public class HomeController {
 		model.addAttribute("tags",tags);
                 model.addAttribute("ldviewed",ldviewed);
                 model.addAttribute("ldrecent",ldrecent);
+                model.addAttribute("locale",locale);
                 
 		return "home";
                 
 	}
         
-        @RequestMapping(value = "/en", method = RequestMethod.GET)
-	public String homeEN(Model model) {
-                LegislationService lds = new LegislationService();
-		List<String> tags = lds.getTags();
-		List<LegalDocument> ldviewed = lds.MostViewed();
-                List<LegalDocument> ldrecent = lds.MostRecent();
-		model.addAttribute("tags",tags);
-                model.addAttribute("ldviewed",ldviewed);
-                model.addAttribute("ldrecent",ldrecent);
-                
-		return "home_en";
-                
-	}
+//        @RequestMapping(value = "/en", method = RequestMethod.GET)
+//	public String homeEN(Model model, Locale locale) {
+//                LegislationService lds = new LegislationService();
+//		List<String> tags = lds.getTags();
+//		List<LegalDocument> ldviewed = lds.MostViewed();
+//                List<LegalDocument> ldrecent = lds.MostRecent();
+//		model.addAttribute("tags",tags);
+//                model.addAttribute("ldviewed",ldviewed);
+//                model.addAttribute("ldrecent",ldrecent);
+//                
+//		return "home_en";
+//                
+//	}
 	
         @RequestMapping(value = "/aboutus", method = RequestMethod.GET)
-	public String aboutus(Locale locale, Model model) {	
-		return "aboutus";
+	public String aboutus(Locale locale, Model model) {
+            
+            model.addAttribute("locale",locale);
+            return "aboutus";
                 
 	}
         
         @RequestMapping(value = "/developer", method = RequestMethod.GET)
 	public String developer(Locale locale, Model model) {	
-		return "developer";
+	
+            model.addAttribute("locale",locale);
+            return "developer";
                 
 	}
         
         @RequestMapping(value = "/legislation/statistics", method = RequestMethod.GET)
 	public String stats(Locale locale, Model model) {	
-		return "stats";
+	
+            model.addAttribute("locale",locale);
+            return "stats";
                 
 	}
         
@@ -88,7 +93,7 @@ public class HomeController {
             //servletContext.contextPath
             ServletContext context = request.getSession().getServletContext();
             String appPath = context.getRealPath("");
-            System.out.println("appPath = " + appPath);
+            //System.out.println("appPath = " + appPath);
 
             // construct the complete absolute path of the file
             String fullPath = appPath + filePath;      
@@ -103,7 +108,7 @@ public class HomeController {
                 mimeType = "application/octet-stream";
             }
 
-            System.out.println("MIME type: " + mimeType);
+            //System.out.println("MIME type: " + mimeType);
 
             // set content attributes for the response
             response.setContentType(mimeType);
@@ -140,7 +145,7 @@ public class HomeController {
             //servletContext.contextPath
             ServletContext context = request.getSession().getServletContext();
             String appPath = context.getRealPath("");
-            System.out.println("appPath = " + appPath);
+            //System.out.println("appPath = " + appPath);
 
             // construct the complete absolute path of the file
             String fullPath = appPath + filePath;      
@@ -155,7 +160,7 @@ public class HomeController {
                 mimeType = "application/octet-stream";
             }
 
-            System.out.println("MIME type: " + mimeType);
+            //System.out.println("MIME type: " + mimeType);
 
             // set content attributes for the response
             response.setContentType(mimeType);
@@ -183,10 +188,11 @@ public class HomeController {
         }
         
         @ExceptionHandler(Exception.class)
-	public String handleAllException(Exception ex) {
+	public String handleAllException(Exception ex, Locale locale, Model model) {
  
-		//ModelAndView model = new ModelAndView("error/exception_error");
-		return "home";
+            //ModelAndView model = new ModelAndView("error/exception_error");
+            model.addAttribute("locale",locale);
+            return "home";
  
 	}
             

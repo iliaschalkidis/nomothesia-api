@@ -414,11 +414,13 @@ public class XMLBuilder  {
                 }   
             
             }
-                 
+               
             //Convert Document DOM type to String with greek characters support
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+            //transformer.setOutputProperty(OutputKeys.METHOD,"html");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.VERSION,"1.0");
             //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(doc);
             Writer stringWriter = new StringWriter();

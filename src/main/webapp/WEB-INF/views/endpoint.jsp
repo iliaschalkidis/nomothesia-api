@@ -3,6 +3,7 @@
 <%@ page session="false" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
-    <title>NOMOΘΕΣΙΑ</title>
+    <title><spring:message code="title"/></title>
     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -50,7 +51,7 @@
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
         <div class="container-fluid">
             <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -60,32 +61,43 @@
             </div>
         
             <div class="collapse navbar-collapse navbar-menubuilder">
-               <ul class="nav navbar-nav navbar-left">
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">EN</a>
-                    </li>
-                </ul>
-            </div>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <c:set var="localeCode" value="${pageContext.response.locale}" />
+                        <c:choose>
+                            <c:when test="${localeCode == 'en' }"> 
+                                <li>
+                                    <a href="?language=el_GR" style="font-family: 'Comfortaa', cursive;">EL</a>
+                                </li>
+                            </c:when>
+                            <c:when test="${localeCode == 'el_GR' }">
+                                <li>
+                                    <a href="?language=en" style="font-family: 'Comfortaa', cursive;">EN</a>
+                                </li>
+                            </c:when>
+                        </c:choose>
+                    </ul>
+                </div>
         </div>
     </div>
       
@@ -93,15 +105,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ΠΑΡΑΔΕΙΓΜΑΤΑ</h3></span>
+                <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3><spring:message code="endpoint.ex"/></h3></span>
                 <div align="center" style="padding:10px;">
-                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;">Εμφάνισε όλες τις τροποποιήσεις<br/>που αφορούν το ΠΔ 2011/54</a>
+                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q1"/></a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;">Εμφάνισε την πλήρη δομή <br/>του ΠΔ 2014/65</a>
+                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q2"/></a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;">Εμφάνισε μέλη κυβερνήσεων<br/>τα οποία έχουν υπογράψει<br/>τις περισσότερες αποφάσεις<br/>μεταξύ του 2010 και 2014</a>
+                    <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -120,7 +132,7 @@ PREFIX dc: <http://purl.org/dc/terms/></c:when>
                   <div class="form-group" style="text-align: right;">
                   <div class="row">
                       <div class="col-md-3" style="text-align:left;">
-                        <label for="format">Mορφή αποτελέσματος:</label>
+                        <label for="format"><spring:message code="endpoint.form"/></label>
                         <select class="form-control" name="format">
                             <option value="HTML" <c:if test="${format != null && fn:contains(format, 'HTML')}">selected</c:if>>HTML</option>
                             <option value="XML" <c:if test="${format != null && fn:contains(format, 'XML')}">selected</c:if>>SPARQL/XML</option>
@@ -128,7 +140,7 @@ PREFIX dc: <http://purl.org/dc/terms/></c:when>
                     </div>
                     <div class="col-md-4"></div>
                     <div class="col-md-5" style="bottom:0"> 
-                        <button type="submit" class="btn btn-default btn-lg">Εκτέλεση</button>
+                        <button type="submit" class="btn btn-default btn-lg"><spring:message code="endpoint.run"/></button>
                     </div>
                   </div>
                   </div>
@@ -153,7 +165,7 @@ PREFIX dc: <http://purl.org/dc/terms/></c:when>
     </div>
     
     <div id="footer" style="text-align: center; font-family:'Jura';" >
-        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+        <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

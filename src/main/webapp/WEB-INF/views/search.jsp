@@ -4,6 +4,7 @@
 <%@ page session="false" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
-    <title>NOMOΘΕΣΙΑ</title>
+    <title><spring:message code="title"/></title>
     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -52,7 +53,7 @@
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
         <div class="container-fluid">
             <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px">ΝΟΜΟΘΕΣΙ@</a>
+            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -62,32 +63,43 @@
             </div>
         
             <div class="collapse navbar-collapse navbar-menubuilder">
-                <ul class="nav navbar-nav navbar-left">
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;">Αρχική</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" >Αναζήτηση</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" >Στατιστικά</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" >Eμείς</a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" >Πληροφορίες</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="${pageContext.servletContext.contextPath}/en" style="font-family: 'Comfortaa', cursive;">EN</a>
-                    </li>
-                </ul>
-            </div>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <c:set var="localeCode" value="${pageContext.response.locale}" />
+                        <c:choose>
+                            <c:when test="${localeCode == 'en' }"> 
+                                <li>
+                                    <a href="?language=el_GR" style="font-family: 'Comfortaa', cursive;">EL</a>
+                                </li>
+                            </c:when>
+                            <c:when test="${localeCode == 'el_GR' }">
+                                <li>
+                                    <a href="?language=en" style="font-family: 'Comfortaa', cursive;">EN</a>
+                                </li>
+                            </c:when>
+                        </c:choose>
+                    </ul>
+                </div>
         </div>
     </div>
       
@@ -97,33 +109,33 @@
             <div class="col-md-3">
                 <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
                 <ul  class="nav nav-sidebar">
-                    <li><a>Λέξεις Κλειδιά:</a>
-                        <input type="text" name="keywords" class="form-control" id="keywords" <c:if test="${not empty keywords}">value="${keywords}"</c:if> placeholder="Εισάγετε επιθυμητή έκφραση...">
+                    <li><a><spring:message code="home.keywords"/></a>
+                        <input type="text" name="keywords" class="form-control" id="keywords" <c:if test="${not empty keywords}">value="${keywords}"</c:if> placeholder="<spring:message code="search.placeholder"/>">
                     </li>
-                    <li><a>Τύπος Νομοθεσίας:</a>
+                    <li><a><spring:message code="home.type"/></a>
                         <fieldset>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="con" <c:if test="${type != null && fn:contains(type, 'con')}">checked='checked'</c:if>>Σύνταγμα</label>
+                          <label><input type="checkbox" class="category" value="con" <c:if test="${type != null && fn:contains(type, 'con')}">checked='checked'</c:if>><spring:message code="home.con"/></label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="law" <c:if test="${type != null && fn:contains(type, 'law')}">checked='checked'</c:if>>Νόμος</label>
+                          <label><input type="checkbox" class="category" value="law" <c:if test="${type != null && fn:contains(type, 'law')}">checked='checked'</c:if>><spring:message code="home.law"/></label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="pd" <c:if test="${type != null && fn:contains(type, 'pd')}">checked='checked'</c:if>>Προεδρικό Διάταγμα (ΠΔ)</label>
+                          <label><input type="checkbox" class="category" value="pd" <c:if test="${type != null && fn:contains(type, 'pd')}">checked='checked'</c:if>><spring:message code="home.pd"/></label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="amc" <c:if test="${type != null && fn:contains(type, 'amc')}">checked='checked'</c:if>>Πράξη Υπουργικού Συμβουλίου (ΠΥΣ)</label>
+                          <label><input type="checkbox" class="category" value="amc" <c:if test="${type != null && fn:contains(type, 'amc')}">checked='checked'</c:if>><spring:message code="home.amc"/></label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="md" <c:if test="${type != null && fn:contains(type, 'md')}">checked='checked'</c:if>>Υπουργική Απόφαση (ΥΑ)</label>
+                          <label><input type="checkbox" class="category" value="md" <c:if test="${type != null && fn:contains(type, 'md')}">checked='checked'</c:if>><spring:message code="home.md"/></label>
                            </div>
                            <div class="checkbox">
-                          <label><input type="checkbox" class="category" value="rd" <c:if test="${type != null && fn:contains(type, 'rd')}">checked='checked'</c:if>>Βασιλικό Διάταγμα (ΒΔ)</label>
+                          <label><input type="checkbox" class="category" value="rd" <c:if test="${type != null && fn:contains(type, 'rd')}">checked='checked'</c:if>><spring:message code="home.rd"/></label>
                            </div>
                            <input id='categories' type='hidden' name='type' />
                         </fieldset>
                     </li>
-                    <li><a>Αριθμός Κυκλοφορίας:</a>                        
+                    <li><a><spring:message code="home.serial"/></a>                        
                         <div class="row">
                         <div class="col-md-5">
                         <input class="form-control" <c:if test="${not empty year}">value="${year}"</c:if> type="number" name="year" min="1976" max="2015" step="1">
@@ -134,7 +146,7 @@
                         </div>
                         </div>
                     </li>
-                    <li><a>Αριθμός ΦΕΚ:</a>
+                    <li><a><spring:message code="search.fek"/></a>
                         <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -153,10 +165,10 @@
                         </div>
                         </div>
                     </li>
-                    <li><a>Ημερομηνία Κυκλοφορίας:</a>
+                    <li><a><spring:message code="home.date"/></a>
                     <div class="form-group">                        
                         <div class='input-group date' >
-                            <input type='text'  name="date" id='datepicker' class="form-control" <c:if test="${not empty date}">value="${date}"</c:if> placeholder="Ημερομηνία"/>
+                            <input type='text'  name="date" id='datepicker' class="form-control" <c:if test="${not empty date}">value="${date}"</c:if> placeholder="<spring:message code="home.dateplaceholder"/>">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div> 
@@ -165,14 +177,14 @@
                         <div class="row">
                         <div class="col-md-6">
                         <div class='input-group date' >
-                            <input type='text'  name="datefrom" id='datepicker2' class="form-control" <c:if test="${not empty datefrom}">value="${datefrom}"</c:if> placeholder="Από"/>
+                            <input type='text'  name="datefrom" id='datepicker2' class="form-control" <c:if test="${not empty datefrom}">value="${datefrom}"</c:if> placeholder="<spring:message code="search.from"/>"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                         </div>
                             <div class="col-md-6">
                         <div class='input-group date' >
-                            <input type='text'  name="dateto" id='datepicker3' class="form-control" <c:if test="${not empty dateto}">value="${dateto}"</c:if> placeholder="Έως"/>
+                            <input type='text'  name="dateto" id='datepicker3' class="form-control" <c:if test="${not empty dateto}">value="${dateto}"</c:if> placeholder="<spring:message code="search.to"/>"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
@@ -181,19 +193,19 @@
                     </div>
                     </li>
                     <li>
-                   <button type="submit" class="btn btn-primary btn-lg">Αναζήτηση</button>
+                   <button type="submit" class="btn btn-primary btn-lg"><spring:message code="navbar.search"/></button>
                     </li>
                 </ul>
                 </form>
             </div>
             <div class="col-md-9">
-            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 25px;">ΑΠΟΤΕΛΕΣΜΑΤΑ ΑΝΑΖΗΤΗΣΗΣ</div>
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 25px;"><spring:message code="search.results"/></div>
             <br/><table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
-                    <th>Τίτλος</th>
-                    <th>Κωδικός</th>
-                    <th>Ημερομηνία</th>
+                    <th><spring:message code="home.title"/></th>
+                    <th><spring:message code="home.code"/></th>
+                    <th><spring:message code="home.datesimple"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -216,7 +228,7 @@
     </div>
     
     <div id="footer" style="text-align: center; font-family:'Jura';" >
-        <h5>Νομοθεσί@ &copy; 2014 - Τμήμα Πληροφορικής &amp; Τηλ/νωνιών ΕΚΠΑ - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+        <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -225,8 +237,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    
     <script>
         $(document).ready(function() {
         var dis1 = document.getElementById("datepicker");
@@ -242,6 +255,7 @@
         }
     });
     </script>
+    
     <script>
         $(document).ready(function() {
         var dis2 = document.getElementById("datepicker2");
@@ -255,6 +269,7 @@
         }
     });
     </script>
+    
     <script>
         $(document).ready(function() {
         var dis3 = document.getElementById("datepicker3");
@@ -268,93 +283,138 @@
         }
     });
     </script>
+    
+   
     <script>
       $(function() {
-        $( "#datepicker" ).datepicker(
-                {
-                closeText: 'Κλείσιμο',
-                prevText: 'Προηγούμενος',
-                nextText: 'Επόμενος',
-                currentText: 'Τρέχων Μήνας',
-                monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
-                'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
-                monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
-                'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
-                dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
-                dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
-                dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
-                dateFormat: 'yy-mm-dd', 
-                firstDay: 1,
-                maxDate: '0',
-                isRTL: false}
-                );
+          
+        $( "#datepicker" ).datepicker({
+                <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }"> 
+                        dateFormat: 'yy-mm-dd', 
+                        firstDay: 1,
+                        maxDate: '0',
+                        isRTL: false
+                    </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
+                        closeText: 'Κλείσιμο',
+                        prevText: 'Προηγούμενος',
+                        nextText: 'Επόμενος',
+                        currentText: 'Τρέχων Μήνας',
+                        monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
+                        'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
+                        monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
+                        'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
+                        dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
+                        dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
+                        dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
+                        dateFormat: 'yy-mm-dd', 
+                        firstDay: 1,
+                        maxDate: '0',
+                        isRTL: false
+                    </c:when>
+                </c:choose>
+        });
         
-        $( "#datepicker2" ).datepicker(
-                {
-                closeText: 'Κλείσιμο',
-                prevText: 'Προηγούμενος',
-                nextText: 'Επόμενος',
-                currentText: 'Τρέχων Μήνας',
-                monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
-                'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
-                monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
-                'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
-                dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
-                dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
-                dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
-                dateFormat: 'yy-mm-dd', 
-                firstDay: 1,
-                maxDate: '0',
-                isRTL: false}
-                );
+        $( "#datepicker2" ).datepicker({
+            <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }"> 
+                        dateFormat: 'yy-mm-dd', 
+                        firstDay: 1,
+                        maxDate: '0',
+                        isRTL: false
+                    </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
+                        closeText: 'Κλείσιμο',
+                        prevText: 'Προηγούμενος',
+                        nextText: 'Επόμενος',
+                        currentText: 'Τρέχων Μήνας',
+                        monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
+                        'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
+                        monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
+                        'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
+                        dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
+                        dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
+                        dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
+                        dateFormat: 'yy-mm-dd', 
+                        firstDay: 1,
+                        maxDate: '0',
+                        isRTL: false
+                    </c:when>
+                </c:choose>
+        });
         
-        $( "#datepicker3" ).datepicker(
-                {
-                closeText: 'Κλείσιμο',
-                prevText: 'Προηγούμενος',
-                nextText: 'Επόμενος',
-                currentText: 'Τρέχων Μήνας',
-                monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
-                'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
-                monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
-                'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
-                dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
-                dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
-                dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
-                dateFormat: 'yy-mm-dd', 
-                firstDay: 1,
-                maxDate: '0',
-                isRTL: false}
-                );
-      });
-      </script>
-      <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-                $('#example').dataTable({
-       aaSorting: [[ 2, "desc" ]],
-       bSortable: true,
-      "iDisplayLength": 5,
-       aoColumnDefs: [
-            { "aTargets": [ 0 ], "bSortable": true },
-            { "aTargets": [ 1 ], "bSortable": true },
-            { "aTargets": [ 2 ], "bSortable": true }
-        ],
-      "bLengthChange": false,
-      "oLanguage": {
-			"sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-			"sZeroRecords": "Δεν βρέθηκε τίποτα",
-			"sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-			"sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-			"sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-                        "oPaginate": {
-                                    "sNext": "Επόμενη",
-                                     "sPrevious": "Προηγούμενη"
-                         }
-		}
-  });
-        } );
+        $( "#datepicker3" ).datepicker({
+            <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }"> 
+                        dateFormat: 'yy-mm-dd', 
+                        firstDay: 1,
+                        maxDate: '0',
+                        isRTL: false
+                    </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
+                        closeText: 'Κλείσιμο',
+                        prevText: 'Προηγούμενος',
+                        nextText: 'Επόμενος',
+                        currentText: 'Τρέχων Μήνας',
+                        monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
+                        'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
+                        monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
+                        'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
+                        dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
+                        dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
+                        dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
+                        dateFormat: 'yy-mm-dd', 
+                        firstDay: 1,
+                        maxDate: '0',
+                        isRTL: false
+                    </c:when>
+                </c:choose>
+        });
+    });
     </script>
+      
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#example').dataTable({
+                aaSorting: [[ 2, "desc" ]],
+                bSortable: true,
+                "iDisplayLength": 5,
+                aoColumnDefs: [
+                    { "aTargets": [ 0 ], "bSortable": true },
+                    { "aTargets": [ 1 ], "bSortable": true },
+                    { "aTargets": [ 2 ], "bSortable": true }
+                ],
+            <c:set var="localeCode2" value="${pageContext.response.locale}" />
+                <c:choose>
+                    <c:when test="${localeCode2 == 'en' }"> 
+                        
+                "bLengthChange": false
+                    </c:when>
+                    <c:when test="${localeCode2 == 'el_GR' }">
+                        "bLengthChange": false,
+                "oLanguage": {
+                    "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
+                    "sZeroRecords": "Δεν βρέθηκε τίποτα",
+                    "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
+                    "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
+                    "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
+                    "sSearch": "Αναζήτηση",
+                    "oPaginate": {
+                        "sNext": "Επόμενη",
+                        "sPrevious": "Προηγούμενη"
+                    }
+                }
+                    </c:when>
+                </c:choose>
+            });
+        });
+    </script>
+        
+    
     <!--<script>
             $(function(){
                $('html, body').animate({scrollTop:$('#${type1}-${id1}-${type2}-${id2}').position().top}, 'slow');
