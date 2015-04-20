@@ -500,7 +500,12 @@
                         <td colspan="3">
                         <table id="example2" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                             <thead>
-                                <td><spring:message code="basic.mod"/></td>
+                                <c:set var="uris" value="${fn:split(legalmod.getURI(),'l')}"/>
+                                <c:set var="modname" value="${fn:replace(uris[3],'paragraph','Παράγραφος')}"/>
+                                <c:set var="modname" value="${fn:replace(modname,'passage','Εδάφιο')}"/>
+                                <c:set var="modname" value="${fn:replace(modname,'case','Περίπτωση')}"/>
+                                <c:set var="modname" value="${fn:replace(modname,'e','Άρθρο')}"/>
+                                <td><spring:message code="basic.mod"/> ${modname}</td>
                                 <td><spring:message code="basic.type"/></td>
                             </thead>
                             <tbody>

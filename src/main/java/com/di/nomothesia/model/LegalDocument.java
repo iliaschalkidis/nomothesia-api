@@ -147,7 +147,10 @@ public class LegalDocument {
                     Passage passage = (Passage) mod.getFragment();
                     passage.setId(this.articles.get(count1).getParagraphs().get(count2).getPassages().get(count3).getId());
                     frags.add(this.articles.get(count1).getParagraphs().get(count2).getPassages().get(count3));
+                    String URI = this.articles.get(count1).getParagraphs().get(count2).getPassages().get(count3).getURI();
                     this.articles.get(count1).getParagraphs().get(count2).getPassages().set(count3, passage);
+                    this.articles.get(count1).getParagraphs().get(count2).getPassages().get(count3).setURI(URI);
+                    mod.setURI(URI);
                 }
                 else if(hierarchy[hierarchy.length-2].equals("case")){
                     int count3 = Integer.parseInt(hierarchy[hierarchy.length-1]) - 1;
@@ -156,7 +159,10 @@ public class LegalDocument {
                     Case case1 = (Case) mod.getFragment();
                     case1.setId(this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(count3).getId());
                     frags.add(this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(count3));
+                    String URI = this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(count3).getURI();
                     this.articles.get(count1).getParagraphs().get(count2).getCaseList().set(count3, case1);
+                    this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(count3).setURI(URI);
+                    mod.setURI(URI);
                 }
                 else if(hierarchy[hierarchy.length-2].equals("paragraph")){
                     int count2 = Integer.parseInt(hierarchy[hierarchy.length-1]) - 1;
@@ -164,7 +170,10 @@ public class LegalDocument {
                     Paragraph paragraph = (Paragraph) mod.getFragment();
                     paragraph.setId(this.articles.get(count1).getParagraphs().get(count2).getId());
                     frags.add(this.articles.get(count1).getParagraphs().get(count2));
+                    String URI = this.articles.get(count1).getParagraphs().get(count2).getURI();
                     this.articles.get(count1).getParagraphs().set(count2, paragraph);
+                    this.articles.get(count1).getParagraphs().get(count2).setURI(URI);
+                    mod.setURI(URI);
                 }
             }
             else if(mod.getType().contains("Creation")){
@@ -173,13 +182,19 @@ public class LegalDocument {
                     int count1 = Integer.parseInt(hierarchy[hierarchy.length-3]) - 1;
                     if(mod.getFragment().getURI().contains("case")){
                         Case case1 = (Case) mod.getFragment();
+                        int size = this.articles.get(count1).getParagraphs().get(count2).getCaseList().size();
                         case1.setId(this.articles.get(count1).getParagraphs().get(count2).getCaseList().size()+1);
                         this.articles.get(count1).getParagraphs().get(count2).getCaseList().add(case1);
+                        mod.setURI(this.articles.get(count1).getParagraphs().get(count2).getCaseList().get(size-1).getURI());
+                        mod.setURI(mod.getURI().substring(1,mod.getURI().length()-1)+size);
                     }
                     else{
                         Passage passage = (Passage) mod.getFragment();
-                        passage.setId(this.articles.get(count1).getParagraphs().get(count2).getPassages().size()+1);
+                        int size = this.articles.get(count1).getParagraphs().get(count2).getPassages().size();
+                        passage.setId(size+1);
                         this.articles.get(count1).getParagraphs().get(count2).getPassages().add(passage);
+                        mod.setURI(this.articles.get(count1).getParagraphs().get(count2).getPassages().get(size-1).getURI());
+                        mod.setURI(mod.getURI().substring(1,mod.getURI().length()-1)+size);
                     }
                 }
             }
