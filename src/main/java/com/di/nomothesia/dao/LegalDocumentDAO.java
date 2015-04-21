@@ -13,7 +13,7 @@ public interface LegalDocumentDAO {
     public LegalDocument getCitationsById(String decisionType, String year, String id, int req, LegalDocument legald);
     public LegalDocument getMetadataById(String decisionType, String year, String id);
     public List<Modification> getAllModifications(String decisionType, String year, String id, String date, int req);
-//    public List<LegalDocument> getAllModifications(String decisionType, String year, String id);
+    //public List<LegalDocument> getAllModifications(String decisionType, String year, String id);
     public EndpointResultSet sparqlQuery(EndpointResultSet endpointResult, String format);
     public String getRDFById(String decisionType, String year, String id);
     public List<LegalDocument> search(Map<String, String> params);

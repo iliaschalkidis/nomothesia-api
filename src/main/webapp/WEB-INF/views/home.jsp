@@ -80,7 +80,7 @@
                             <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
                     </ul>
-                    
+
                     <ul class="nav navbar-nav navbar-right">
                         <c:set var="localeCode" value="${pageContext.response.locale}" />
                         <c:choose>
@@ -132,7 +132,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <td width="45%">
                                             <div class="form-group">
@@ -159,7 +159,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -167,7 +167,7 @@
                                             <button type="submit" class="btn btn-primary btn-lg"><spring:message code="navbar.search"/></button>
                                         </td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -176,7 +176,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                        
+
                                 <input type="hidden" name="datefrom" value="" class="form-control"/>
                                 <input type="hidden" name="dateto" value="" class="form-control"/>
                                 <input type="hidden" name="fek_isuue" value="" class="form-control"/>
@@ -185,7 +185,7 @@
                             </form>
                         </div>
                     </div>
-                    
+
                     <div class="row" style="padding:10px;">
                         <div role="tabpanel">
                             <!-- Nav tabs -->
@@ -209,8 +209,8 @@
                                         <tbody>
                                             <c:forEach var="ldrecent" items="${ldrecent}" varStatus="loop">
                                                 <% LegalDocument ldr = (LegalDocument) pageContext.getAttribute("ldrecent");
-                                                String[] URIsr = ldr.getURI().toString().split("uoa.gr/");
-                                                pageContext.setAttribute("urir", URIsr[1]); %>
+                                                    String[] URIsr = ldr.getURI().toString().split("uoa.gr/");
+                                                    pageContext.setAttribute("urir", URIsr[1]); %>
                                                 <tr>
                                                     <td><a href="<c:url value="legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
                                                     <td>${ldrecent.getDecisionType()} ${ldrecent.getYear()}/${ldrecent.getId()}</td>
@@ -234,8 +234,8 @@
                                         <tbody>
                                             <c:forEach var="ldviewed" items="${ldviewed}" varStatus="loop">
                                                 <% LegalDocument ldv = (LegalDocument) pageContext.getAttribute("ldviewed");
-                                                String[] URIs = ldv.getURI().toString().split("uoa.gr");
-                                                pageContext.setAttribute("uri", URIs[1]); %>
+                                                    String[] URIs = ldv.getURI().toString().split("uoa.gr");
+                                                    pageContext.setAttribute("uri", URIs[1]);%>
                                                 <tr>
                                                     <td><a href="<c:url value="legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
                                                     <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
@@ -249,18 +249,18 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6">
                     <div style="text-align: justify;padding:10px;">
                         <p><img style="width:40%; margin-left: 10px; margin-bottom: 10px;" align="right" src="${pageContext.servletContext.contextPath}/resources/images/greekcloud.png"</img>
-                        <spring:message code="home.text"/>                        
+                            <spring:message code="home.text"/>                        
                         </p>
                         <p>
-                        <spring:message code="home.text2"/>
-                            <ul>
-                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> <spring:message code="home.text3"/></li>
-                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> <spring:message code="home.text4"/></li>
-                            </ul>
+                            <spring:message code="home.text2"/>
+                        <ul>
+                            <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> <spring:message code="home.text3"/></li>
+                            <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> <spring:message code="home.text4"/></li>
+                        </ul>
                         </p>
                         <div align="center" style="padding:10px;">
                             <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button1"/></a>
@@ -285,94 +285,16 @@
         <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
         <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-        
-        
-        
-                <script type="text/javascript">
-            var is_profile_inited = false;
-            $(document).on('shown.bs.tab', '[data-toggle="tab"]', function (e) {
-                if ($(this).attr("href") == '#profile' && is_profile_inited == false) {
-                    is_profile_inited = true;
+
+
+
+        <script type="text/javascript">
+                    var is_profile_inited = false;
+                    $(document).on('shown.bs.tab', '[data-toggle="tab"]', function (e) {
+            if ($(this).attr("href") == '#profile' && is_profile_inited == false) {
+            is_profile_inited = true;
                     $("#example2").dataTable({
-                        "autoWidth": false,
-                        "scrollY": "333px",
-                        "scrollCollapse": true,
-                        "paging": true,
-                        "iDisplayLength": 4,
-                        "aaSorting": [],
-                        "bSortable": true,
-                        "aoColumnDefs": [
-                            {"aTargets": [0], "bSortable": true},
-                            {"aTargets": [1], "bSortable": true},
-                            {"aTargets": [2], "bSortable": true}],
-                        
-                        <c:set var="localeCode2" value="${pageContext.response.locale}" />
-                <c:choose>
-                    <c:when test="${localeCode2 == 'en' }"> 
-                        "bLengthChange": false
-                    </c:when>
-                    <c:when test="${localeCode2 == 'el_GR' }">
-                        "bLengthChange": false,
-                        "oLanguage": {
-                            "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-                            "sZeroRecords": "Δεν βρέθηκε τίποτα",
-                            "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-                            "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-                            "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                            "sSearch": "Αναζήτηση",
-                            "oPaginate": {
-                                "sNext": "Επόμενη",
-                                "sPrevious": "Προηγούμενη"
-                            }
-
-                        }
-                    </c:when>
-                </c:choose>
-                        
-                    });
-                }
-            });
-        </script>
-        
-        <script>
-            $(function () {
-                $("#datepicker").datepicker({
-                    <c:set var="localeCode2" value="${pageContext.response.locale}" />
-                <c:choose>
-                    <c:when test="${localeCode2 == 'en' }">
-                        dateFormat: 'yy-mm-dd',
-                    firstDay: 1,
-                    maxDate: '0',
-                    isRTL: false
-            </c:when>
-                    <c:when test="${localeCode2 == 'el_GR' }">
-                    closeText: 'Κλείσιμο',
-                    prevText: 'Προηγούμενος',
-                    nextText: 'Επόμενος',
-                    currentText: 'Τρέχων Μήνας',
-                    monthNames: ['Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος',
-                        'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος'],
-                    monthNamesShort: ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαι', 'Ιουν',
-                        'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ'],
-                    dayNames: ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'],
-                    dayNamesShort: ['Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ'],
-                    dayNamesMin: ['Κυ', 'Δε', 'Τρ', 'Τε', 'Πε', 'Πα', 'Σα'],
-                    dateFormat: 'yy-mm-dd',
-                    firstDay: 1,
-                    maxDate: '0',
-                    isRTL: false
-            </c:when>
-                </c:choose>
-                });
-
-            });
-        </script>
-      
-        <script>
-            $(document).ready(function () {
-
-                $("#example").dataTable({
-                    "autoWidth": false,
+            "autoWidth": false,
                     "scrollY": "333px",
                     "scrollCollapse": true,
                     "paging": true,
@@ -380,49 +302,119 @@
                     "aaSorting": [],
                     "bSortable": true,
                     "aoColumnDefs": [
-                        {"aTargets": [0], "bSortable": true},
-                        {"aTargets": [1], "bSortable": true},
-                        {"aTargets": [2], "bSortable": true}],
-                    <c:set var="localeCode2" value="${pageContext.response.locale}" />
-                <c:choose>
-                    <c:when test="${localeCode2 == 'en' }"> 
-                        "bLengthChange": false
-                        </c:when>
-                    <c:when test="${localeCode2 == 'el_GR' }">
-                    "bLengthChange": false,
+                    {"aTargets": [0], "bSortable": true},
+                    {"aTargets": [1], "bSortable": true},
+                    {"aTargets": [2], "bSortable": true}],
+            <c:set var="localeCode2" value="${pageContext.response.locale}" />
+            <c:choose>
+                <c:when test="${localeCode2 == 'en' }">
+            "bLengthChange": false
+                </c:when>
+                <c:when test="${localeCode2 == 'el_GR' }">
+            "bLengthChange": false,
                     "oLanguage": {
-                        "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
-                        "sZeroRecords": "Δεν βρέθηκε τίποτα",
-                        "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
-                        "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
-                        "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
-                        "sSearch": "Αναζήτηση",
-                        "oPaginate": {
+                    "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
+                            "sZeroRecords": "Δεν βρέθηκε τίποτα",
+                            "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
+                            "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
+                            "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
+                            "sSearch": "Αναζήτηση",
+                            "oPaginate": {
                             "sNext": "Επόμενη",
-                            "sPrevious": "Προηγούμενη"
-                        }
+                                    "sPrevious": "Προηγούμενη"
+                            }
 
                     }
-                   </c:when>
-                </c:choose>
-                });
+                </c:when>
+            </c:choose>
 
             });
-        </script>
-   
-        <script>
-            $(function () {
+            }
+            });        </script>
 
-                var availableTags = [
+        <script>
+                    $(function () {
+                    $("#datepicker").datepicker({
+            <c:set var="localeCode2" value="${pageContext.response.locale}" />
+            <c:choose>
+                <c:when test="${localeCode2 == 'en' }">
+                    dateFormat: 'yy-mm-dd',
+                            firstDay: 1,
+                            maxDate: '0',
+                            isRTL: false
+                </c:when>
+                <c:when test="${localeCode2 == 'el_GR' }">
+                    closeText: 'Κλείσιμο',
+                            prevText: 'Προηγούμενος',
+                            nextText: 'Επόμενος',
+                            currentText: 'Τρέχων Μήνας',
+                            monthNames: ['Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος',
+                                    'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος'],
+                            monthNamesShort: ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαι', 'Ιουν',
+                                    'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ'],
+                            dayNames: ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'],
+                            dayNamesShort: ['Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ'],
+                            dayNamesMin: ['Κυ', 'Δε', 'Τρ', 'Τε', 'Πε', 'Πα', 'Σα'],
+                            dateFormat: 'yy-mm-dd',
+                            firstDay: 1,
+                            maxDate: '0',
+                            isRTL: false
+                </c:when>
+            </c:choose>
+                    });
+                    });        </script>
+
+        <script>
+                    $(document).ready(function () {
+
+            $("#example").dataTable({
+            "autoWidth": false,
+                    "scrollY": "333px",
+                    "scrollCollapse": true,
+                    "paging": true,
+                    "iDisplayLength": 4,
+                    "aaSorting": [],
+                    "bSortable": true,
+                    "aoColumnDefs": [
+                    {"aTargets": [0], "bSortable": true},
+                    {"aTargets": [1], "bSortable": true},
+                    {"aTargets": [2], "bSortable": true}],
+            <c:set var="localeCode2" value="${pageContext.response.locale}" />
+            <c:choose>
+                <c:when test="${localeCode2 == 'en' }">
+            "bLengthChange": false
+                </c:when>
+                <c:when test="${localeCode2 == 'el_GR' }">
+            "bLengthChange": false,
+                    "oLanguage": {
+                    "sLengthMenu": "Εμφάνισε _MENU_ εγγραφές ",
+                            "sZeroRecords": "Δεν βρέθηκε τίποτα",
+                            "sInfo": "Εμφανίζει από _START_ μέχρι _END_ των _TOTAL_ εγγραφών",
+                            "sInfoEmpty": "Εμφανίζει 0 εγγραφές",
+                            "sInfoFiltered": "(φιλτραρισμένες _MAX_ συνολικά εγγραφές)",
+                            "sSearch": "Αναζήτηση",
+                            "oPaginate": {
+                            "sNext": "Επόμενη",
+                                    "sPrevious": "Προηγούμενη"
+                            }
+
+                    }
+                </c:when>
+            </c:choose>
+            });
+            });        </script>
+
+        <script>
+                    $(function () {
+
+                    var availableTags = [
             <c:forEach var="tag" items="${tags}" >
                     "${tag}",
             </c:forEach>];
-
-                $("#keywords").autocomplete({
+                            $("#keywords").autocomplete({
                     source: availableTags
-                });
-
-            });
+                    });
+                    });
         </script>
     </body>
 </html>
