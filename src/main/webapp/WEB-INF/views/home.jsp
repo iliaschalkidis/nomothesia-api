@@ -124,6 +124,7 @@
                                                     <option value="con"><spring:message code="home.con"/></option>
                                                     <option value="law"><spring:message code="home.law"/></option>
                                                     <option value="pd"><spring:message code="home.pd"/></option>
+                                                    <option value="la"><spring:message code="home.la"/></option>
                                                     <option value="amc"><spring:message code="home.amc"/></option>
                                                     <option value="md"><spring:message code="home.md"/></option>
                                                     <option value="rd"><spring:message code="home.rd"/></option>

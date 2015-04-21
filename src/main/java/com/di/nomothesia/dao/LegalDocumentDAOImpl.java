@@ -65,6 +65,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         else if(decisionType.equals("rd")){
             legald.setDecisionType("(бс) басикийо диатацла");
         }
+        else if(decisionType.equals("la")){
+            legald.setDecisionType("(пмп) пяанг молохетийоу пеяиеволемоу");
+        }
         
         legald.setURI("http://legislation.di.uoa.gr/"+ decisionType + "/" + year + "/" + id);
         String sesameServer ="";
@@ -1557,6 +1560,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 else if (items.get(i).equals("rd")) {
                                     queryString += "?type=leg:RoyalDecree";
                                 }
+                                else if (items.get(i).equals("la")) {
+                                    queryString += "?type=leg:LegislativeAct";
+                                }
                                   
                             }
                             else {
@@ -1578,6 +1584,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 }
                                 else if (items.get(i).equals("rd")) {
                                     queryString += "?type=leg:RoyalDecree || ";
+                                }
+                                else if (items.get(i).equals("la")) {
+                                    queryString += "?type=leg:LegislativeAct || ";
                                 }
                                   
                             }
@@ -1606,6 +1615,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         }
                         else if (items.get(0).equals("rd")) {
                             queryString += "?legaldocument rdf:type leg:RoyalDecree.\n";  
+                        }
+                        else if (items.get(0).equals("la")) {
+                            queryString += "?legaldocument rdf:type leg:LegislativeAct.\n";  
                         }
                     
                     }
@@ -1718,8 +1730,11 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
                                 ld.setDecisionType("(уа) упоуяцийг апожасг");
                             }
-                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
                                 ld.setDecisionType("(бд) басикийо диатацла");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
+                                ld.setDecisionType("(пмп) пяанг молохетийоу пеяиеволемоу");
                             }
                             
                         }
@@ -1744,6 +1759,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             }
                             else if (type.equals("rd")) {
                                 ld.setDecisionType("(бд) басикийо диатацла");
+                            }
+                            else if (type.equals("la")) {
+                                ld.setDecisionType("(пмп) пяанг молохетийоу пеяиеволемоу");
                             }
                             
                         }
@@ -1959,6 +1977,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
                                 legald.setDecisionType("(бд) басикийо диатацла");
                             }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
+                                legald.setDecisionType("(пмп) пяанг молохетийоу пеяиеволемоу");
+                            }
                             
                         legalviewed.add(legald);
                         
@@ -2086,6 +2107,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
                                 legald.setDecisionType("(бд) басикийо диатацла");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
+                                legald.setDecisionType("(пмп) пяанг молохетийоу пеяиеволемоу");
                             }
                             
                         legalrecent.add(legald);
