@@ -332,10 +332,10 @@ public class LegislationController {
 	}
 	
        @ExceptionHandler(Exception.class)
-	public String handleAllException(Exception ex) {
+	public String handleAllException(Exception ex, Locale locale, Model model) {
  
 		//ModelAndView model = new ModelAndView("error/exception_error");
-                //model.addAttribute("locale",locale);
+                model.addAttribute("locale",locale);
 		return "error";
  
 	}
