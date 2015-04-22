@@ -11,7 +11,6 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import java.util.Map;
@@ -104,7 +103,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                     
                     //Article id and title
                     //ID
-                    String par2 = "ўсисп " + legald.getArticles().get(i).getId() + "\n";
+                    String par2 = "?сисп " + legald.getArticles().get(i).getId() + "\n";
                     Paragraph article = new Paragraph(par2, fontArticle);
                     article.setAlignment(Element.ALIGN_CENTER);
                     doc.add(article);

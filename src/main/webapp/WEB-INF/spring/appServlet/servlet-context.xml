@@ -8,9 +8,7 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
         <annotation-driven/>
@@ -18,8 +16,6 @@
         <resources mapping="/images/**" location="/images/"/>
         <resources mapping="/css/**" location="/css/"/>
         <resources mapping="/js/**" location="/js/"/>
-        
-        
         
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
         <beans:bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
@@ -33,7 +29,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
         
-        <!-- Internationalization -->
+        <!-- Resolves Internationalization -->
         <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
             <beans:property name="basename" value="classpath:messages" />
             <beans:property name="defaultEncoding" value="UTF-8" />
@@ -51,8 +47,7 @@
             </beans:bean>
         </interceptors>
  
-        <context:component-scan base-package="com.journaldev.spring" />
-        
+        <context:component-scan base-package="com.journaldev.spring" />      
 	<context:component-scan base-package="com.di.nomothesia.controller" />	
 
 </beans:beans>

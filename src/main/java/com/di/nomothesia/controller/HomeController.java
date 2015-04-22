@@ -44,20 +44,6 @@ public class HomeController {
 		return "home";
                 
 	}
-        
-//        @RequestMapping(value = "/en", method = RequestMethod.GET)
-//	public String homeEN(Model model, Locale locale) {
-//                LegislationService lds = new LegislationService();
-//		List<String> tags = lds.getTags();
-//		List<LegalDocument> ldviewed = lds.MostViewed();
-//                List<LegalDocument> ldrecent = lds.MostRecent();
-//		model.addAttribute("tags",tags);
-//                model.addAttribute("ldviewed",ldviewed);
-//                model.addAttribute("ldrecent",ldrecent);
-//                
-//		return "home_en";
-//                
-//	}
 	
         @RequestMapping(value = "/aboutus", method = RequestMethod.GET)
 	public String aboutus(Locale locale, Model model) {
@@ -188,11 +174,11 @@ public class HomeController {
         }
         
         @ExceptionHandler(Exception.class)
-	public String handleAllException(Exception ex, Locale locale, Model model) {
+	public String handleAllException(Exception ex) {
  
             //ModelAndView model = new ModelAndView("error/exception_error");
-            model.addAttribute("locale",locale);
-            return "home";
+            //model.addAttribute("locale",locale);
+            return "error";
  
 	}
             
