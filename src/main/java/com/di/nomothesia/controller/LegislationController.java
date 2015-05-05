@@ -10,10 +10,13 @@ import java.util.Locale;
 import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.TransformerException;
+import org.openrdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +36,7 @@ public class LegislationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LegislationController.class);
 	
-	@RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted", method = RequestMethod.GET)
+	@RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/enacted", method = RequestMethod.GET)
 	public String presentOriginalLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model, Locale locale) {
 		
             LegislationService lds = new LegislationService();
@@ -47,7 +50,7 @@ public class LegislationController {
             return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}", method = RequestMethod.GET)
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id}", method = RequestMethod.GET)
 	public String presentUpdatedLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -63,7 +66,7 @@ public class LegislationController {
             return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}/{type2}/{id2}", method = RequestMethod.GET)
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{type1}/{id1}/{type2}/{id2}", method = RequestMethod.GET)
 	public String presentLegalFragment(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, @PathVariable String type2, @PathVariable String id2, Model model, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -79,7 +82,7 @@ public class LegislationController {
             return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{type1}/{id1}", method = RequestMethod.GET)
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{type1}/{id1}", method = RequestMethod.GET)
 	public String presentLegalFragmentless(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String type1, @PathVariable String id1, Model model, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -95,7 +98,7 @@ public class LegislationController {
             return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}", method = RequestMethod.GET)
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}", method = RequestMethod.GET)
         public String presentModificationByDate(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Model model, Locale locale) {
             
             String date = "";
@@ -116,7 +119,7 @@ public class LegislationController {
             return "basiclegislation";
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportDateToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Locale locale) throws TransformerException{
             
             LegislationService lds = new LegislationService();
@@ -127,7 +130,7 @@ public class LegislationController {
             return new ResponseEntity<String>(xml,new HttpHeaders(),HttpStatus.CREATED);
         }
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.rdf", method = RequestMethod.GET, produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}/data.rdf", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportDateToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Locale locale) throws JAXBException {
             
             LegislationService lds = new LegislationService();
@@ -137,7 +140,7 @@ public class LegislationController {
 	
         }
         
-        @RequestMapping(value="/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.json", method = RequestMethod.GET)
+        @RequestMapping(value="/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}/data.json", method = RequestMethod.GET)
 	public @ResponseBody LegalDocument exportDateToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id,@PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -155,7 +158,7 @@ public class LegislationController {
  
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/{yyyy}-{mm}-{dd}/data.pdf", method = RequestMethod.GET, produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}/data.pdf", method = RequestMethod.GET, produces={"application/xml"})
         public ModelAndView exportDateToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, @PathVariable String yyyy, @PathVariable String mm, @PathVariable String dd, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -171,7 +174,7 @@ public class LegislationController {
             return new ModelAndView("pdfView", "legaldocument", legaldoc);
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/enacted/data.xml", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) throws TransformerException{
             
             LegislationService lds = new LegislationService();
@@ -181,7 +184,7 @@ public class LegislationController {
         }
         
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/enacted/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
 	public ResponseEntity<String> exportToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) throws JAXBException {
             
             LegislationService lds = new LegislationService();
@@ -191,7 +194,7 @@ public class LegislationController {
 	
         }
         
-        @RequestMapping(value="/legislation/{type}/{year}/{id}/enacted/data.json", method = RequestMethod.GET)
+        @RequestMapping(value="/{type}/{year:\\d+}/{id:\\d+}/enacted/data.json", method = RequestMethod.GET)
 	public @ResponseBody LegalDocument exportToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -202,7 +205,7 @@ public class LegislationController {
  
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/enacted/data.pdf", method = RequestMethod.GET)
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/enacted/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -210,7 +213,7 @@ public class LegislationController {
             return new ModelAndView("pdfView", "legaldocument", legal);
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
         public ResponseEntity<String> exportUpdatedToXML(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) throws TransformerException{
             
             LegislationService lds = new LegislationService();
@@ -220,7 +223,7 @@ public class LegislationController {
         }
         
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/data.rdf", method = RequestMethod.GET,  produces={"application/xml"})
 	public ResponseEntity<String> exportUpdatedToRDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) throws JAXBException {
             
             LegislationService lds = new LegislationService();
@@ -230,7 +233,7 @@ public class LegislationController {
 	
         }
         
-        @RequestMapping(value="/legislation/{type}/{year}/{id}/data.json", method = RequestMethod.GET)
+        @RequestMapping(value="/{type}/{year:\\d+}/{id:\\d+}/data.json", method = RequestMethod.GET)
 	public @ResponseBody LegalDocument exportUpdatedToJSON(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -242,7 +245,7 @@ public class LegislationController {
  
 	}
         
-        @RequestMapping(value = "/legislation/{type}/{year}/{id}/data.pdf", method = RequestMethod.GET)
+        @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/data.pdf", method = RequestMethod.GET)
 	public ModelAndView exportUpdatedToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) {
             
             LegislationService lds = new LegislationService();
@@ -253,7 +256,7 @@ public class LegislationController {
             return new ModelAndView("pdfView", "legaldocument", legaldoc);
 	}
         
-        @RequestMapping(value = "/legislation/search", method = RequestMethod.GET)
+        @RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String search(@RequestParam Map<String,String> params, Model model, Locale locale) {
             
             if(params != null){
@@ -304,7 +307,7 @@ public class LegislationController {
             return "search";
 	}
         
-        @RequestMapping(value = "/legislation/endpoint", method = RequestMethod.GET)
+        @RequestMapping(value = "/endpoint", method = RequestMethod.GET)
 	public String endpoint(@RequestParam Map<String,String> params, Model model, Locale locale) {
             
             if(params.get("query") != null){
@@ -318,7 +321,7 @@ public class LegislationController {
             return "endpoint";
 	}
         
-        @RequestMapping(value = "/legislation/endpoint/query/{id}", method = RequestMethod.GET)
+        @RequestMapping(value = "/endpoint/query/{id}", method = RequestMethod.GET)
 	public String endpoint( @PathVariable String id, Model model, Locale locale) {
             
             if(id != null){

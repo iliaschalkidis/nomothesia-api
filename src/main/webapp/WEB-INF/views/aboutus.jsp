@@ -54,8 +54,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -67,16 +67,16 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
@@ -123,17 +123,16 @@
                             <p>
                             <h4><spring:message code="halk.name"/></h4>
                             <spring:message code="halk.status"/><br/>
-                            ihalk[at]di.uoa.gr <br/>&#160;<br/>
-                            <a href="thesis.pdf" target="_blank"><spring:message code="halk.pdf"/></a><br/>
+                            ihalk[at]di.uoa.gr <br/><a href="http://cgi.di.uoa.gr/~ihalk" target="_blank">http://cgi.di.uoa.gr/~ihalk</a><br/>
                             </p>
                             <p style="text-align: justify"><spring:message code="halk.info"/><a href="http://madgik.di.uoa.gr/" target="_blank"> Management of Data and Information Knowledge Group (MaDgiK)</a></p>
                             <p style="text-align: justify"><spring:message code="halk.info2"/></p>
+                            <p style="text-align: justify"><spring:message code="halk.info3"/></p>
                         </div>
                         <div id="tab2"><br/>
                             <p> <h4><spring:message code="sours.name"/></h4>
                             <spring:message code="sours.status"/><br/>
-                            sdi08xxx[at]di.uoa.gr <br/>&#160;<br/>
-                            <a href="thesis.pdf" target="_blank"><spring:message code="sours.pdf"/></a><br/>
+                            sdi0800049[at]di.uoa.gr <br/>&#160;<br/>
                             </p>
                             <p style="text-align: justify"><spring:message code="sours.info"/></p>
                             <p style="text-align: justify"><spring:message code="sours.info2"/></p><br/>        
@@ -142,8 +141,7 @@
                             <br/> 
                             <p> <h4><spring:message code="char.name"/></h4>
                             <spring:message code="char.status"/><br/>
-                            charnik[at]di.uoa.gr <br/>&#160;<br/>
-                            <spring:message code="char.pdf"/><br/>
+                            charnik[at]di.uoa.gr <br/><a href="http://cgi.di.uoa.gr/~charnik" target="_blank">http://cgi.di.uoa.gr/~charnik</a><br/>
                             </p>
                             <p style="text-align: justify"><spring:message code="char.info"/><a href="http://madgik.di.uoa.gr/" target="_blank"> Management of Data and Information Knowledge Group (MaDgiK)</a></p>
                             <p style="text-align: justify"><spring:message code="char.info2"/></p><br/><br/>
@@ -152,7 +150,7 @@
                             <br/>
                             <p> <h4><spring:message code="kouba.name"/></h4>
                             <spring:message code="kouba.status"/><br/>
-                            koubarak[at]di.uoa.gr <br/>&#160;<br/>
+                            koubarak[at]di.uoa.gr <br/><a href="http://cgi.di.uoa.gr/~koubarak" target="_blank">http://cgi.di.uoa.gr/~koubarak</a><br/>
                             </p>
                             <p style="text-align: justify"><spring:message code="kouba.info"/></p>
                             <p><spring:message code="kouba.info2"/></p>

@@ -49,8 +49,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -65,13 +65,13 @@
                             <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
@@ -106,7 +106,7 @@
                 <div class="col-md-6">
                     <div class="row" style="padding:10px;">
                         <div class="jumbotron" style="padding: 20px 20px 20px 20px;">
-                            <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
+                            <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/search">
                                 <table width="100%">
                                     <tr>
                                         <td width="45%">
@@ -124,10 +124,8 @@
                                                     <option value="con"><spring:message code="home.con"/></option>
                                                     <option value="law"><spring:message code="home.law"/></option>
                                                     <option value="pd"><spring:message code="home.pd"/></option>
-                                                    <option value="la"><spring:message code="home.la"/></option>
                                                     <option value="amc"><spring:message code="home.amc"/></option>
                                                     <option value="md"><spring:message code="home.md"/></option>
-                                                    <option value="rd"><spring:message code="home.rd"/></option>
                                                 </select>
                                             </div>
                                         </td>
@@ -172,7 +170,7 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align: right; margin-top: 5px;">
-                                            <a href="${pageContext.servletContext.contextPath}/legislation/search"><spring:message code="home.advancedsearch"/></a> 
+                                            <a href="${pageContext.servletContext.contextPath}/search"><spring:message code="home.advancedsearch"/></a> 
                                         </td>
                                     </tr>
                                 </table>
@@ -212,7 +210,7 @@
                                                 String[] URIsr = ldr.getURI().toString().split("uoa.gr/");
                                                 pageContext.setAttribute("urir", URIsr[1]); %>
                                                 <tr>
-                                                    <td><a href="<c:url value="legislation/${urir}"/>">${ldrecent.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="${urir}"/>">${ldrecent.getTitle()}</a></td>
                                                     <td>${ldrecent.getDecisionType()} ${ldrecent.getYear()}/${ldrecent.getId()}</td>
                                                     <td>${ldrecent.getPublicationDate()}</td>
                                                 </tr>
@@ -237,7 +235,7 @@
                                                 String[] URIs = ldv.getURI().toString().split("uoa.gr");
                                                 pageContext.setAttribute("uri", URIs[1]); %>
                                                 <tr>
-                                                    <td><a href="<c:url value="legislation/${uri}"/>">${ldviewed.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="${uri}"/>">${ldviewed.getTitle()}</a></td>
                                                     <td>${ldviewed.getDecisionType()} ${ldviewed.getYear()}/${ldviewed.getId()}</td>
                                                     <td>${ldviewed.getPublicationDate()}</td>
                                                 </tr>
@@ -252,21 +250,23 @@
                 
                 <div class="col-md-6">
                     <div style="text-align: justify;padding:10px;">
-                        <p><img style="width:40%; margin-left: 10px; margin-bottom: 10px;" align="right" src="${pageContext.servletContext.contextPath}/resources/images/greekcloud.png"</img>
-                        <spring:message code="home.text"/>                        
+                        <p><img style="width:55%; margin-left: 2px; margin-bottom: 2px;" align="right" src="${pageContext.servletContext.contextPath}/resources/images/greekcloud.png"</img>
+                        <spring:message code="home.text"/>   
+                        <p><spring:message code="home.text2"/></p>
+                        <p><spring:message code="home.text3"/></p>
                         </p>
                         <p>
-                        <spring:message code="home.text2"/>
+                        <spring:message code="home.text4"/>
                             <ul>
-                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> <spring:message code="home.text3"/></li>
-                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> <spring:message code="home.text4"/></li>
+                                <li><a href="http://doc.metalex.eu/" target="_blank">Metalex Document Server</a> <spring:message code="home.text5"/></li>
+                                <li><a href="http://www.legislation.gov.uk/" target="_blank">Legislation.gov.uk</a> <spring:message code="home.text6"/></li>
                             </ul>
                         </p>
                         <div align="center" style="padding:10px;">
-                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button1"/></a>
+                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation.owl" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button1"/></a>
                         </div>
                         <div align="center" style="padding:10px;">
-                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button2"/></a>
+                            <a class="btn btn-primary btn-lg" href="${pageContext.servletContext.contextPath}/legislation.n3" style="width:100%"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <spring:message code="download.button2"/></a>
                         </div>
                     </div>
                 </div>
@@ -295,7 +295,7 @@
                     is_profile_inited = true;
                     $("#example2").dataTable({
                         "autoWidth": false,
-                        "scrollY": "333px",
+                        "scrollY": "500px",
                         "scrollCollapse": true,
                         "paging": true,
                         "iDisplayLength": 4,
@@ -373,7 +373,7 @@
 
                 $("#example").dataTable({
                     "autoWidth": false,
-                    "scrollY": "333px",
+                    "scrollY": "500px",
                     "scrollCollapse": true,
                     "paging": true,
                     "iDisplayLength": 4,

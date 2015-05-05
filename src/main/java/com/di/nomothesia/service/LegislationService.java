@@ -58,7 +58,7 @@ public class LegislationService {
                     "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
                     "SELECT ?modification ?type ?version ?competenceground \n" +
@@ -77,7 +77,7 @@ public class LegislationService {
                     "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
                     "SELECT ?part ?type \n" +
@@ -95,13 +95,13 @@ public class LegislationService {
                     "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                    "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                    "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                     "\n" +
                     "SELECT ?signer ?name (COUNT(?decision) AS ?decisions)\n" +
                     "WHERE{\n" +
-                    " ?decision leg:signer  ?signer.\n" +
+                    " ?decision nomothesia:signer  ?signer.\n" +
                     " ?signer foaf:name ?name.\n" +
                     "}" +
                     "GROUP BY ?signer ?name\n" +

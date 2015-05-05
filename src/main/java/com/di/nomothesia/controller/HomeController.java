@@ -61,7 +61,7 @@ public class HomeController {
                 
 	}
         
-        @RequestMapping(value = "/legislation/statistics", method = RequestMethod.GET)
+        @RequestMapping(value = "/statistics", method = RequestMethod.GET)
 	public String stats(Locale locale, Model model) {	
 	
             model.addAttribute("locale",locale);
@@ -69,7 +69,7 @@ public class HomeController {
                 
 	}
         
-        @RequestMapping(value = "/legislation/legislation.owl", method = RequestMethod.GET)
+        @RequestMapping(value = "/legislation.owl", method = RequestMethod.GET)
 	public void OwlDownload(HttpServletRequest request, HttpServletResponse response) throws IOException {
                 
             int BUFFER_SIZE = 4096;
@@ -121,7 +121,7 @@ public class HomeController {
 
         }
         
-        @RequestMapping(value = "/legislation/legislation.n3", method = RequestMethod.GET)
+        @RequestMapping(value = "/legislation.n3", method = RequestMethod.GET)
 	public void n3Download(HttpServletRequest request, HttpServletResponse response) throws IOException {
                 
             int BUFFER_SIZE = 4096;

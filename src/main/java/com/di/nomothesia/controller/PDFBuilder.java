@@ -96,14 +96,15 @@ public class PDFBuilder extends AbstractITextPdfView {
                 //Articles
                 for (int i = 0; i<legald.getArticles().size(); i++) {
                     
-                    char letter = 'α';
+                    String[] letter = {"α","β","γ","δ","ε","στ","ζ","η","θ","ι","ια","ιβ","ιγ","ιδ","ιε","ιστ","ιζ","ιη","ιθ"};
+        
                     String par = "";
                     Paragraph paragraph3 = new Paragraph();
                     paragraph3.setFont(fontText);
                     
                     //Article id and title
                     //ID
-                    String par2 = "?ρθρο " + legald.getArticles().get(i).getId() + "\n";
+                    String par2 = "’ρθρο " + legald.getArticles().get(i).getId() + "\n";
                     Paragraph article = new Paragraph(par2, fontArticle);
                     article.setAlignment(Element.ALIGN_CENTER);
                     doc.add(article);
@@ -139,8 +140,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                             //Case id
                             paragraph3.setTabSettings(new TabSettings(16f));
                             paragraph3.add(Chunk.TABBING);
-                            paragraph3.add(new Chunk(letter+". "));
-                            letter++;
+                            paragraph3.add(new Chunk(letter[k]+". "));
                             
                             //get Case Passage
                             for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().size(); l++) {
@@ -155,17 +155,14 @@ public class PDFBuilder extends AbstractITextPdfView {
                             
                             //Case in case
                             if (legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList() != null) {
-                                
-                                char letter2 = 'α';
-                                
+                                                                
                                 for (int p = 0; p<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().size(); p++) {
 
                                     //Case id
                                     paragraph3.setTabSettings(new TabSettings(16f));
                                     paragraph3.add(Chunk.TABBING);
                                     paragraph3.add(Chunk.TABBING);
-                                    paragraph3.add(new Chunk(letter2+". "));
-                                    letter2++;
+                                    paragraph3.add(new Chunk(letter[p]+letter[p]+". "));
 
                                     //get Case Passage
                                     for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getCaseList().get(p).getPassages().size(); l++) {
@@ -181,9 +178,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                             }
                         
                         }
-                        
-                        letter = 'α';
-                        
+                                                
                         //If document has modifications
                         if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
                             

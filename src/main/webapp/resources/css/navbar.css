@@ -69,7 +69,26 @@
                 text-decoration:none;
         }
         
-        
-        #modification {
-            background-color:#ECF8E0; border: 6px solid; border-radius: 10px; border-color: #ECF8E0;
+        .mod {
+            background-color:#F0F0F0; border-radius: 10px; padding: 6px; 
         }
+        
+        .modification {
+            background-color:#ECF8E0; padding: 6px; border-radius: 10px;position: relative; left: -6px;width: 102%;
+        }
+        
+        .modification2 {
+            background-color:#ECF8E0; padding: 6px; border-radius: 10px; width:101%; height: 102%
+        }
+        
+        .modification .modification {
+            width: 100%; position: static;
+        }
+        
+        .special-list li:before{
+            content:attr(data-number) ".";
+        }
+        .special-list li li:before{
+            content:attr(data-number)attr(data-number) ".";
+        }        
+        

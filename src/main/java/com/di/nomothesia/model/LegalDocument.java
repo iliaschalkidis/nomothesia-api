@@ -176,7 +176,7 @@ public class LegalDocument {
                     mod.setURI(URI);
                 }
             }
-            else if(mod.getType().contains("Creation")){
+            else if(mod.getType().contains("Addition")){
                 if(hierarchy[hierarchy.length-2].equals("paragraph")){
                     int count2 = Integer.parseInt(hierarchy[hierarchy.length-1]) - 1;
                     int count1 = Integer.parseInt(hierarchy[hierarchy.length-3]) - 1;

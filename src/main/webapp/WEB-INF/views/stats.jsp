@@ -232,8 +232,8 @@
     <!-- Navigation Bar -->
     <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
         <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+            <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+            <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -245,16 +245,16 @@
             <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>

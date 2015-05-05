@@ -563,7 +563,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             }
                             else if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Table")) {
                                 
-                                String table = bindingSet.getValue("text").toString();
+                                String table = bindingSet.getValue("text").toString().replace("@html", "");
                                 //System.out.println(bindingSet.getValue("part").toString());
                                 
                                 if ((mod==0)|| (!table.contains("modification"))) {
@@ -572,7 +572,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 }
                                 else {
                                     //System.out.println("MODIFICATION TABLE");
-                                    paragraph.setTable(table);
+                                    paragraph.setTable(trimDoubleQuotes(table));
                                     legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
                                 }
                                 
@@ -627,7 +627,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 }
                             
                             }
-                            else if ((bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Edit")) || (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Creation")) ||(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Deletion"))) {
+                            else if ((bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Edit")) || (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Addition")) ||(bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Deletion"))) {
                                 
                                 Modification modification = new Modification();
                                 modification.setURI(bindingSet.getValue("part").toString());
@@ -698,53 +698,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             // handle exception
         }
         
-        /*System.out.println("=========================================================================================");
-            for (int i = 0; i<legald.getArticles().size(); i++) {
-                for (int j = 0; j<legald.getArticles().get(i).getParagraphs().size(); j++) {
-
-                String paragraph = "\n" + legald.getArticles().get(i).getParagraphs().get(j).getId();
-                for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getPassages().size(); k++) {
-                    paragraph += legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText();
-                }
-
-                for (int k = 0; k<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().size(); k++) {
-                    paragraph += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getId();
-                    for (int l = 0; l<legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().size(); l++) {
-                        paragraph += legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getPassages().get(l).getText();
-                    }
-                    paragraph +="\n";
-                }
-
-                if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null){
-                    if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")){
-                        Paragraph p = (Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                        paragraph += "\n\"";
-                        for (int k = 0; k<p.getPassages().size(); k++) {
-                            paragraph += p.getPassages().get(k).getText();
-                        }
-
-                        for (int k = 0; k< p.getCaseList().size(); k++) {
-                            paragraph += p.getCaseList().get(k).getId();
-                            for (int l = 0; l<p.getCaseList().get(k).getPassages().size(); l++) {
-                                paragraph += p.getCaseList().get(k).getPassages().get(l).getText();
-                            }
-                        }
-                        paragraph +="\n";
-                    }
-                    else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")){
-                        Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                        for (int l = 0; l<c.getPassages().size(); l++) {
-                            paragraph += c.getPassages().get(l).getText();
-                        }
-                    }
-                    paragraph += "\"\n";
-                }
-                System.out.println(paragraph);
-            }
-
-        }
-        System.out.println("=========================================================================================");*/
-
         //sort containts of legald before displayiing it
         LegalDocumentSort srt = new LegalDocumentSort();
         
@@ -1317,110 +1270,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             
     }
     
-//    @Override
-//    public List<LegalDocument> getAllModifications(String decisionType, String year, String id) {
-//        
-//        List<LegalDocument> legalds = new ArrayList<LegalDocument>();
-//        String sesameServer ="";
-//        String repositoryID ="";
-//        
-//        Properties props = new Properties();
-//        InputStream fis = null;
-//        
-//        try {
-//            
-//            fis = getClass().getResourceAsStream("/properties.properties");
-//            props.load(fis);
-//            
-//            // get the properties values
-//            sesameServer = props.getProperty("SesameServer");
-//            repositoryID = props.getProperty("SesameRepositoryID");
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Connect to Sesame
-//        Repository repo = new HTTPRepository(sesameServer, repositoryID);
-//        
-//        try {
-//            repo.initialize();
-//        } catch (RepositoryException ex) {
-//            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        TupleQueryResult result;
-//         
-//        try {
-//           
-//            RepositoryConnection con = repo.getConnection();
-//           
-//            try {
-//                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-//                "\n" +
-//                "SELECT ?work ?title ?date ?gaztitle\n" +
-//                "WHERE{\n" +
-//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-//                "metalex:realizedBy  ?version.\n" +
-//                "?version metalex:matterOf ?mod.\n" +
-//                "?mod  metalex:legislativeCompetenceGround ?work.\n" +
-//                "?work dc:title ?title.\n" +
-//                "?work dc:created ?date.\n" +
-//                "?work leg:gazette ?gazette.\n" +
-//                "?gazette dc:title ?gaztitle.\n" +
-//                "FILTER(langMatches(lang(?title), \"el\"))\n"+      
-//                "}" + 
-//                "GROUP BY ?work ?title ?date ?gaztitle\n" +
-//                "ORDER BY ?date\n";
-//
-//                  
-//                //System.out.println(queryString);
-//                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-//                result = tupleQuery.evaluate();
-//
-//                try {
-//                    
-//                    //iterate the result set
-//                    while (result.hasNext()) {
-//                        
-//                        BindingSet bindingSet = result.next();
-//                        LegalDocument legald = new LegalDocument();
-//                        
-//                        if (bindingSet.getValue("work")!=null) {
-//                            legald.setURI(bindingSet.getValue("work").toString());
-//                            legald.setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
-//                            String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
-//                            legald.setPublicationDate(trimDoubleQuotes(date2));
-//                            String fek = bindingSet.getValue("gaztitle").toString().replace("^^","");
-//                            legald.setFEK(trimDoubleQuotes(fek));
-//                            legalds.add(legald);
-//                        }
-//                        
-//                   }
-//                    
-//                }
-//                finally {
-//                    result.close();
-//                }
-//                 
-//            }
-//            finally {
-//                con.close();
-//            }
-//        }
-//        catch (OpenRDFException e) {
-//            // handle exception
-//        }
-//        
-//        return legalds;
-//    
-//    }
 
     @Override
     public List<LegalDocument> search(Map<String, String> params) {
@@ -2193,41 +2042,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             
             return KML;
 
-//            URL obj = new URL(url);
-//            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-//
-//            // optional default is GET
-//            con.setRequestMethod("GET");
-//
-//            //add request header
-//            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//            con.setRequestProperty("Accept", "application/vnd.google-earth.kml+xml");
-//            int responseCode = con.getResponseCode();
-//            System.out.println("\nSending 'GET' request to URL : " + url);
-//            System.out.println("Response Code : " + responseCode);
-//
-//            BufferedReader in = new BufferedReader(
-//                    new InputStreamReader(con.getInputStream()));
-//            String inputLine;
-//            StringBuilder response = new StringBuilder();
-//
-//            while ((inputLine = in.readLine()) != null) {
-//                    response.append(inputLine);
-//            }
-//            in.close();
-//            
-//            String[] outs = response.toString().split("<!-- Response -->");
-//            String KML = outs[1].replaceAll("&lt;","<");
-//            KML = KML.replaceAll("&gt;", ">");
-//            outs = KML.split("<kml");
-//            //print result
-//            System.out.println(KML);
-//            System.out.println("KML");
-//            System.out.println("======================================================================================");
-//            System.out.println(response.toString());
-//            //System.out.println(outs[1]);
-//            System.out.println("======================================================================================");
-//            return "<kml" + outs[1];
     }
     
 }

@@ -50,8 +50,8 @@
             <!-- Navigation Bar -->
             <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
                 <div class="container-fluid">
-                    <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                    <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -63,16 +63,16 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
@@ -107,27 +107,26 @@
                 <div class="col-md-3">
                     <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3><spring:message code="endpoint.ex"/></h3></span>
                     <div align="center" style="padding:10px;">
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q1"/></a>
+                        <a href="${pageContext.servletContext.contextPath}/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q1"/></a>
                     </div>
                     <div align="center" style="padding:10px;">
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q2"/></a>
+                        <a href="${pageContext.servletContext.contextPath}/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q2"/></a>
                     </div>
                     <div align="center" style="padding:10px;">
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
+                        <a href="${pageContext.servletContext.contextPath}/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
                     </div>
                 </div>
                 <div class="col-md-9">
                     <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ENDPOINT</h3></span>
-                    <form role="form" action="${pageContext.servletContext.contextPath}/legislation/endpoint">
+                    <form role="form" action="${pageContext.servletContext.contextPath}/endpoint">
                         <div class="form-group">
                             <textarea name="query" class="form-control" rows="15" columns="15"><c:choose><c:when test="${empty endpointResults}">PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
 PREFIX owl: <http://www.w3.org/2002/07/owl#> 
 PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> 
-PREFIX leg: <http://legislation.di.uoa.gr/ontology/> 
-PREFIX dc: <http://purl.org/dc/terms/></c:when>
-                                                                <c:otherwise>${endpointResults.getQuery()}</c:otherwise></c:choose></textarea>
+PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/> 
+PREFIX dc: <http://purl.org/dc/terms/></c:when><c:otherwise>${endpointResults.getQuery()}</c:otherwise></c:choose></textarea>
                                                                     </div>
                                                                     <div class="form-group" style="text-align: right;">
                                                                         <div class="row">

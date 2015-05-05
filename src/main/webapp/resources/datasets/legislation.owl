@@ -104,7 +104,11 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+    <!-- http://legislation.di.uoa.gr/ontology/LegislativeAct -->
+
+    <owl:Class rdf:about="&ontology;LegislativeAct">
+        <rdfs:subClassOf rdf:resource="&metalex;BibliographicWork"/>
+    </owl:Class>
 
 
     <!-- http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet -->
@@ -155,9 +159,9 @@
     
 
 
-    <!-- http://legislation.di.uoa.gr/ontology/Creation -->
+    <!-- http://legislation.di.uoa.gr/ontology/Addition -->
 
-    <owl:Class rdf:about="&ontology;Creation">
+    <owl:Class rdf:about="&ontology;Addition">
         <rdfs:subClassOf rdf:resource="&metalex;LegislativeModification"/>
     </owl:Class>
     

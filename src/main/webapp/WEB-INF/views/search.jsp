@@ -52,8 +52,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -65,16 +65,16 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
                             <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
@@ -107,7 +107,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/legislation/search">
+                    <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/search">
                         <ul  class="nav nav-sidebar">
                             <li><a><spring:message code="home.keywords"/></a>
                                 <input type="text" name="keywords" class="form-control" id="keywords" <c:if test="${not empty keywords}">value="${keywords}"</c:if> placeholder="<spring:message code="search.placeholder"/>">
@@ -124,16 +124,10 @@
                                             <label><input type="checkbox" class="category" value="pd" <c:if test="${type != null && fn:contains(type, 'pd')}">checked='checked'</c:if>><spring:message code="home.pd"/></label>
                                         </div>
                                         <div class="checkbox">
-                                            <label><input type="checkbox" class="category" value="la" <c:if test="${type != null && fn:contains(type, 'la')}">checked='checked'</c:if>><spring:message code="home.la"/></label>
-                                        </div>
-                                        <div class="checkbox">
                                             <label><input type="checkbox" class="category" value="amc" <c:if test="${type != null && fn:contains(type, 'amc')}">checked='checked'</c:if>><spring:message code="home.amc"/></label>
                                         </div>
                                         <div class="checkbox">
                                             <label><input type="checkbox" class="category" value="md" <c:if test="${type != null && fn:contains(type, 'md')}">checked='checked'</c:if>><spring:message code="home.md"/></label>
-                                        </div>
-                                        <div class="checkbox">
-                                            <label><input type="checkbox" class="category" value="rd" <c:if test="${type != null && fn:contains(type, 'rd')}">checked='checked'</c:if>><spring:message code="home.rd"/></label>
                                         </div>
                                         <input id='categories' type='hidden' name='type' />
                                     </fieldset>
@@ -217,7 +211,7 @@
                         String[] URIs = ld.getURI().toString().split("uoa.gr/");
                         pageContext.setAttribute("uri", URIs[1]);%>
                                 <tr>
-                                    <td><a href="<c:url value="http://localhost:8080/nomothesia/legislation/${uri}"/>">${legaldoc.getTitle()}</a></td>
+                                    <td><a href="<c:url value="${pageContext.servletContext.contextPath}${uri}"/>">${legaldoc.getTitle()}</a></td>
                                     <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                                     <td>${legaldoc.getPublicationDate()}</td>
                                 </tr>

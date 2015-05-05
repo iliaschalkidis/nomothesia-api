@@ -6,7 +6,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+<c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ', ',')}" scope="application" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -133,8 +133,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
+                <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -146,16 +146,16 @@
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                        <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                        <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/legislation/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                        <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                     </li>
                     <li>
                         <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
@@ -203,7 +203,7 @@
                             </c:when>
                         </c:choose>
                         <c:set var="fek2" value="${fn:split(fek, '/')}" />
-                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="${pageContext.servletContext.contextPath}/legislation/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="${pageContext.servletContext.contextPath}/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
                     <u style="color:  #1087dd"><spring:message code="basic.signer"/></u><br/>
                         <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                             ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
@@ -226,7 +226,15 @@
                     </c:if>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-default btn-lg" href="${requestScope['javax.servlet.forward.request_uri']}/enacted" style="width:100%"><spring:message code="basic.enacted"/></a>
+                    <c:choose>
+                        <c:when test="${fn:contains(requestScope['javax.servlet.forward.request_uri'], '-')}">
+                            <c:set var="base" value="${legaldoc.getURI()}" />
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="base" value="${fn:replace(requestScope['javax.servlet.forward.request_uri'], '/enacted','')}" />
+                        </c:otherwise>
+                    </c:choose>                        
+                    <a class="btn btn-default btn-lg" href="${base}/enacted" style="width:100%"><spring:message code="basic.enacted"/></a>
                 </div>
                 <div align="center" style="padding:10px;">
                     <a class="btn btn-success btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> XML</a>
@@ -292,17 +300,11 @@
                                         <c:set var="parcount" value="0"/>
                                         <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
                                             <c:set var="parcount" value="${parcount+1}"/>
-                                            <c:if test="${paragraph.getStatus() >= 1}">
-                                                <div id="modification">
-                                                </c:if>
-                                                <li><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
+                                                <li${paragraph.getStatus() >= 1?' class="modification2"':"" }><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
                                                         <c:set var="pascount" value="0"/>
                                                         <c:forEach var="passage" items="${paragraph.getPassages()}" varStatus="loop">
                                                             <c:set var="pascount" value="${pascount+1}"/>
-                                                            <c:if test="${passage.getStatus() >= 1}">
-                                                                <div id="modification">
-                                                                </c:if>
-                                                                ${passage.getText()}
+                                                            <c:if test="${passage.getStatus() >= 1}"><div class="modification"></c:if>${passage.getText()}
                                                                 <c:if test="${passage.getStatus() >= 1}">
                                                                     <c:if test="${passage.getStatus() ==2}">
                                                                         <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
@@ -318,14 +320,10 @@
                                                                 </div>
                                                             </c:if>
                                                         </c:forEach>
-                                                        <ol style="list-style-type: lower-greek;">
+                                                        <ol class="special-list" style="list-style-type: none;">
                                                             <c:set var="casecount" value="0"/>
                                                             <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
-                                                                <c:set var="casecount" value="${casecount+1}"/>
-                                                                <c:if test="${case1.getStatus() >= 1}">
-                                                                    <div id="modification">
-                                                                    </c:if>
-                                                                    <li>
+                                                                    <li${case1.getStatus() >= 1?' class="modification"':"" } data-number="${ionian_nums[casecount]}">
                                                                         <c:forEach var="passage2" items="${case1.getPassages()}" varStatus="loop">
                                                                             <c:if test="${passage2.getStatus() >= 1}">
                                                                                 <div id="modification">
@@ -336,7 +334,8 @@
                                                                             </c:if>
                                                                         </c:forEach>
                                                                         <c:if test="${not empty case1.getCaseList()}">
-                                                                            <ol style="list-style-type: lower-greek;">
+                                                                            <c:set var="casecount2" value="0"/>
+                                                                            <ol style="list-style-type: none;">
                                                                                 <c:forEach var="case2" items="${case1.getCaseList()}" varStatus="loop">
                                                                                     <c:if test="${case2.getStatus() >= 1}">
                                                                                         <div id="modification">
@@ -345,7 +344,7 @@
                                                                                             <c:if test="${passage3.getStatus() >= 1}">
                                                                                                 <div id="modification">
                                                                                                 </c:if>
-                                                                                                <li>${passage3.getText()}</li>
+                                                                                                <li data-number="${ionian_nums[casecount2]}">${passage3.getText()}</li>
                                                                                                     <c:if test="${passage3.getStatus() >= 1}">
                                                                                                 </div>
                                                                                             </c:if>
@@ -353,15 +352,16 @@
                                                                                         <c:if test="${case2.getStatus() >= 1}">
                                                                                         </div>
                                                                                     </c:if>
+                                                                                    <c:set var="casecount2" value="${casecount2+1}"/>
                                                                                 </c:forEach>
                                                                             </ol>
                                                                         </c:if>
-                                                                    </li>
+                                                                    
                                                                     <c:if test="${case1.getStatus() >= 1}">
                                                                         <c:if test="${case1.getStatus() ==2}">
-                                                                            <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount}" data-target=".${artcount}${parcount}0${casecount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
-                                                                                <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/case/${casecount}"/>
-                                                                            <div class="collapse out budgets ${artcount}${parcount}0${casecount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                                                            <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount+1}" data-target=".${artcount}${parcount}0${casecount+1}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                                                                <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}/case/${casecount+1}"/>
+                                                                            <div class="collapse out budgets ${artcount}${parcount}0${casecount+1}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
                                                                                 <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
                                                                                     <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
                                                                                         <c:forEach var="passage23" items="${frag.getPassages()}" varStatus="loop">
@@ -371,57 +371,64 @@
                                                                                 </c:forEach>
                                                                             </div>
                                                                         </c:if>
-                                                                    </div>
+                                                                   
                                                                 </c:if>
+                                                            </li>
+                                                                <c:set var="casecount" value="${casecount+1}"/>        
                                                             </c:forEach>
                                                         </ol>
                                                         <c:if test="${not empty paragraph.getTable()}">
                                                             <br/>${paragraph.getTable()}
                                                         </c:if>
                                                         <c:if test="${not empty paragraph.getModification()}">
+                                                            <div class="mod">
                                                             <c:choose>
                                                                 <c:when test="${paragraph.getModification().getType() == 'Case'}">
-                                                                    "<c:forEach var="passage3" items="${paragraph.getModification().getFragment().getPassages()}" varStatus="loop">
+                                                                    <c:forEach var="passage3" items="${paragraph.getModification().getFragment().getPassages()}" varStatus="loop">
                                                                         ${passage3.getText()}
-                                                                    </c:forEach>"
+                                                                    </c:forEach>
                                                                 </c:when>
                                                                 <c:when test="${paragraph.getModification().getType() == 'Passage'}">
-                                                                    "${paragraph.getModification().getFragment().getText()}"
+                                                                    ${paragraph.getModification().getFragment().getText()}
                                                                 </c:when>
                                                                 <c:when test="${paragraph.getModification().getType() == 'Paragraph'}">
-                                                                    "<c:forEach var="passage4" items="${paragraph.getModification().getFragment().getPassages()}" varStatus="loop">
+                                                                    <c:forEach var="passage4" items="${paragraph.getModification().getFragment().getPassages()}" varStatus="loop">
                                                                         ${passage4.getText()}
                                                                     </c:forEach>
                                                                     <c:if test="${paragraph.getModification().getFragment().getCaseList().size() > 0}">
-                                                                        <ol style="list-style-type: lower-greek;">    
+                                                                        <ol class="special-list" style="list-style-type: none;">   
+                                                                            <c:set var="casecount" value="0"/>
                                                                             <c:forEach var="case2" items="${paragraph.getModification().getFragment().getCaseList()}" varStatus="loop">
                                                                                 <c:forEach var="passage2" items="${case2.getPassages()}" varStatus="loop">
-                                                                                    <li>${passage2.getText()}</li>
-                                                                                    </c:forEach>
+                                                                                    <li data-number="${ionian_nums[casecount]}">${passage2.getText()}</li>
                                                                                 </c:forEach>
+                                                                                <c:set var="casecount" value="${casecount+1}"/>
+                                                                            </c:forEach>
                                                                         </ol>
-                                                                    </c:if>"
-
+                                                                    </c:if>
                                                                 </c:when>
                                                             </c:choose>
+                                                            </div>
                                                         </c:if>
-                                                    </div></li>
+                                                    </div>
                                                     <c:if test="${paragraph.getStatus() >= 1}">
                                                         <c:if test="${paragraph.getStatus() ==2}">
                                                         <span class="clickable" data-toggle="collapse" id="${parcount}" data-target=".${parcount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
                                                             <c:set var="target_uri" value="article/${artcount}/paragraph/${parcount}"/>
-                                                        <div class="collapse out budgets ${parcount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                                        <div class="collapse out budgets ${parcount}collapsed" style=" background-color: #FFCCCC; padding: 6px; border-radius: 10px;">
                                                             <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
                                                                 <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
                                                                     <c:forEach var="passage24" items="${frag.getPassages()}" varStatus="loop">
                                                                         ${passage24.getText()}
                                                                     </c:forEach>
                                                                     <c:if test="${frag.getCaseList().size() > 0}">
-                                                                        <ol style="list-style-type: lower-greek;">    
+                                                                        <ol class="special-list" style="list-style-type: none;">
+                                                                            <c:set var="casecount" value="0"/>
                                                                             <c:forEach var="case22" items="${frag.getCaseList()}" varStatus="loop">
                                                                                 <c:forEach var="passage22" items="${case22.getPassages()}" varStatus="loop">
-                                                                                    <li>${passage22.getText()}</li>
+                                                                                    <li data-number="${ionian_nums[casecount]}>${passage22.getText()}</li>
                                                                                     </c:forEach>
+                                                                                    <c:set var="casecount2" value="${casecount2+1}"/>
                                                                                 </c:forEach>
                                                                         </ol>
                                                                     </c:if>
@@ -429,8 +436,7 @@
                                                             </c:forEach>
                                                         </div>
                                                     </c:if>
-                                                </div>
-                                            </c:if>
+                                            </c:if></li>
                                             <br/>
                                         </c:forEach>
                                     </ol>
@@ -553,7 +559,7 @@
                                                                         <c:when test="${fn:endsWith(legalmod.getType(),'Edit')}">
                                                                             <spring:message code="basic.rep"/>
                                                                         </c:when>
-                                                                        <c:when test="${fn:endsWith(legalmod.getType(),'Creation')}">
+                                                                        <c:when test="${fn:endsWith(legalmod.getType(),'Addition')}">
                                                                             <spring:message code="basic.ins"/>
                                                                         </c:when>
                                                                         <c:when test="${fn:endsWith(legalmod.getType(),'Delete')}">
