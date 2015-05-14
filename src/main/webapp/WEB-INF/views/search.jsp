@@ -13,7 +13,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
+        <link rel="shortcut icon" href="/resources/images/logo.png" >
         <title><spring:message code="title"/></title>
 
         <!-- Bootstrap -->
@@ -30,7 +30,7 @@
         <![endif]-->
 
         <!-- Load CSS -->
-        <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
+        <link href="/resources/css/navbar.css" rel="stylesheet"/>
 
         <!-- jQueryUI Calendar-->
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
@@ -52,8 +52,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="/"><img style="height: 40px; margin-top: -10px;" src="/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -65,22 +65,22 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                            <a href="/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                            <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
                     </ul>
 
@@ -107,7 +107,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/search">
+                    <form role="form" method="GET" action="/search">
                         <ul  class="nav nav-sidebar">
                             <li><a><spring:message code="home.keywords"/></a>
                                 <input type="text" name="keywords" class="form-control" id="keywords" <c:if test="${not empty keywords}">value="${keywords}"</c:if> placeholder="<spring:message code="search.placeholder"/>">
@@ -197,6 +197,7 @@
                 </div>
                 <div class="col-md-9">
                     <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 25px;"><spring:message code="search.results"/></div>
+                    <div class="table-responsive">
                     <br/><table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -207,17 +208,15 @@
                         </thead>
                         <tbody>
                             <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
-                                <% LegalDocument ld = (LegalDocument) pageContext.getAttribute("legaldoc");
-                        String[] URIs = ld.getURI().toString().split("uoa.gr/");
-                        pageContext.setAttribute("uri", URIs[1]);%>
                                 <tr>
-                                    <td><a href="<c:url value="${pageContext.servletContext.contextPath}${uri}"/>">${legaldoc.getTitle()}</a></td>
+                                    <td><a href="<c:url value="${legaldoc.getURI()}"/>">${legaldoc.getTitle()}</a></td>
                                     <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                                     <td>${legaldoc.getPublicationDate()}</td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>  
+                    </div>
                 </div>
             </div>
             <div class="row"  style="height:400px;">&#160;&#160;</div>
@@ -225,7 +224,7 @@
         </div>
 
         <div id="footer" style="text-align: center; font-family:'Jura';" >
-            <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/> </h5>
         </div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

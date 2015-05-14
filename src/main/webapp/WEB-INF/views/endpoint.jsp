@@ -12,7 +12,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
+        <link rel="shortcut icon" href="/resources/images/logo.png" >
         <title><spring:message code="title"/></title>
 
         <!-- Bootstrap -->
@@ -29,7 +29,7 @@
         <![endif]-->
 
         <!-- Load CSS -->
-        <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
+        <link href="/resources/css/navbar.css" rel="stylesheet"/>
 
         <!-- jQueryUI Calendar-->
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
@@ -50,8 +50,8 @@
             <!-- Navigation Bar -->
             <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
                 <div class="container-fluid">
-                    <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                    <div class="navbar-header"><a class="navbar-brand"  href="/"><img style="height: 40px; margin-top: -10px;" src="/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -63,22 +63,22 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                            <a href="/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                            <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
                     </ul>
 
@@ -107,18 +107,18 @@
                 <div class="col-md-3">
                     <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3><spring:message code="endpoint.ex"/></h3></span>
                     <div align="center" style="padding:10px;">
-                        <a href="${pageContext.servletContext.contextPath}/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q1"/></a>
+                        <a href="/endpoint/query/1" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q1"/></a>
                     </div>
                     <div align="center" style="padding:10px;">
-                        <a href="${pageContext.servletContext.contextPath}/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q2"/></a>
+                        <a href="/endpoint/query/2" class="btn btn-default" style="width:100%; text-align: left;"><spring:message code="endpoint.q2"/></a>
                     </div>
                     <div align="center" style="padding:10px;">
-                        <a href="${pageContext.servletContext.contextPath}/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
+                        <a href="/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
                     </div>
                 </div>
                 <div class="col-md-9">
                     <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ENDPOINT</h3></span>
-                    <form role="form" action="${pageContext.servletContext.contextPath}/endpoint">
+                    <form role="form" action="/endpoint">
                         <div class="form-group">
                             <textarea name="query" class="form-control" rows="15" columns="15"><c:choose><c:when test="${empty endpointResults}">PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
@@ -152,9 +152,11 @@ PREFIX dc: <http://purl.org/dc/terms/></c:when><c:otherwise>${endpointResults.ge
                                                                     <div class="alert alert-warning" role="alert">${endpointResults.getMessage()}</div>
                                                                 </c:if>
                                                                 <c:if test="${not empty endpointResults.getResults()}">
+                                                                    <div class="table-responsive">
                                                                     <table id="example" class="table table-striped table-bordered" style="text-align: left; font-size: 12px;" cellspacing="0" width="80%">
                                                                         ${endpointResults.getResults()}
                                                                     </table>
+                                                                    </div>
                                                                 </c:if>
                                                                 <br/>
                                                                 <br/>
@@ -164,7 +166,7 @@ PREFIX dc: <http://purl.org/dc/terms/></c:when><c:otherwise>${endpointResults.ge
                                                             </div>
 
                                                             <div id="footer" style="text-align: center; font-family:'Jura';" >
-                                                                <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+                                                                <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/> </h5>
                                                             </div>
 
                                                             <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

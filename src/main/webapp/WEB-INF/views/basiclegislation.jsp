@@ -14,7 +14,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
+        <link rel="shortcut icon" href="/resources/images/logo.png" >
         <title><spring:message code="title"/></title>
 
         <!-- Bootstrap -->
@@ -32,8 +32,8 @@
         <![endif]-->
 
         <!-- Load CSS -->
-        <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
-        <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-social.css" rel="stylesheet"/>
+        <link href="/resources/css/navbar.css" rel="stylesheet"/>
+        <link href="/resources/css/bootstrap-social.css" rel="stylesheet"/>
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
 
@@ -133,8 +133,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="/"><img style="height: 40px; margin-top: -10px;" src="/resources/images/logo.png"</img></a>
+                <a class="navbar-brand"  href="/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -146,22 +146,22 @@
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                        <a href="/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                        <a href="/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                        <a href="/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                        <a href="/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                        <a href="/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
                     </li>
                     <li>
-                        <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                        <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                     </li>
                 </ul>
 
@@ -203,7 +203,7 @@
                             </c:when>
                         </c:choose>
                         <c:set var="fek2" value="${fn:split(fek, '/')}" />
-                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="${pageContext.servletContext.contextPath}/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
                     <u style="color:  #1087dd"><spring:message code="basic.signer"/></u><br/>
                         <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                             ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
@@ -237,16 +237,16 @@
                     <a class="btn btn-default btn-lg" href="${base}/enacted" style="width:100%"><spring:message code="basic.enacted"/></a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-success btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> XML</a>
+			<a class="btn btn-success btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> XML</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-danger btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> PDF</a>
+                    <a class="btn btn-danger btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> PDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-primary btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> RDF</a>
+                    <a class="btn btn-primary btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> RDF</a>
                 </div>
                 <div align="center" style="padding:10px;">
-                    <a class="btn btn-warning btn-lg" target="_blank" href="${requestScope['javax.servlet.forward.request_uri']}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> JSON</a>
+                    <a class="btn btn-warning btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> JSON</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -254,7 +254,7 @@
                     <li style="display: inline;"><a class="btn btn-social btn-xs btn-facebook"><i class="fa fa-facebook"></i>Share</a><div class="fb-share-button" data-href="https://legislation.di.uoa.gr" data-layout="button_count"></div></li>
                     <li style="display: inline;"><a class="btn btn-social btn-xs btn-twitter"><i class="fa fa-twitter"></i>Tweet</a><a class="twitter-share-button" href="https://twitter.com/share" data-related="twitterdev" data-count="horizontal">Tweet</a></li>
                 </ul>-->
-                <a href="#" class="scrollToTop"><img src="${pageContext.servletContext.contextPath}/resources/images/newup.png"/></a>
+                <a href="#" class="scrollToTop"><img src="/resources/images/newup.png"/></a>
                 <span style="text-align: center;"><h4>${legaldoc.getTitle()}</h4></span>
                 <div role="tabpanel">
 
@@ -267,19 +267,19 @@
                         <div id="share-buttons">
                             <li style="display: inline;">
                                 <!-- Facebook -->
-                                <a href="http://www.facebook.com/sharer.php?u=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></a>
+                                <a href="http://www.facebook.com/sharer.php?u=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="resources/images/facebook.png" alt="Facebook" /></a>
                             </li>
                             <li style="display: inline;">
                                 <!-- Twitter -->
-                                <a href="http://twitter.com/share?url=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" /></a>
+                                <a href="http://twitter.com/share?url=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="resources/images/twitter.png" alt="Twitter" /></a>
                             </li>
                             <li style="display: inline;">
                                 <!-- Google+ -->
-                                <a href="https://plus.google.com/share?url=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/google.png" alt="Google" /></a>
+                                <a href="https://plus.google.com/share?url=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="resources/images/google.png" alt="Google" /></a>
                             </li>
                             <li style="display: inline;">
                                 <!-- LinkedIn -->
-                                <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://legislation.di.uoa.gr" target="_blank"><img src="http://www.simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" /></a>
+                                <a href="http://www.linkedin.com/shareArticle?mini=true&url=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="resources/images/linkedin.png" alt="LinkedIn" /></a>
                             </li>
                         </div>
                     </ul>
@@ -445,6 +445,7 @@
                             </c:forEach>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">
+                        <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                                 <thead>
                                 <td><spring:message code="basic.mind"/></td>
@@ -459,6 +460,7 @@
                                     </c:if>
                                 </tbody>
                             </table>
+                        </div>
 
                         </div>
                         <div role="tabpanel" class="tab-pane" id="messages">
@@ -487,6 +489,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="settings">
+                            <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                                 <thead>
                                 <td><spring:message code="home.datesimple"/></td>
@@ -512,6 +515,7 @@
                                             </c:if>
                                             <tr class="collapse out budgets modcollapsed">
                                                 <td colspan="3">
+                                                    <div class="table-responsive">
                                                     <table id="example2" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                                                         <thead>
                                                             <spring:message var="par" code='basic.par'/>
@@ -569,6 +573,7 @@
                                                                 </td>
                                                             </tr>
                                                     </table>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <c:set var="currentTitle" value="${legalmod.getCompetenceGround().getTitle()}"/>
@@ -576,7 +581,7 @@
                                     </c:if>
                                 </tbody>
                             </table>
-
+                            </div>        
                         </div>
                     </div>
                 </div>
@@ -585,13 +590,13 @@
         </div>
     </div>               
     <div id="footer" style="text-align: center; font-family:'Jura';" >
-        <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+        <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/> </h5>
     </div>                        
 
     <c:if test="${not empty legaldoc.getPlace()}">
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-        <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/geoxml3-kmz.js"></script>
-        <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/ProjectedOverlay.js"></script>	
+        <script type="text/javascript" src="/resources/js/geoxml3-kmz.js"></script>
+        <script type="text/javascript" src="/resources/js/ProjectedOverlay.js"></script>	
 
         <script type="text/javascript">
     function initialize() {

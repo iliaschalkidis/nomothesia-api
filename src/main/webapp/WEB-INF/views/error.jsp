@@ -13,7 +13,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/resources/images/logo.png" >
+        <link rel="shortcut icon" href="/resources/images/logo.png" >
         <title><spring:message code="title"/></title>
 
         <!-- Bootstrap -->
@@ -31,7 +31,7 @@
         <![endif]-->
 
         <!-- Load CSS -->
-        <link href="${pageContext.servletContext.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
+        <link href="/resources/css/navbar.css" rel="stylesheet"/>
 
         <!-- jQueryUI Calendar-->
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
@@ -50,8 +50,8 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/"><img style="height: 40px; margin-top: -10px;" src="${pageContext.servletContext.contextPath}/resources/images/logo.png"</img></a>
-                    <a class="navbar-brand"  href="${pageContext.servletContext.contextPath}/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="/"><img style="height: 40px; margin-top: -10px;" src="/resources/images/logo.png"</img></a>
+                    <a class="navbar-brand"  href="/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -63,22 +63,22 @@
                 <div class="collapse navbar-collapse navbar-menubuilder">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
+                            <a href="/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
+                            <a href="/search" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.search"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
+                            <a href="/endpoint" style="font-family: 'Comfortaa', cursive;" >Endpoint</a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
+                            <a href="/statistics" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.statistics"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
+                            <a href="/aboutus" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.aboutus"/></a>
                         </li>
                         <li>
-                            <a href="${pageContext.servletContext.contextPath}/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
+                            <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
                     </ul>
                     
@@ -119,7 +119,8 @@
                 <div class="col-md-6">
                     <div class="row" style="padding:10px;">
                         <div class="jumbotron" style="padding: 20px 20px 20px 20px;">
-                            <form role="form" method="GET" action="${pageContext.servletContext.contextPath}/search">
+                            <form role="form" method="GET" action="/search">
+                                <div class="table-responsive">
                                 <table width="100%">
                                     <tr>
                                         <td width="45%">
@@ -184,10 +185,11 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align: right; margin-top: 5px;">
-                                            <a href="${pageContext.servletContext.contextPath}/search"><spring:message code="home.advancedsearch"/></a> 
+                                            <a href="/search"><spring:message code="home.advancedsearch"/></a> 
                                         </td>
                                     </tr>
                                 </table>
+                                </div>
                                         
                                 <input type="hidden" name="datefrom" value="" class="form-control"/>
                                 <input type="hidden" name="dateto" value="" class="form-control"/>
@@ -199,13 +201,13 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <img align="center" src="${pageContext.servletContext.contextPath}/resources/images/404.png"</img>
+                    <img align="center" src="/resources/images/404.png"</img>
                 </div>
             </div>
         </div>
 
         <div id="footer" style="text-align: center; font-family:'Jura';" >
-            <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="${pageContext.servletContext.contextPath}/resources/images/rdf.png" width="15"/> </h5>
+            <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/> </h5>
         </div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -42,7 +42,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                 doc.add(new Paragraph("\n\n\n\n\n\n\n"));
                 
                 //Fonts
-                BaseFont bf = BaseFont.createFont("c:/windows/fonts/arial.ttf",BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                BaseFont bf = BaseFont.createFont("/resources/fonts/arial.ttf",BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 bf.setSubset(true);
                 Font fontTitle = new Font(bf, 18,Font.BOLD);
                 Font fontText = new Font(bf, 12);
