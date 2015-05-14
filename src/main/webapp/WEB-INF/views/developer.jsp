@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/resources/images/logo.png" >
-        <title><spring:message code="title"/></title>
+        <title><spring:message code="title.info"/></title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -110,6 +110,7 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active"><a href="#introduction" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="developer.insert"/></a></li>
+                                <li role="presentation"><a href="#background" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="developer.back"/></a></li>
                                 <li role="presentation"><a href="#legislation" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="developer.legr"/></a></li>
                                 <li role="presentation"><a href="#uris" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="developer.uri"/></a></li>
                                 <li role="presentation"><a href="#restservices" aria-controls="profile" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="developer.rest"/></a></li>
@@ -118,7 +119,15 @@
 
                             <!-- Tab panes -->
                             <div class="tab-content" style="text-align:justify;">
-                                <div role="tabpanel" class="tab-pane fade in active" id="introduction">
+                                <div role="tabpanel" style="text-align: center;" class="tab-pane fade in active" id="introduction">
+                                    <br/>
+                                        <tr>
+                                        <iframe src="https://www.slideshare.net/slideshow/embed_code/key/EDBgLLvuH1Hxdb" width="900" height="500" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                                        <br/>
+                                        <br/>
+                                        
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="background">
                                     <br/>
                                     <spring:message code="developer.text1"/>
                                 </div>

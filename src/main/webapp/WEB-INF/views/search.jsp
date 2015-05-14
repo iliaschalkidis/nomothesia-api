@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/resources/images/logo.png" >
-        <title><spring:message code="title"/></title>
+        <title><spring:message code="title.search"/></title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -194,6 +194,8 @@
                             </li>
                         </ul>
                     </form>
+                    <br/>
+                    
                 </div>
                 <div class="col-md-9">
                     <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 25px;"><spring:message code="search.results"/></div>
