@@ -50,7 +50,7 @@ public abstract class AbstractITextPdfView extends AbstractView {
             reader.makeRemoteNamedDestinationsLocal();
             baos = new ByteArrayOutputStream();
             PdfStamper stamper = new PdfStamper(reader, baos);
-            BaseFont bf = BaseFont.createFont("c:/windows/fonts/tahoma.ttf",BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bf = BaseFont.createFont(getServletContext().getRealPath("/resources/fonts/tahoma.ttf"),BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             PdfContentByte cb;
 
             int n = reader.getNumberOfPages();
