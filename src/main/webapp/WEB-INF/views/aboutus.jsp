@@ -39,11 +39,9 @@
             }
 
             #footer {
-                position:absolute;
-                bottom:0;
+                position:relative;
                 width:100%;
                 height:60px;   /* Height of the footer */
-                /*background:#6cf;*/
             }
         </style>
 
