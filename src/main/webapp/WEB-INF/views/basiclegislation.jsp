@@ -266,19 +266,19 @@
                         <div id="share-buttons">
                             <li style="display: inline;">
                                 <!-- Facebook -->
-                                <a href="http://www.facebook.com/sharer.php?u=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="/resources/images/facebook.png" alt="Facebook" /></a>
+                                <a href="http://www.facebook.com/sharer.php?u=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/facebook.png" alt="Facebook" /></a>
                             </li>
                             <li style="display: inline;">
                                 <!-- Twitter -->
-                                <a href="http://twitter.com/share?url=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="/resources/images/twitter.png" alt="Twitter" /></a>
+                                <a href="http://twitter.com/share?url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/twitter.png" alt="Twitter" /></a>
                             </li>
                             <li style="display: inline;">
                                 <!-- Google+ -->
-                                <a href="https://plus.google.com/share?url=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="/resources/images/google.png" alt="Google" /></a>
+                                <a href="https://plus.google.com/share?url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/google.png" alt="Google" /></a>
                             </li>
                             <li style="display: inline;">
                                 <!-- LinkedIn -->
-                                <a href="http://www.linkedin.com/shareArticle?mini=true&url=${requestScope['javax.servlet.forward.request_uri']}" target="_blank"><img src="/resources/images/linkedin.png" alt="LinkedIn" /></a>
+                                <a href="http://www.linkedin.com/shareArticle?mini=true&url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/linkedin.png" alt="LinkedIn" /></a>
                             </li>
                         </div>
                     </ul>
