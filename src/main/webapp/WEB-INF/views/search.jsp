@@ -211,7 +211,7 @@
                         <tbody>
                             <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
                                 <tr>
-                                    <td><a href="<c:url value="${legaldoc.getURI()}"/>">${legaldoc.getTitle()}</a></td>
+                                    <td><a href="<c:url value="${fn:replace(legaldoc.getURI(),'legislation.di.uoa.gr','localhost:8080')}"/>">${legaldoc.getTitle()}</a></td>
                                     <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                                     <td>${legaldoc.getPublicationDate()}</td>
                                 </tr>

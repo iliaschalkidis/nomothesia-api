@@ -334,13 +334,13 @@ public class LegislationController {
             return "endpoint";
 	}
 	
-       @ExceptionHandler(Exception.class)
-	public String handleAllException(Exception ex) {
- 
-		//ModelAndView model = new ModelAndView("error/exception_error");
-                //model.addAttribute("locale",locale);
-		return "error";
- 
-	}
+//       @ExceptionHandler(Exception.class)
+//	public String handleAllException(Exception ex) {
+// 
+//		//ModelAndView model = new ModelAndView("error/exception_error");
+//                //model.addAttribute("locale",locale);
+//		return "error";
+// 
+//	}
         
 }

@@ -289,7 +289,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
-                "SELECT ?citation ?cittext ?cituri\n" +
+                "SELECT  DISTINCT ?citation ?cittext ?cituri\n" +
                 "WHERE{\n" +
                 "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +"> metalex:part ?citation.\n" +
                 "?citation a metalex:BibliographicCitation.\n" +
@@ -438,7 +438,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
-                    "SELECT ?part ?text ?type ?title\n" +
+                    "SELECT DISTINCT ?part ?text ?type ?title\n" +
                     "WHERE{\n" +
                     "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                     " metalex:part+  ?part.\n" +
@@ -646,47 +646,47 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     result.close();
                 }
                 
-                int view = Integer.parseInt(legald.getViews());
-                    
-                String queryString2 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                "\n" +
-                "DELETE WHERE {\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-                " <http://legislation.di.uoa.gr/ontology/views>" +
-                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
-                "}";
-                
-                //System.out.println(queryString2);
-                Update update = con.prepareUpdate(QueryLanguage.SPARQL, queryString2);
-                update.execute();
-                con.commit();
-                
-                view = view+1;
-                
-                String queryString3 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                "\n" +
-                "INSERT DATA {\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-                " <http://legislation.di.uoa.gr/ontology/views>" +
-                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
-                "}";
-                
-                //System.out.println(queryString3);
-                Update update2 = con.prepareUpdate(QueryLanguage.SPARQL, queryString3);
-                update2.execute();
-                con.commit();
+//                int view = Integer.getInteger(legald.getViews());
+//                    
+//                String queryString2 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+//                "\n" +
+//                "DELETE WHERE {\n" +
+//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+//                " <http://legislation.di.uoa.gr/ontology/views>" +
+//                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
+//                "}";
+//                
+//                //System.out.println(queryString2);
+//                Update update = con.prepareUpdate(QueryLanguage.SPARQL, queryString2);
+//                update.execute();
+//                con.commit();
+//                
+//                view = view+1;
+//                
+//                String queryString3 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+//                "\n" +
+//                "INSERT DATA {\n" +
+//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+//                " <http://legislation.di.uoa.gr/ontology/views>" +
+//                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
+//                "}";
+//                
+//                //System.out.println(queryString3);
+//                Update update2 = con.prepareUpdate(QueryLanguage.SPARQL, queryString3);
+//                update2.execute();
+//                con.commit();
                 
             }
             finally {
@@ -991,7 +991,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
-                    "SELECT ?mod ?type ?patient ?work ?title ?date ?gaztitle ?part ?type2 ?text\n" +
+                    "SELECT DISTINCT ?mod ?type ?patient ?work ?title ?date ?gaztitle ?part ?type2 ?text\n" +
                     "WHERE{\n" +
                     " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                     " metalex:realizedBy  ?version.\n" +
