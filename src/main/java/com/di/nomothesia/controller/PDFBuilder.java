@@ -104,7 +104,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                     
                     //Article id and title
                     //ID
-                    String par2 = "Άρθρο " + legald.getArticles().get(i).getId() + "\n";
+                    String par2 = "'Αρθρο " + legald.getArticles().get(i).getId() + "\n";
                     Paragraph article = new Paragraph(par2, fontArticle);
                     article.setAlignment(Element.ALIGN_CENTER);
                     doc.add(article);
