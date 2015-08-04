@@ -7,6 +7,7 @@ import java.util.List;
 public class LegalDocument {
      
     private List<Article> articles;
+    private List<Chapter> chapters;
     private List<Signer> signers;
     private List<Citation> citations;
     private List<String> tags;
@@ -24,16 +25,22 @@ public class LegalDocument {
     public LegalDocument() {
         
         articles = new ArrayList<Article>();
-        //art.add(new Article());
+        chapters = new ArrayList<Chapter>();
         signers = new ArrayList<Signer>();
-        //sin.add(new Signer());
         citations = new ArrayList<Citation>();
-        //cit.add(new Citation());
         this.tags = new ArrayList<String>();
 
     }
     
     //Setters-Getters for LegalDocument
+    
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+    
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
     
     public List<Article> getArticles() {
         return articles;

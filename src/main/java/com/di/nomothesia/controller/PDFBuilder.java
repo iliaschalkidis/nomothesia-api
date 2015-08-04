@@ -180,50 +180,50 @@ public class PDFBuilder extends AbstractITextPdfView {
                         }
                                                 
                         //If document has modifications
-                        if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
-                            
-                            paragraph3.add("\"");
-                            
-                            //if Modification type = Paraghraph
-                            if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")) {
-                        
-                                com.di.nomothesia.model.Paragraph p = (com.di.nomothesia.model.Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                                
-                                //get Modification's text
-                                for (int n = 0; n<p.getPassages().size(); n++) {
-                                    paragraph3.add(p.getPassages().get(n).getText());
-                                }
-                                
-                                //get Modification Case
-                                for (int n = 0; n< p.getCaseList().size(); n++) {
-                                    
-                                    paragraph3.add(p.getCaseList().get(n).getId()+"");
-                                    
-                                    //get MOdification Case Passage text
-                                    for (int l = 0; l<p.getCaseList().get(n).getPassages().size(); l++) {
-                                        paragraph3.add(p.getCaseList().get(n).getPassages().get(l).getText());
-                                    }
-                                
-                                }
-                        
-                                paragraph3.add("\n");
-                    
-                            } //If Modification type = Case
-                            else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")) {
-                                
-                                //get Fragment
-                                Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                                
-                                //Get Modification Passage text
-                                for (int l = 0; l<c.getPassages().size(); l++) {
-                                    paragraph3.add(c.getPassages().get(l).getText());
-                                }
-                                
-                            }
-                            
-                            paragraph3.add("\"\n");
-                
-                        }
+////                        if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
+////                            
+////                            paragraph3.add("\"");
+////                            
+////                            //if Modification type = Paraghraph
+////                            if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")) {
+////                        
+////                                com.di.nomothesia.model.Paragraph p = (com.di.nomothesia.model.Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+////                                
+////                                //get Modification's text
+////                                for (int n = 0; n<p.getPassages().size(); n++) {
+////                                    paragraph3.add(p.getPassages().get(n).getText());
+////                                }
+////                                
+////                                //get Modification Case
+////                                for (int n = 0; n< p.getCaseList().size(); n++) {
+////                                    
+////                                    paragraph3.add(p.getCaseList().get(n).getId()+"");
+////                                    
+////                                    //get MOdification Case Passage text
+////                                    for (int l = 0; l<p.getCaseList().get(n).getPassages().size(); l++) {
+////                                        paragraph3.add(p.getCaseList().get(n).getPassages().get(l).getText());
+////                                    }
+////                                
+////                                }
+////                        
+////                                paragraph3.add("\n");
+////                    
+////                            } //If Modification type = Case
+////                            else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")) {
+////                                
+////                                //get Fragment
+////                                Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+////                                
+////                                //Get Modification Passage text
+////                                for (int l = 0; l<c.getPassages().size(); l++) {
+////                                    paragraph3.add(c.getPassages().get(l).getText());
+////                                }
+////                                
+////                            }
+////                            
+////                            paragraph3.add("\"\n");
+////                
+////                        }
                         
                         paragraph3.add("\n");
                       

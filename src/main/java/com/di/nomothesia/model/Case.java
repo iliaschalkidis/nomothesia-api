@@ -12,13 +12,15 @@ public class Case implements Fragment{
     private List<Case> caseList;
     private int status;
     private String type;
-    
+    private Modification modification;
+
     public Case() {
         
         passages = new ArrayList<Passage>();
         //pas.add(new Passage());
         caseList = new ArrayList<Case>();
         //casel.add(new Case());
+        
 
     }
     
@@ -74,6 +76,14 @@ public class Case implements Fragment{
 
     public void setCaseList(List<Case> caseList) {
         this.caseList = caseList;
+    }
+    
+    public Modification getModification() {
+        return modification;
+    }
+
+    public void setModification(Modification modification) {
+        this.modification = modification;
     }
  
     

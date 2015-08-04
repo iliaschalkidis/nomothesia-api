@@ -316,98 +316,98 @@ public class XMLBuilder  {
                     
                     }
                     
-                    if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
-                        
-                        //modification
-                        Element modification = doc.createElement("Modification");
-                        modification.setAttribute("documentURI", legald.getArticles().get(i).getParagraphs().get(j).getModification().getURI());
-                        paragraph.appendChild(modification);
-                        
-                        //modification type
-                        //Element modType = doc.createElement("type");
-                        //modType.setTextContent(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType());
-                        //modification.appendChild(modType);
-                        
-                        if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")) {
-                            
-                            Paragraph p = (Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                            Element paragraphin = doc.createElement("Paragraph");
-                            paragraphin.setAttribute("id", "" + p.getId());
-                            paragraphin.setAttribute("documentURI", p.getURI());
-                            modification.appendChild(paragraphin);
-                            
-                            for (int m = 0; m<p.getPassages().size(); m++) {
-                                
-                                Element passagein = doc.createElement("Passage");
-                                passagein.setAttribute("id", "" + p.getPassages().get(m).getId());
-                                passagein.setAttribute("documentURI", p.getPassages().get(m).getURI());
-                                Element pasTextin = doc.createElement("text");
-                                pasTextin.setTextContent(p.getPassages().get(m).getText());
-                                passagein.appendChild(pasTextin);
-                                
-                                paragraphin.appendChild(passagein);
-                            
-                            }
-
-                            for (int m = 0; m< p.getCaseList().size(); m++) {
-                            
-                                for (int l = 0; l<p.getCaseList().get(m).getPassages().size(); l++) {
-                                    
-                                    Element passagein2 = doc.createElement("Passage");
-                                    passagein2.setAttribute("id", "" + p.getCaseList().get(m).getPassages().get(l).getId());
-                                    passagein2.setAttribute("documentURI", p.getCaseList().get(m).getPassages().get(l).getURI());
-                                    Element pasTextin2 = doc.createElement("text");
-                                    pasTextin2.setTextContent(p.getCaseList().get(m).getPassages().get(l).getText());
-                                    passagein2.appendChild(pasTextin2);
-                                
-                                    paragraphin.appendChild(passagein2);
-                                
-                                }
-                            
-                            }
-                            
-                            //paragraph.appendChild(modification); 
-                        
-                        }
-                        else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")) {
-                            
-                            Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                            Element paragraphin = doc.createElement("Case");
-                            paragraphin.setAttribute("id", "" + c.getId());
-                            paragraphin.setAttribute("documentURI", c.getURI());
-                            modification.appendChild(paragraphin);
-                            
-                            for (int l = 0; l<c.getPassages().size(); l++) {
-                                
-                                Element passage = doc.createElement("Passage");
-                                passage.setAttribute("id", "" + c.getPassages().get(l).getId());
-                                passage.setAttribute("documentURI", c.getPassages().get(l).getURI());
-                                Element pasText = doc.createElement("text");
-                                pasText.setTextContent(c.getPassages().get(l).getText());
-                                passage.appendChild(pasText);
-
-                                paragraphin.appendChild(passage);
-                            
-                            }
-                            
-                                //paragraph.appendChild(modification); 
-                        
-                        }
-                        else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Passage")) {
-                            
-                            Passage pas = (Passage) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-                            Element passage = doc.createElement("Passage");
-                            passage.setAttribute("id", "" + pas.getId());
-                            passage.setAttribute("documentURI", pas.getURI());
-                            Element pasText = doc.createElement("text");
-                            pasText.setTextContent(pas.getText());
-                            passage.appendChild(pasText);
-
-                            modification.appendChild(passage);
-                        
-                        }
-                    
-                    }
+////                    if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
+////                        
+////                        //modification
+////                        Element modification = doc.createElement("Modification");
+////                        modification.setAttribute("documentURI", legald.getArticles().get(i).getParagraphs().get(j).getModification().getURI());
+////                        paragraph.appendChild(modification);
+////                        
+////                        //modification type
+////                        //Element modType = doc.createElement("type");
+////                        //modType.setTextContent(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType());
+////                        //modification.appendChild(modType);
+////                        
+////                        if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")) {
+////                            
+////                            Paragraph p = (Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+////                            Element paragraphin = doc.createElement("Paragraph");
+////                            paragraphin.setAttribute("id", "" + p.getId());
+////                            paragraphin.setAttribute("documentURI", p.getURI());
+////                            modification.appendChild(paragraphin);
+////                            
+////                            for (int m = 0; m<p.getPassages().size(); m++) {
+////                                
+////                                Element passagein = doc.createElement("Passage");
+////                                passagein.setAttribute("id", "" + p.getPassages().get(m).getId());
+////                                passagein.setAttribute("documentURI", p.getPassages().get(m).getURI());
+////                                Element pasTextin = doc.createElement("text");
+////                                pasTextin.setTextContent(p.getPassages().get(m).getText());
+////                                passagein.appendChild(pasTextin);
+////                                
+////                                paragraphin.appendChild(passagein);
+////                            
+////                            }
+////
+////                            for (int m = 0; m< p.getCaseList().size(); m++) {
+////                            
+////                                for (int l = 0; l<p.getCaseList().get(m).getPassages().size(); l++) {
+////                                    
+////                                    Element passagein2 = doc.createElement("Passage");
+////                                    passagein2.setAttribute("id", "" + p.getCaseList().get(m).getPassages().get(l).getId());
+////                                    passagein2.setAttribute("documentURI", p.getCaseList().get(m).getPassages().get(l).getURI());
+////                                    Element pasTextin2 = doc.createElement("text");
+////                                    pasTextin2.setTextContent(p.getCaseList().get(m).getPassages().get(l).getText());
+////                                    passagein2.appendChild(pasTextin2);
+////                                
+////                                    paragraphin.appendChild(passagein2);
+////                                
+////                                }
+////                            
+////                            }
+////                            
+////                            //paragraph.appendChild(modification); 
+////                        
+////                        }
+////                        else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")) {
+////                            
+////                            Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+////                            Element paragraphin = doc.createElement("Case");
+////                            paragraphin.setAttribute("id", "" + c.getId());
+////                            paragraphin.setAttribute("documentURI", c.getURI());
+////                            modification.appendChild(paragraphin);
+////                            
+////                            for (int l = 0; l<c.getPassages().size(); l++) {
+////                                
+////                                Element passage = doc.createElement("Passage");
+////                                passage.setAttribute("id", "" + c.getPassages().get(l).getId());
+////                                passage.setAttribute("documentURI", c.getPassages().get(l).getURI());
+////                                Element pasText = doc.createElement("text");
+////                                pasText.setTextContent(c.getPassages().get(l).getText());
+////                                passage.appendChild(pasText);
+////
+////                                paragraphin.appendChild(passage);
+////                            
+////                            }
+////                            
+////                                //paragraph.appendChild(modification); 
+////                        
+////                        }
+////                        else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Passage")) {
+////                            
+////                            Passage pas = (Passage) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
+////                            Element passage = doc.createElement("Passage");
+////                            passage.setAttribute("id", "" + pas.getId());
+////                            passage.setAttribute("documentURI", pas.getURI());
+////                            Element pasText = doc.createElement("text");
+////                            pasText.setTextContent(pas.getText());
+////                            passage.appendChild(pasText);
+////
+////                            modification.appendChild(passage);
+////                        
+////                        }
+////                    
+////                    }
                     
                     article.appendChild(paragraph);
                 

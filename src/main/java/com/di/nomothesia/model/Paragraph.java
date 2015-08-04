@@ -7,7 +7,6 @@ import java.util.List;
 public class Paragraph implements Fragment{
     
     private List<Passage> passages;
-    private Modification modification;
     private List<Case> caseList;
     private String table;
     private String URI;
@@ -51,14 +50,6 @@ public class Paragraph implements Fragment{
 
     public void setPassages(List<Passage> passages) {
         this.passages = passages;
-    }
-
-    public Modification getModification() {
-        return modification;
-    }
-
-    public void setModification(Modification modification) {
-        this.modification = modification;
     }
 
     public List<Case> getCaseList() {

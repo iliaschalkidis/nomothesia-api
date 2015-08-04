@@ -1,6 +1,7 @@
 package com.di.nomothesia.dao;
 
 import com.di.nomothesia.comparators.LegalDocumentSort;
+import com.di.nomothesia.model.Chapter;
 import com.di.nomothesia.model.Article;
 import com.di.nomothesia.model.Case;
 import com.di.nomothesia.model.Citation;
@@ -115,7 +116,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
-                "SELECT ?title ?date ?gaztitle ?signername ?signertitle ?views ?place\n" +
+                "SELECT DISTINCT ?title ?date ?gaztitle ?signername ?signertitle ?views ?place\n" +
                 "WHERE{\n" +
                 "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " dc:title ?title.\n" +
@@ -463,60 +464,196 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     try {
                     
                         // iterate the result set
-                        int count = -1;
+                        int chap_count = -1;
+                        int art_count = -1;
+                        int art_count2= 0;
                         int count2 = -1;
                         int count3 = -1;
                         int count4 = -1;
                         int mod = 0;
-                        
+                        int mod_count3 = -1;
+                        int mod_count4 = -1;
                         String old = "old";
                         Paragraph paragraph = null;
+                        Article article = null;
                     
                         while (result.hasNext()) {
                             
                             BindingSet bindingSet = result.next(); 
                             
-                            if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Article")) {
+                            if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Chapter")) {
                                 
-                                Article article = new Article();
-                                article.setId(count+2);
-                                article.setURI(bindingSet.getValue("part").toString());
+                                Chapter chapter = new Chapter();
+                                chapter.setId(chap_count+2);
+                                chapter.setURI(bindingSet.getValue("part").toString());
                                 
                                 if (bindingSet.getValue("title")!=null) {
                                     String title = bindingSet.getValue("title").toString().replace("@el", "");
+                                    title = title.replace("^^", "");
+                                    chapter.setTitle(trimDoubleQuotes(title));
+                                }
+                                
+                                //System.out.println(article.getURI());
+                                System.out.println("NEW CHAPTER"+chap_count);
+                                legald.getChapters().add(chapter);
+                                chap_count ++;
+                                art_count =-1;
+                                count2 = -1;
+                                count3 = -1;
+                                count4 = -1;
+                                mod = 0;
+                                int mod_count = 3;
+                               
+                            
+                            }
+                            else if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Article")) {
+                                
+                                article = new Article();
+                                article.setURI(bindingSet.getValue("part").toString());
+                                if(mod==1&&article.getURI().contains("modification")){
+                                    article.setId(Integer.parseInt(article.getURI().split("article\\/")[2].replaceAll("[Á-Ù]+","")));
+                                }
+                                else{
+                                    article.setId(art_count2+1);
+                                }
+                                if (bindingSet.getValue("title")!=null) {
+                                    String title = bindingSet.getValue("title").toString().replace("@el", "");
+                                    title = title.replace("^^", "");
                                     article.setTitle(trimDoubleQuotes(title));
                                 }
                                 
                                 //System.out.println(article.getURI());
                                 //System.out.println("NEW ARTICLE");
-                                legald.getArticles().add(article);
-                                count ++;
-                                count2 = -1;
-                                count3 = -1;
-                                count4 = -1;
-                                mod = 0;
+                                if((mod==0)||(mod==2)||(mod==3)){
+                                    System.out.println("NEW ARTICLE"+art_count);
+                                    if(legald.getChapters().isEmpty()){
+                                        legald.getArticles().add(article);
+                                    }
+                                    else{
+                                        legald.getChapters().get(chap_count).getArticles().add(article);
+                                    }
+                                    art_count ++;
+                                    art_count2 ++;
+                                    count2 = -1;
+                                    count3 = -1;
+                                    count4 = -1;
+                                    mod = 0;
+                                }
+                                else{
+                                    System.out.println("MODIFICATION ARTICLE");
+                                    mod = 3;
+                                    if(legald.getChapters().isEmpty()){
+                                        if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Article");
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                        }
+                                        else{
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Article");
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                        }
+                                    }
+                                    else{
+                                        if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Article");
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Article");
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                        }
+                                    }
+                                    mod_count3 = -1;
+                                    mod_count4 = -1;
+                                }
+                               
+                                
                             
                             }
                             else if (bindingSet.getValue("type").toString().equals("http://legislation.di.uoa.gr/ontology/Paragraph")) {
                                 
                                 paragraph = new Paragraph();
-                                paragraph.setId(count2+2);
+                                
                                 paragraph.setURI(bindingSet.getValue("part").toString());
                                 //System.out.println(paragraph.getURI());
                                 
                                 if ((mod==0)||(mod==2)) {
-                                    //System.out.println("NEW PARAGRAPH");
-                                    legald.getArticles().get(count).getParagraphs().add(paragraph);
+                                    paragraph.setId(count2+2);
+                                    System.out.println("NEW PARAGRAPH"+count2);
+                                    if(legald.getChapters().isEmpty()){
+                                         legald.getArticles().get(art_count).getParagraphs().add(paragraph);
+                                    }
+                                    else{
+                                        legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().add(paragraph);
+                                    }
+                                    //legald.getArticles().get(art_count).getParagraphs().add(paragraph);
                                     count2++;
                                     count3 = -1;
                                     count4 = -1;
                                     mod = 0;
                                 }
-                                else {
-                                    //System.out.println("MODIFICATION PARAGRAPH");
+                                else if(mod==1){
+                                   paragraph.setId(count2+2);
+                                    System.out.println("MODIFICATION PARAGRAPH");
                                     mod = 2;
-                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Paragraph");
-                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                    if(legald.getChapters().isEmpty()){
+                                        if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Paragraph");
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                        }
+                                        else{
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Paragraph");
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                        }
+                                    }
+                                    else{
+                                        if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Paragraph");
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Paragraph");
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                        }
+                                    }
+                                    mod_count3 = -1;
+                                    mod_count4 = -1;
+                                }
+                                else if ((mod==3)&&(paragraph.getURI().contains("modification"))){
+                                    paragraph.setId(count2+2);
+                                    System.out.println("MODIFICATION ARTICLE PARAGRAPH"+count2);
+                                    article.getParagraphs().add(paragraph);
+                                    if(legald.getChapters().isEmpty()){
+                                        if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                        }
+                                        else{
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                        }
+                                    }
+                                    else{
+                                        if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                        }
+                                    }
+                                    mod_count3 = -1;
+                                    mod_count4 = -1;
+                                }
+                                else if ((mod==3)&&(!paragraph.getURI().contains("modification"))){
+                                    paragraph.setId(count2+2);
+                                    System.out.println("NEW PARAGRAPH"+count2);
+                                    if(legald.getChapters().isEmpty()){
+                                         legald.getArticles().get(art_count).getParagraphs().add(paragraph);
+                                    }
+                                    else{
+                                        legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().add(paragraph);
+                                    }
+                                    count2++;
+                                    count3 = -1;
+                                    count4 = -1;
+                                    mod = 0;
                                 }
                                 
                             }
@@ -525,7 +662,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 if (!old.equals(bindingSet.getValue("part").toString())) {
                                     
                                     Passage passage = new Passage();
-                                    passage.setId(count3+2);
+                                    
                                     passage.setURI(bindingSet.getValue("part").toString());
                                     
                                     if (bindingSet.getValue("text").toString().contains("@html")) {
@@ -539,23 +676,101 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                     
                                     //System.out.println(passage.getURI());
 
-                                    if ((mod==0)|| (!passage.getURI().contains("modification"))) {
-                                        //System.out.println("NEW PASSAGE");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getPassages().add(passage);
+                                    if ((mod==0)||(!passage.getURI().contains("modification"))) {
+                                        passage.setId(count3+2);
+                                        System.out.println("NEW PASSAGE"+count3);
+                                        if(legald.getChapters().isEmpty()){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().add(passage);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().add(passage);
+                                        }
+                                        count3 ++;
                                     }
                                     else if (mod==1) {
-                                        //System.out.println("MODIFICATION PASSAGE");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Passage");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(passage);
+                                        passage.setId(mod_count3+2);
+                                        System.out.println("MODIFICATION PASSAGE");
+                                        if(legald.getChapters().isEmpty()){
+                                            if(passage.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Passage");
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(passage);
+                                            }
+                                            else{
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Passage");
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(passage);
+                                            }
+                                        }
+                                        else{
+                                            if(passage.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Passage");
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(passage);
+                                            }
+                                            else{
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Passage");
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(passage);
+                                            }
+                                        }
                                         mod =0;
+                                        mod_count3 ++;
                                     }
-                                    else {
-                                        //System.out.println("PARAGRAPH MODIFICATION PASSAGE");
+                                    else if (mod==2){
+                                        passage.setId(mod_count3+2);
+                                        System.out.println("PARAGRAPH MODIFICATION PASSAGE");
                                         paragraph.getPassages().add(passage);
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                        if(legald.getChapters().isEmpty()){
+                                            if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                            }
+                                            else{
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                            }
+                                        }
+                                        else{
+                                            if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                            }
+                                            else{
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                            }
+                                        }
+                                        mod_count3 ++;
+                                    }
+                                    else if ((mod==3)&&(passage.getURI().contains("modification"))){
+                                        passage.setId(mod_count3+2);
+                                        System.out.println("ARTICLE PARAGRAPH MODIFICATION PASSAGE");
+                                        article.getParagraphs().get(article.getParagraphs().size()-1).getPassages().add(passage);
+                                        if(legald.getChapters().isEmpty()){
+                                            if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                            }
+                                            else{
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                            }
+                                        }
+                                        else{
+                                            if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                            }
+                                            else{
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                            }
+                                        }
+                                        mod_count3 ++;
+                                    }
+                                    else if ((mod==3)&&(!passage.getURI().contains("modification"))){
+                                        passage.setId(count3+2);
+                                        System.out.println("NEW PASSAGE"+count3);
+                                        if(legald.getChapters().isEmpty()){
+                                            legald.getArticles().get(art_count).getParagraphs().get(legald.getArticles().get(art_count).getParagraphs().size()-1).getPassages().add(passage);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get( legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().size()-1).getPassages().add(passage);
+                                        }
+                                        mod=0;
+                                        count3 ++;
                                     }
 
-                                    count3 ++;
+                                    
                                     old = bindingSet.getValue("part").toString();
                                 
                                 }
@@ -568,12 +783,52 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 
                                 if ((mod==0)|| (!table.contains("modification"))) {
                                     //System.out.println("NEW TABLE");
-                                    legald.getArticles().get(count).getParagraphs().get(count2).setTable(trimDoubleQuotes(table));
+                                    if(legald.getChapters().isEmpty()){
+                                        legald.getArticles().get(art_count).getParagraphs().get(count2).setTable(trimDoubleQuotes(table));
+                                    }
+                                    else{
+                                        legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).setTable(trimDoubleQuotes(table));
+                                    }
+                                    //legald.getArticles().get(art_count).getParagraphs().get(count2).setTable(trimDoubleQuotes(table));
                                 }
-                                else {
+                                else if ((mod==1)||(mod==2)){
                                     //System.out.println("MODIFICATION TABLE");
                                     paragraph.setTable(trimDoubleQuotes(table));
-                                    legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                    if(legald.getChapters().isEmpty()){
+                                        if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                        }
+                                        else{
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                        }
+                                    }
+                                    else{
+                                        if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                        }
+                                    }
+                                }
+                                else{
+                                    article.getParagraphs().get(article.getParagraphs().size()-1).setTable(trimDoubleQuotes(table));
+                                    if(legald.getChapters().isEmpty()){
+                                        if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                        }
+                                        else{
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                        }
+                                    }
+                                    else{
+                                        if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                        }
+                                    }
                                 }
                                 
                             }
@@ -582,7 +837,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 if (!old.equals(bindingSet.getValue("part").toString())) {
                                     
                                     Case case1 = new Case();
-                                    case1.setId(count4+2);
+                                    
                                     case1.setURI(bindingSet.getValue("part").toString());
                                     Passage passage = new Passage();
                                     
@@ -602,26 +857,97 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                     //case1.setText(bindingSet.getValue("text").toString());
 
                                     if (cases.length > 2) {
-                                        //System.out.println("NEW CASE");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getCaseList().get(count4).getCaseList().add(case1);
+                                        case1.setId(count4+2);
+                                        System.out.println("NEW CASE"+count4);
+                                        if(legald.getChapters().isEmpty()){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getCaseList().add(case1);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getCaseList().add(case1);
+                                        }
                                     }
                                     else if (mod==0) {
-                                        //System.out.println("NEW CASE");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getCaseList().add(case1);
+                                        case1.setId(count4+2);
+                                        System.out.println("NEW CASE"+count4);
+                                        if(legald.getChapters().isEmpty()){
+                                            legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().add(case1);
+                                        }
+                                        else{
+                                            legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().add(case1);
+                                        }
                                         count4 ++;
                                     }
                                     else if (mod==1) {
-                                        //System.out.println("MODIFICATION CASE");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getModification().setType("Case");
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(case1);
+                                        case1.setId(mod_count4+2);
+                                        System.out.println("MODIFICATION CASE");
+                                        if(legald.getChapters().isEmpty()){
+                                            if(case1.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Case");
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(case1);
+                                            }
+                                            else{
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Case");
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(case1);
+                                            }
+                                        }
+                                        else{
+                                            if(case1.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setType("Case");
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(case1);
+                                            }
+                                            else{
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setType("Case");
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(case1);
+                                            }
+                                        }
                                         mod=0;
-                                        count4 ++;
+                                        mod_count4 ++;
                                     }
-                                    else {
-                                        //System.out.println("PARAGPAPH MODIFICATION CASE");
+                                    else if (mod==2) {
+                                        case1.setId(mod_count4+2);
+                                        System.out.println("PARAGPAPH MODIFICATION CASE");
                                         paragraph.getCaseList().add(case1);
-                                        legald.getArticles().get(count).getParagraphs().get(count2).getModification().setFragment(paragraph);
-                                        count4 ++;
+                                        if(legald.getChapters().isEmpty()){
+                                            if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                            }
+                                            else{
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                            }
+                                        }
+                                        else{
+                                            if(paragraph.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(paragraph);
+                                            }
+                                            else{
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(paragraph);
+                                            }
+                                        }
+                                        //legald.getArticles().get(art_count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                        mod_count4 ++;
+                                    }
+                                    else{
+                                        case1.setId(mod_count4+2);
+                                        System.out.println("ARTICLE PARAGPAPH MODIFICATION CASE");
+                                        article.getParagraphs().get(article.getParagraphs().size()-1).getCaseList().add(case1);
+                                        if(legald.getChapters().isEmpty()){
+                                            if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                            }
+                                            else{
+                                                legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                            }
+                                        }
+                                        else{
+                                            if(article.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).getModification().setFragment(article);
+                                            }
+                                            else{
+                                                legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).getModification().setFragment(article);
+                                            }
+                                        }
+                                        //legald.getArticles().get(art_count).getParagraphs().get(count2).getModification().setFragment(paragraph);
+                                        mod_count4 ++;
                                     }
                                     
                                 }
@@ -632,11 +958,27 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 Modification modification = new Modification();
                                 modification.setURI(bindingSet.getValue("part").toString());
                                 //System.out.println(modification.getURI());
-                                //System.out.println("MODIFICATION");
+                                System.out.println("MODIFICATION");
                                 modification.setType(bindingSet.getValue("type").toString());
-                                legald.getArticles().get(count).getParagraphs().get(count2).setModification(modification);
+                                if(legald.getChapters().isEmpty()){
+                                    if(modification.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                        legald.getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).setModification(modification);
+                                    }
+                                    else{
+                                        legald.getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).setModification(modification);
+                                    }
+                                }
+                                else{
+                                    if(modification.getURI().split("\\/[0-9]+\\/modification")[0].endsWith("passage")){
+                                        legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getPassages().get(count3).setModification(modification);
+                                    }
+                                    else{
+                                        legald.getChapters().get(chap_count).getArticles().get(art_count).getParagraphs().get(count2).getCaseList().get(count4).setModification(modification);
+                                    }
+                                }
                                 mod = 1;
-                            
+                                mod_count3 = -1;
+                                mod_count4 = -1;
                             }
 
                     }
@@ -1850,6 +2192,97 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         }
         
         return legalviewed;
+
+    }
+    
+    @Override
+    public String getLegislationTypeByYear() {
+        
+        List<LegalDocument> legalviewed = new ArrayList<LegalDocument>();
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+        
+        try {
+            
+            RepositoryConnection con = repo.getConnection();
+            
+            try {
+                
+                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+                "\n" +
+                "SELECT ?uri ?date ?type\n" +
+                "WHERE{\n" +
+                "?uri dc:title ?title.\n" +
+                "?uri dc:created ?date.\n" +
+                "?uri rdf:type ?type.\n" +
+                "FILTER(langMatches(lang(?title), \"el\"))\n" +
+                "}\n" +
+                "ORDER BY DESC(?views)\n" +
+                "LIMIT 10";
+                  
+                //System.out.println(queryString);
+                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                result = tupleQuery.evaluate();
+
+                try {
+                    
+                    // iterate the result set
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+                        // TO DO
+                    }
+                    
+                }
+                finally {
+                    result.close();
+                }
+                 
+            }
+            finally {
+                con.close();
+            }
+            
+        }
+        catch (OpenRDFException e) {
+            // handle exception
+        }
+        
+        return "";
 
     }
     

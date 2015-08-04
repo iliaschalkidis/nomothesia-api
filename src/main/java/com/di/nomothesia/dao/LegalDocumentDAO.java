@@ -20,5 +20,6 @@ public interface LegalDocumentDAO {
     public List<String> getTags();
     public List<LegalDocument> getViewed();
     public List<LegalDocument> getRecent();
+    public String getLegislationTypeByYear();
     
 }

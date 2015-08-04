@@ -373,12 +373,17 @@
             $('#example').dataTable({
             aaSorting: [[ 2, "desc" ]],
                     bSortable: true,
-                    "iDisplayLength": 5,
+                    "iDisplayLength": 10,
                     aoColumnDefs: [
                     { "aTargets": [ 0 ], "bSortable": true },
                     { "aTargets": [ 1 ], "bSortable": true },
                     { "aTargets": [ 2 ], "bSortable": true }
                     ],
+                    "columns": [
+                    { "width": "70%" },
+                    { "width": "20%" },
+                    { "width": "10%" }
+                   ],
             <c:set var="localeCode2" value="${pageContext.response.locale}" />
             <c:choose>
                 <c:when test="${localeCode2 == 'en' }">

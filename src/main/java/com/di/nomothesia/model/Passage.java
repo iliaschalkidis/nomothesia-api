@@ -8,7 +8,8 @@ public class Passage implements Fragment {
     private int id;
     private int status;
     private String type;
-    
+    private Modification modification;
+
     public Passage() {
 
     }
@@ -47,6 +48,14 @@ public class Passage implements Fragment {
     
     public void setId(int id) {
         this.id = id;
+    }
+    
+    public Modification getModification() {
+        return modification;
+    }
+
+    public void setModification(Modification modification) {
+        this.modification = modification;
     }
 
     @Override

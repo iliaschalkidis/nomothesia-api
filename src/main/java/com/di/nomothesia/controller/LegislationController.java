@@ -46,8 +46,13 @@ public class LegislationController {
             model.addAttribute("legalmods", legalmods);
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
-
-            return "basiclegislation";
+            
+            if(legaldoc.getChapters().isEmpty()){
+                return "basiclegislation";
+            }
+            else{
+                return "basiclegislation2";
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id}", method = RequestMethod.GET)
@@ -62,8 +67,13 @@ public class LegislationController {
             model.addAttribute("legaldoc", legaldoc);
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
-
-            return "basiclegislation";
+            System.out.println("IM ON BOARD!");
+            if(legaldoc.getChapters().isEmpty()){
+                return "basiclegislation";
+            }
+            else{
+                return "basiclegislation2";
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{type1}/{id1}/{type2}/{id2}", method = RequestMethod.GET)
@@ -79,7 +89,12 @@ public class LegislationController {
             model.addAttribute("id", type1 + "-" + id1 + "-" +type2 + "-" + id2);
             model.addAttribute("locale",locale);
             
-            return "basiclegislation";
+            if(legaldoc.getChapters().isEmpty()){
+                return "basiclegislation";
+            }
+            else{
+                return "basiclegislation2";
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{type1}/{id1}", method = RequestMethod.GET)
@@ -95,7 +110,12 @@ public class LegislationController {
             model.addAttribute("id", type1 + "-" + id1);
             model.addAttribute("locale",locale);
             
-            return "basiclegislation";
+            if(legaldoc.getChapters().isEmpty()){
+                return "basiclegislation";
+            }
+            else{
+                return "basiclegislation2";
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}", method = RequestMethod.GET)
@@ -116,7 +136,12 @@ public class LegislationController {
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
 
-            return "basiclegislation";
+            if(legaldoc.getChapters().isEmpty()){
+                return "basiclegislation";
+            }
+            else{
+                return "basiclegislation2";
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/{yyyy:\\d+}-{mm:\\d+}-{dd:\\d+}/data.xml", method = RequestMethod.GET, produces={"application/xml"})

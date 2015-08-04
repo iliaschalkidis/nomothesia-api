@@ -1,3 +1,4 @@
+<%@page import="com.di.nomothesia.model.Chapter"%>
 <%@page import="com.di.nomothesia.model.Article"%>
 <%@page import="com.di.nomothesia.model.Paragraph"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -7,6 +8,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ', ',')}" scope="application" />
+<c:set var="chap_nums" value="${fn:split('Α,Β,Γ,Δ,Ε,Ζ,Η,Θ,Ι,ΙΑ,ΙΒ,ΙΓ,ΙΔ,ΙΕ,ΙΣΤ,ΙΖ,ΙΗ,ΙΘ', ',')}" scope="application" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -286,8 +288,17 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="home">
+                            <c:set var="chapcount" value="0"/>
+                            <c:forEach var="chapter" items="${legaldoc.getChapters()}" varStatus="loop">
+                                <c:set var="chapcount" value="${chapcount+1}"/>
+                                <div id="chapter-${chapter.getId()}">
+                                    <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.chapter"/> ${chap_nums[chapter.getId()-1]}</h4></span>
+                                    <c:if test="${not empty chapter.getTitle()}">
+                                        <span style="text-align: center; font-size: 12px;"><h4>${chapter.getTitle()}</h4></span>
+                                            </c:if>
+                                    <br/>
                             <c:set var="artcount" value="0"/>
-                            <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
+                            <c:forEach var="article" items="${chapter.getArticles()}" varStatus="loop">
                                 <c:set var="artcount" value="${artcount+1}"/>
                                 <div id="article-${article.getId()}">
                                     <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.article"/> ${article.getId()}</h4></span>
@@ -518,6 +529,8 @@
                                 </div>
                                 <br/>
                             </c:forEach>
+                            </div>
+                        </c:forEach>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">
                         <div class="table-responsive">
@@ -540,26 +553,38 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="messages">
                             <ul id="messagescol">
-                                <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
-                                    <% Article a = (Article) pageContext.getAttribute("article");
+                                <c:forEach var="chapter" items="${legaldoc.getChapters()}" varStatus="loop">
+                                    <% Chapter c = (Chapter) pageContext.getAttribute("chapter");
 
-                                        //String[] URIsr = a.getURI().toString().split("uoa.gr/");
-                                        //pageContext.setAttribute("urir", URIsr[1]);
+                                            //String[] URIsr = a.getURI().toString().split("uoa.gr/");
+                                            //pageContext.setAttribute("urir", URIsr[1]);
 
-                                    %>
-                                    <li ><a href="<c:url value="${legaldoc.getId()}/article/${article.getId()}"/>" target="_blank"> <spring:message code="basic.article"/> ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
-                                            <ul>
-                                            <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
-                                                <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
+                                        %>
+                                        <li ><a href="<c:url value="${legaldoc.getId()}/chapter/${chapter.getId()}"/>" target="_blank"> <spring:message code="basic.chapter"/> ${chapter.getId()} <c:if test="${not empty chapter.getTitle()}"> «${chapter.getTitle()}»</c:if></a>
+                                                <ul>
+                                    <c:forEach var="article" items="${chapter.getArticles()}" varStatus="loop">
+                                        <% Article a = (Article) pageContext.getAttribute("article");
 
-                                                    String[] URIs1 = p.getURI().toString().split("/article/");
-                                                    pageContext.setAttribute("uri1", URIs1[1]);
+                                            //String[] URIsr = a.getURI().toString().split("uoa.gr/");
+                                            //pageContext.setAttribute("urir", URIsr[1]);
 
-                                                %>
-                                                <li><a href="<c:url value="${legaldoc.getId()}/article/${uri1}"/>" target="_blank"><spring:message code="basic.par"/> ${paragraph.getId()}</a></li>
-                                                </c:forEach>
-                                            </ul>
-                                    </li>
+                                        %>
+                                        <li ><a href="<c:url value="${legaldoc.getId()}/chapter/${chapter.getId()}/article/${article.getId()}"/>" target="_blank"> <spring:message code="basic.article"/> ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
+                                                <ul>
+                                                <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
+                                                    <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
+
+                                                        String[] URIs1 = p.getURI().toString().split("/article/");
+                                                        pageContext.setAttribute("uri1", URIs1[1]);
+
+                                                    %>
+                                                    <li><a href="<c:url value="${legaldoc.getId()}/chapter/${chapter.getId()}/article/${uri1}"/>" target="_blank"><spring:message code="basic.par"/> ${paragraph.getId()}</a></li>
+                                                    </c:forEach>
+                                                </ul>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                                        </li>
                                 </c:forEach>
                             </ul>
                         </div>
