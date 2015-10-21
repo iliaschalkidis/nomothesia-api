@@ -1,11 +1,13 @@
 package com.di.nomothesia.controller;
 
+import com.di.nomothesia.model.GovernmentGazette;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.service.LegislationService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -43,6 +45,17 @@ public class HomeController {
 		return "home";
                 
 	}
+        
+        @RequestMapping(value = "/gazette", method = RequestMethod.GET)
+	public String gazette(Model model, Locale locale) {
+                LegislationService lds = new LegislationService();
+		List<GovernmentGazette> gazs = lds.getFEKStatistics();
+                model.addAttribute("gazs",gazs);
+                model.addAttribute("locale",locale);
+                
+		return "gazette";
+                
+	}
 	
         @RequestMapping(value = "/aboutus", method = RequestMethod.GET)
 	public String aboutus(Locale locale, Model model) {
@@ -62,7 +75,9 @@ public class HomeController {
         
         @RequestMapping(value = "/statistics", method = RequestMethod.GET)
 	public String stats(Locale locale, Model model) {	
-	
+            LegislationService lds = new LegislationService();
+            List<ArrayList<String>> lists = lds.getStats();
+            model.addAttribute("lists",lists);
             model.addAttribute("locale",locale);
             return "stats";
                 
@@ -172,13 +187,13 @@ public class HomeController {
 
         }
         
-        @ExceptionHandler(Exception.class)
-	public String handleAllException(Exception ex) {
- 
-            //ModelAndView model = new ModelAndView("error/exception_error");
-            //model.addAttribute("locale",locale);
-            return "error";
- 
-	}
+//        @ExceptionHandler(Exception.class)
+//	public String handleAllException(Exception ex) {
+// 
+//            //ModelAndView model = new ModelAndView("error/exception_error");
+//            //model.addAttribute("locale",locale);
+//            return "error";
+// 
+//	}
             
 }

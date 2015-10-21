@@ -4,6 +4,8 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<c:set var="years" value="${fn:split('2006,2007,2008,2009,2010,2011,2012,2013,2014,2015', ',')}" scope="application" />
+<c:set var="types" value="${fn:split('ΣΥΝΟΛΟ,ΠΔ,Ν.,ΠΥΣ,ΥΑ,ΚΔ,ΠΝΠ', ',')}" scope="application" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,8 +37,6 @@
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>  
     
     <c:set var="localeCode2" value="${pageContext.response.locale}"/>
-    <c:choose>
-        <c:when test="${localeCode2 == 'en' }"> 
             <script type="text/javascript">
 
                 window.onload = function () {
@@ -46,35 +46,51 @@
                         },
 
                         data: [  //array of dataSeries     
+                        <c:set var="typecount" value="0"/>
+                        <c:forEach var="list" items="${lists}" varStatus="loop">
                             { //dataSeries - first quarter
                                 /*** Change type "column" to "bar", "area", "line" or "pie"***/        
                                 type: "column",
-                                name: "PD",
+                                name: "${types[typecount]}",
                                 showInLegend: true,
                                 dataPoints: [
-                                { label: "2008", y: 200 },
-                                { label: "2009", y: 194 },
-                                { label: "2010", y: 152 },
-                                { label: "2011", y: 138 },
-                                { label: "2012", y: 136 },                                    
-                                { label: "2013", y: 177 },
-                                { label: "2014", y: 178 }
+                                <c:set var="yearcount" value="0"/>
+                                <c:forEach var="num" items="${list}" varStatus="loop">
+                                    { label: "${years[yearcount]}", y: ${num} },
+                                    <c:set var="yearcount" value="${yearcount+1}"/>
+                                </c:forEach>
                                 ]
                             },
+                            <c:set var="typecount" value="${typecount+1}"/>
+                        </c:forEach>
+                        ],
+                        /** Set axisY properties here*/
+                        axisY:{
+                            prefix: "",
+                            suffix: ""
+                        }       
+                    });
 
-                            { //dataSeries - second quarter
-                                color: "#B0D0B0",
+                    chart.render();
+                
+                    var chart2 = new CanvasJS.Chart("chartContainer2", {            
+                        title:{
+                            text: ""              
+                        },
+
+                        data: [  //array of dataSeries     
+                            { //dataSeries - first quarter
+                                /*** Change type "column" to "bar", "area", "line" or "pie"***/        
                                 type: "column",
-                                name: "Law", 
-                                showInLegend: true,               
+                                color: "#007bb6",
+                                name: "ΠΝΠ",
+                                showInLegend: true,
                                 dataPoints: [
-                                    { label: "2008", y: 3732 },
-                                    { label: "2009", y: 3813 },
-                                    { label: "2010", y: 3906 },
-                                    { label: "2011", y: 4035 },
-                                    { label: "2012", y: 4102 },                                    
-                                    { label: "2013", y: 4224 },
-                                    { label: "2014", y: 4319 }
+                                <c:set var="yearcount" value="0"/>
+                                <c:forEach var="num" items="${lists.get(5)}" varStatus="loop">
+                                    { label: "${years[yearcount]}", y: ${num} },
+                                    <c:set var="yearcount" value="${yearcount+1}"/>
+                                </c:forEach>
                                 ]
                             }
                         ],
@@ -85,135 +101,10 @@
                         }       
                     });
 
-                    chart.render();
-
-                    var chart2 = new CanvasJS.Chart("chartContainer2",
-                    {
-                        title:{
-                            text: ""              
-                        },
-                        legend:{
-                            verticalAlign: "bottom",
-                            horizontalAlign: "center"
-                        },
-                        data: [
-                            {
-                                //startAngle: 45,
-                                //indexLabelFontSize: 20,
-                                //indexLabelFontFamily: "Garamond",
-                                //indexLabelFontColor: "darkgrey",
-                                //indexLabelLineColor: "darkgrey",
-                                //indexLabelPlacement: "outside",
-                                type: "doughnut",
-                                showInLegend: true,
-                                dataPoints: [
-                                    {  y: 42.37, legendText:"MINFIN 2123"},
-                                    {  y: 21.0, legendText:"MINIAR 1232"},
-                                    {  y: 12, legendText:"MINEECC 567"},
-                                    {  y: 8.2, legendText:"FRS 452"},
-                                    {  y: 7.3, legendText:"MINAREG 389"},
-                                    {  y: 4.2, legendText:"MINCER 178"},
-                                    {  y: 2.1, legendText:"MFA 83"},
-                                    {  y: 1.0, legendText:"ETC 1%"}
-                                ]
-                            }
-                        ]
-                    });
-
                     chart2.render();
-                }
+                }  
             </script>
-        </c:when>
-        <c:when test="${localeCode2 == 'el_GR' }">
-            <script type="text/javascript">
-
-                window.onload = function () {
-                    var chart = new CanvasJS.Chart("chartContainer", {            
-                        title:{
-                            text: ""              
-                        },
-
-                        data: [  //array of dataSeries     
-                            { //dataSeries - first quarter
-                                /*** Change type "column" to "bar", "area", "line" or "pie"***/        
-                                type: "column",
-                                name: "ΠΔ",
-                                showInLegend: true,
-                                dataPoints: [
-                                { label: "2008", y: 200 },
-                                { label: "2009", y: 194 },
-                                { label: "2010", y: 152 },
-                                { label: "2011", y: 138 },
-                                { label: "2012", y: 136 },                                    
-                                { label: "2013", y: 177 },
-                                { label: "2014", y: 178 }
-                                ]
-                            },
-
-                            { //dataSeries - second quarter
-                                color: "#B0D0B0",
-                                type: "column",
-                                name: "Νόμος", 
-                                showInLegend: true,               
-                                dataPoints: [
-                                    { label: "2008", y: 3732 },
-                                    { label: "2009", y: 3813 },
-                                    { label: "2010", y: 3906 },
-                                    { label: "2011", y: 4035 },
-                                    { label: "2012", y: 4102 },                                    
-                                    { label: "2013", y: 4224 },
-                                    { label: "2014", y: 4319 }
-                                ]
-                            }
-                        ],
-                        /** Set axisY properties here*/
-                        axisY:{
-                            prefix: "",
-                            suffix: ""
-                        }       
-                    });
-
-                    chart.render();
-
-                    var chart2 = new CanvasJS.Chart("chartContainer2",
-                    {
-                        title:{
-                            text: ""              
-                        },
-                        legend:{
-                            verticalAlign: "bottom",
-                            horizontalAlign: "center"
-                        },
-                        data: [
-                            {
-                                //startAngle: 45,
-                                //indexLabelFontSize: 20,
-                                //indexLabelFontFamily: "Garamond",
-                                //indexLabelFontColor: "darkgrey",
-                                //indexLabelLineColor: "darkgrey",
-                                //indexLabelPlacement: "outside",
-                                type: "doughnut",
-                                showInLegend: true,
-                                dataPoints: [
-                                    {  y: 42.37, legendText:"ΥΠΟΙΚ 2123"},
-                                    {  y: 21.0, legendText:"ΥΠΕΣ 1232"},
-                                    {  y: 12, legendText:"ΥΠΕΧΩΔΕ 567"},
-                                    {  y: 8.2, legendText:"ΥΠΥ 452"},
-                                    {  y: 7.3, legendText:"ΥΠΔΜΕ 389"},
-                                    {  y: 4.2, legendText:"ΥΠΠΟΛ 178"},
-                                    {  y: 2.1, legendText:"ΥΠΕΞ 83"},
-                                    {  y: 1.0, legendText:"ΛΟΙΠΑ 1%"}
-                                ]
-                            }
-                        ]
-                    });
-
-                    chart2.render();
-                }
-            </script>
-        </c:when>
-    </c:choose>
-    
+            
     <script type="text/javascript" src="/resources/js/canvasjs.min.js"></script>
   
   <style>
@@ -261,6 +152,9 @@
                         <li>
                             <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
+                        <li>
+                            <a href="/gazette" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.gazette"/></a>
+                        </li>
                     </ul>
                     
                     <ul class="nav navbar-nav navbar-right">
@@ -285,17 +179,74 @@
     <!-- Stats -->
     <div class="container">
         <div class="row" style="min-height: 505px;">
-            <div class="col-md-6">
+            <div >
             <div class="row" style="padding:10px;">
-                <div id="chartContainer" style="height: 300px; width: 400px;"></div>
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 25px;"><spring:message code="stats.header"/></div>        
+            </div>
+            <div class="row" style="padding:10px;">
+                <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 20px;">Ένταση νομοθετικού έργου κατ'έτος<br/></div>       
+                <div id="chartContainer"></div>
             </div>
             </div>
-            <div class="col-md-6">
-           <div class="row" style="padding:10px;">
-               <div id="chartContainer2" style="height: 300px; width: 300px;"></div>
-            </div>  
-                    
+        </div>
+        <div class="row">
+            <div>
+              <div class="row" style="border-radius:5px; width: 100%">
+           <div class="col-md-4" style="height: 20px; width: 40%; background-color: #005983"> 
+              <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;">ΝΔ</div>
+           </div>
+           <div class="col-md-4" style="height: 20px; width: 20%; background-color: green;"> 
+              <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;">ΠΑΣΟΚ</div>
+           </div>
+            <div class="col-md-4" style="height: 20px; width: 10%; background-color: #1ab7ea">
+                <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;"> ΟΙΚ. (ΠΑΣΟΚ,ΝΔ,ΛΑΟΣ)</div>
             </div>
+          <div  class="col-md-4" style="height:20px; width: 20%; background-color: #005983"> 
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;"">ΝΔ</div>
+          </div>
+          <div  class="col-md-4" style="height:20px; width: 10%; background-color: #f7931e"> 
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;"">ΣΥΡΙΖΑ</div>
+          </div>
+                  <br/>
+                  <br/>
+                  <br/>
+          </div>
+          </div>
+        </div>
+        <div class="row" style="min-height: 505px;">
+            <div >
+            <div class="row" style="padding:10px;">
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 20px;">Έκδοση ΠΝΠ (Πράξεων Νομοθετικού Περιεχομένου)* κατ'έτος<br/></div>
+            <div id="chartContainer2"></div>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+              <div class="row" style="border-radius:5px; width: 100%">
+           <div class="col-md-4" style="height: 20px; width: 40%; background-color: #005983"> 
+              <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;">ΝΔ</div>
+           </div>
+           <div class="col-md-4" style="height: 20px; width: 20%; background-color: green;"> 
+              <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;">ΠΑΣΟΚ</div>
+           </div>
+            <div class="col-md-4" style="height: 20px; width: 10%; background-color: #1ab7ea">
+                <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;"> ΟΙΚ. (ΠΑΣΟΚ,ΝΔ,ΛΑΟΣ)</div>
+            </div>
+          <div  class="col-md-4" style="height:20px; width: 20%; background-color: #005983"> 
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;"">ΝΔ</div>
+          </div>
+          <div  class="col-md-4" style="height:20px; width: 10%; background-color: #f7931e"> 
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 15px; color: white;"">ΣΥΡΙΖΑ</div>
+          </div>
+          <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;">*Οι ΠΝΠ (Πράξεις Νομοθετικού Περιεχομένου) δεν χρειάζονται άμεση έγκριση μέσω ψηφοφορίας από την Βουλή των Ελλήνων.</div>
+
+          </div>
+          </div>
         </div>
         
     </div>

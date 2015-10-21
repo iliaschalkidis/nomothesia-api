@@ -1,11 +1,14 @@
 package com.di.nomothesia.service;
 
 import com.di.nomothesia.controller.XMLBuilder;
+import com.di.nomothesia.controller.XMLBuilder2;
 import com.di.nomothesia.dao.LegalDocumentDAO;
 import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.Fragment;
+import com.di.nomothesia.model.GovernmentGazette;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.xml.transform.TransformerException;
@@ -223,8 +226,14 @@ public class LegislationService {
         legald.applyModifications(mods);
         
         // Build XML
-        XMLBuilder xmlbuild = new XMLBuilder();
-        return  xmlbuild.XMLbuilder(legald);
+        if(!legald.getChapters().isEmpty()){
+            XMLBuilder2 xmlbuild = new XMLBuilder2();
+            return  xmlbuild.XMLbuilder2(legald);
+        }
+        else{
+            XMLBuilder xmlbuild = new XMLBuilder();
+            return  xmlbuild.XMLbuilder(legald);        
+        }
     }
     
     public String getUpdatedXMLByIdDate(String type, String year, String id, int request, String date) throws TransformerException {
@@ -250,8 +259,36 @@ public class LegislationService {
         legald.applyModifications(mods);
         
         // Build XML
-        XMLBuilder xmlbuild = new XMLBuilder();
-        return  xmlbuild.XMLbuilder(legald);
+        if(!legald.getChapters().isEmpty()){
+            XMLBuilder2 xmlbuild = new XMLBuilder2();
+            return  xmlbuild.XMLbuilder2(legald);
+        }
+        else{
+            XMLBuilder xmlbuild = new XMLBuilder();
+            return  xmlbuild.XMLbuilder(legald);        
+        }
+    }
+
+    public List<GovernmentGazette> getFEKStatistics() {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+       
+        //Get gazettes
+        return legalDocumentDAO.getFEKStatistics();
+    }
+
+    public List<ArrayList<String>> getStats() {
+        //Get the Spring Context
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+         
+        //Get the ProductDAO Bean
+        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+       
+        //Get gazettes
+        return legalDocumentDAO.getStatistics();
     }
     
 }

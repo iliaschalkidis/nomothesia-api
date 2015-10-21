@@ -1,3 +1,4 @@
+<%@page import="com.di.nomothesia.model.Chapter"%>
 <%@page import="com.di.nomothesia.model.Article"%>
 <%@page import="com.di.nomothesia.model.Paragraph"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -7,6 +8,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ,κ,κα,κβ,,κγ,κδ,κε,κστ,κζ,κη,κθ,λ,λα,λβ,,λγ,λδ,λε,λστ,λζ,λη,λθ', ',')}" scope="application" />
+<c:set var="chap_nums" value="${fn:split('Α,Β,Γ,Δ,Ε,ΣΤ,Ζ,Η,Θ,Ι,ΙΑ,ΙΒ,ΙΓ,ΙΔ,ΙΕ,ΙΣΤ,ΙΖ,ΙΗ,ΙΘ', ',')}" scope="application" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -47,7 +49,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-        
+
         <script>
             $(function () {
                 $('html, body').animate({scrollTop: $('#${id}').position().top}, 'slow');
@@ -165,7 +167,7 @@
                     </li>
                     <li>
                         <a href="/gazette" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.gazette"/></a>
-                     </li>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -288,12 +290,27 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="home">
-                            <c:if test="${empty legaldoc.getArticles()}">
-                                <br/>
-                                <div class="alert alert-warning" role="alert"><spring:message code="basic.notext"/></div>
-                            </c:if>
+                         <c:set var="partcount" value="0"/>
+                         
+                         <c:forEach var="part" items="${legaldoc.getParts()}" varStatus="loop">
+                             <div id="part-${part.getId()}">
+                            <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.part"/> ${chap_nums[part.getId()-1]}</h4></span>
+                            <c:if test="${not empty part.getTitle()}">
+                                <span style="text-align: center; font-size: 12px;"><h4>${part.getTitle()}</h4></span>
+                                    </c:if>
+                            <br/>
+                            <c:if test="${not empty part.getChapters()}">
+                            <c:set var="chapcount" value="0"/>
+                            <c:forEach var="chapter" items="${part.getChapters()}" varStatus="loop">
+                                <c:set var="chapcount" value="${chapcount+1}"/>
+                                <div id="chapter-${chapter.getId()}">
+                                    <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.chapter"/> ${chap_nums[chapter.getId()-1]}</h4></span>
+                                    <c:if test="${not empty chapter.getTitle()}">
+                                        <span style="text-align: center; font-size: 12px;"><h4>${chapter.getTitle()}</h4></span>
+                                            </c:if>
+                                    <br/>
                             <c:set var="artcount" value="0"/>
-                            <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
+                            <c:forEach var="article" items="${chapter.getArticles()}" varStatus="loop">
                                 <c:set var="artcount" value="${artcount+1}"/>
                                 <div id="article-${article.getId()}">
                                     <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.article"/> ${article.getId()}</h4></span>
@@ -489,13 +506,6 @@
                                                                 <c:set var="casecount" value="${casecount+1}"/>        
                                                             </c:forEach>
                                                         </ol>
-                                                        <c:if test="${not empty paragraph.getImages()}">
-                                                            <c:set var="imagecount" value="0"/>
-                                                            <c:forEach var="image" items="${legaldoc.getImages()}" varStatus="loop">
-                                                                <c:set var="imagecount" value="${imagecount+1}"/>
-                                                                <a href="/resources/images/leg/${legaldoc.getYear()}/${image}" data-lightbox="example-${imagecount}">[${imagecount}]</a>
-                                                            </c:forEach>
-                                                        </c:if>
                                                         <c:if test="${not empty paragraph.getTable()}">
                                                             <br/>${paragraph.getTable()}
                                                         </c:if>
@@ -533,6 +543,247 @@
                                 </div>
                                 <br/>
                             </c:forEach>
+                            </div>
+                        </c:forEach>
+                           </c:if>
+                           <c:if test="${not empty part.getArticles()}">
+                           <c:set var="artcount" value="0"/>
+                           <c:forEach var="article" items="${part.getArticles()}" varStatus="loop">
+                                <c:set var="artcount" value="${artcount+1}"/>
+                                <div id="article-${article.getId()}">
+                                    <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.article"/> ${article.getId()}</h4></span>
+                                    <c:if test="${not empty article.getTitle()}">
+                                        <span style="text-align: center; font-size: 12px;"><h4>${article.getTitle()}</h4></span>
+                                            </c:if>
+                                    <br/>
+                                    <ol>
+                                        <c:set var="parcount" value="0"/>
+                                        <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
+                                            <c:set var="parcount" value="${parcount+1}"/>
+                                                <li${paragraph.getStatus() >= 1?' class="modification2"':"" }><div id="article-${article.getId()}-paragraph-${paragraph.getId()}" style="text-align: justify;">
+                                                        <c:set var="pascount" value="0"/>
+                                                        <c:forEach var="passage" items="${paragraph.getPassages()}" varStatus="loop">
+                                                            <c:set var="pascount" value="${pascount+1}"/>
+                                                            <c:if test="${passage.getStatus() >= 1}"><div class="modification"></c:if>${passage.getText()}
+                                                           <c:if test="${not empty passage.getModification()}">
+                                                                    <div class="mod">
+                                                                    <c:choose>
+                                                                        <c:when test="${passage.getModification().getType() == 'Case'}">
+                                                                            <c:forEach var="passage3" items="${passage.getModification().getFragment().getPassages()}" varStatus="loop">
+                                                                                ${passage3.getText()}
+                                                                            </c:forEach>
+                                                                        </c:when>
+                                                                        <c:when test="${passage.getModification().getType() == 'Passage'}">
+                                                                            ${passage.getModification().getFragment().getText()}
+                                                                        </c:when>
+                                                                        <c:when test="${passage.getModification().getType() == 'Paragraph'}">
+                                                                            ${passage.getModification().getFragment().getId()}. 
+                                                                            <c:forEach var="passage4" items="${passage.getModification().getFragment().getPassages()}" varStatus="loop">
+                                                                                ${passage4.getText()}
+                                                                            </c:forEach>
+                                                                            <c:if test="${passage.getModification().getFragment().getCaseList().size() > 0}">
+                                                                                <ol class="special-list" style="list-style-type: none;">   
+                                                                                    <c:set var="casecount" value="0"/>
+                                                                                    <c:forEach var="case2" items="${passage.getModification().getFragment().getCaseList()}" varStatus="loop">
+                                                                                        <c:forEach var="passage2" items="${case2.getPassages()}" varStatus="loop">
+                                                                                            <li data-number="${ionian_nums[casecount]}">${passage2.getText()}</li>
+                                                                                        </c:forEach>
+                                                                                        <c:set var="casecount" value="${casecount+1}"/>
+                                                                                    </c:forEach>
+                                                                                </ol>
+                                                                            </c:if>
+                                                                        </c:when>
+                                                                        <c:when test="${passage.getModification().getType() == 'Article'}">
+                                                                            <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.article"/> ${passage.getModification().getFragment().getId()}</h4></span>
+                                                                            <ol>
+                                                                            <c:forEach var="paragraph5" items="${passage.getModification().getFragment().getParagraphs()}" varStatus="loop">
+                                                                                <li>
+                                                                                <c:forEach var="passage5" items="${paragraph5.getPassages()}" varStatus="loop">
+                                                                                    ${passage5.getText()}
+                                                                                </c:forEach>
+                                                                                <c:if test="${paragraph5.getCaseList().size() > 0}">
+                                                                                    <ol class="special-list" style="list-style-type: none;">   
+                                                                                        <c:set var="casecount" value="0"/>
+                                                                                        <c:forEach var="case5" items="${paragraph5.getCaseList()}" varStatus="loop">
+                                                                                            <c:forEach var="passage6" items="${case5.getPassages()}" varStatus="loop">
+                                                                                                <li data-number="${ionian_nums[casecount]}">${passage6.getText()}</li>
+                                                                                            </c:forEach>
+                                                                                            <c:set var="casecount" value="${casecount+1}"/>
+                                                                                        </c:forEach>
+                                                                                    </ol>
+                                                                                </c:if>
+                                                                                </li>
+                                                                            </c:forEach>
+                                                                            </ol>
+                                                                        </c:when>
+                                                                    </c:choose>
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="${passage.getStatus() >= 1}">
+                                                                    <c:if test="${passage.getStatus() ==2}">
+                                                                        <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}${pascount}" data-target=".${artcount}${parcount}${pascount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                                                            <c:set var="target_uri" value="chapter/${chapcount}article/${artcount}/paragraph/${parcount}/passage/${pascount}"/>
+                                                                        <div class="collapse out budgets ${artcount}${parcount}${pascount}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                                                            <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
+                                                                                <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
+                                                                                    ${frag.getText()}
+                                                                                </c:if>
+                                                                            </c:forEach>
+                                                                        </div>
+                                                                    </c:if>
+                                                                </div>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                        <ol class="special-list" style="list-style-type: none;">
+                                                            <c:set var="casecount" value="0"/>
+                                                            <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
+                                                                    <li${case1.getStatus() >= 1?' class="modification"':"" } data-number="${ionian_nums[casecount]}">
+                                                                        <c:forEach var="passage2" items="${case1.getPassages()}" varStatus="loop">
+                                                                            <c:if test="${passage2.getStatus() >= 1}">
+                                                                                <div id="modification">
+                                                                                </c:if>
+                                                                                ${passage2.getText()}
+                                                                                <c:if test="${passage2.getStatus() >= 1}">
+                                                                                </div>
+                                                                            </c:if>
+                                                                        </c:forEach>
+                                                                        <c:if test="${not empty case1.getCaseList()}">
+                                                                            <c:set var="casecount2" value="0"/>
+                                                                            <ol style="list-style-type: none;">
+                                                                                <c:forEach var="case2" items="${case1.getCaseList()}" varStatus="loop">
+                                                                                    <c:if test="${case2.getStatus() >= 1}">
+                                                                                        <div id="modification">
+                                                                                        </c:if>
+                                                                                        <c:forEach var="passage3" items="${case2.getPassages()}" varStatus="loop">
+                                                                                            <c:if test="${passage3.getStatus() >= 1}">
+                                                                                                <div id="modification">
+                                                                                                </c:if>
+                                                                                                <li data-number="${ionian_nums[casecount2]}">${passage3.getText()}</li>
+                                                                                                    <c:if test="${passage3.getStatus() >= 1}">
+                                                                                                </div>
+                                                                                            </c:if>
+                                                                                        </c:forEach>
+                                                                                        <c:if test="${case2.getStatus() >= 1}">
+                                                                                        </div>
+                                                                                    </c:if>
+                                                                                    <c:set var="casecount2" value="${casecount2+1}"/>
+                                                                                </c:forEach>
+                                                                            </ol>
+                                                                        </c:if>
+                                                                    <c:if test="${not empty case1.getModification()}">
+                                                                    <div class="mod">
+                                                                    <c:choose>
+                                                                        <c:when test="${case1.getModification().getType() == 'Case'}">
+                                                                            <c:forEach var="passage3" items="${case1.getModification().getFragment().getPassages()}" varStatus="loop">
+                                                                                ${passage3.getText()}
+                                                                            </c:forEach>
+                                                                        </c:when>
+                                                                        <c:when test="${case1.getModification().getType() == 'Passage'}">
+                                                                            ${case1.getModification().getFragment().getText()}
+                                                                        </c:when>
+                                                                        <c:when test="${case1.getModification().getType() == 'Paragraph'}">
+                                                                            ${case1.getModification().getFragment().getId()}. 
+                                                                            <c:forEach var="passage4" items="${case1.getModification().getFragment().getPassages()}" varStatus="loop">
+                                                                                ${passage4.getText()}
+                                                                            </c:forEach>
+                                                                            <c:if test="${case1.getModification().getFragment().getCaseList().size() > 0}">
+                                                                                <ol class="special-list" style="list-style-type: none;">   
+                                                                                    <c:set var="casecount" value="0"/>
+                                                                                    <c:forEach var="case2" items="${case1.getModification().getFragment().getCaseList()}" varStatus="loop">
+                                                                                        <c:forEach var="passage2" items="${case2.getPassages()}" varStatus="loop">
+                                                                                            <li data-number="${ionian_nums[casecount]}">${passage2.getText()}</li>
+                                                                                        </c:forEach>
+                                                                                        <c:set var="casecount" value="${casecount+1}"/>
+                                                                                    </c:forEach>
+                                                                                </ol>
+                                                                            </c:if>
+                                                                        </c:when>
+                                                                        <c:when test="${case1.getModification().getType() == 'Article'}">
+                                                                            <span style="text-align: center; font-size: 12px;"><h4><spring:message code="basic.article"/> ${case1.getModification().getFragment().getId()}</h4></span>
+                                                                            <ol>
+                                                                            <c:forEach var="paragraph5" items="${case1.getModification().getFragment().getParagraphs()}" varStatus="loop">
+                                                                                <li>
+                                                                                <c:forEach var="passage5" items="${paragraph5.getPassages()}" varStatus="loop">
+                                                                                    ${passage5.getText()}
+                                                                                </c:forEach>
+                                                                                <c:if test="${paragraph5.getCaseList().size() > 0}">
+                                                                                    <ol class="special-list" style="list-style-type: none;">   
+                                                                                        <c:set var="casecount" value="0"/>
+                                                                                        <c:forEach var="case5" items="${paragraph5.getCaseList()}" varStatus="loop">
+                                                                                            <c:forEach var="passage6" items="${case5.getPassages()}" varStatus="loop">
+                                                                                                <li data-number="${ionian_nums[casecount]}">${passage6.getText()}</li>
+                                                                                            </c:forEach>
+                                                                                            <c:set var="casecount" value="${casecount+1}"/>
+                                                                                        </c:forEach>
+                                                                                    </ol>
+                                                                                </c:if>
+                                                                                </li>
+                                                                            </c:forEach>
+                                                                            </ol>
+                                                                        </c:when>
+                                                                    </c:choose>
+                                                                    </div>
+                                                                </c:if>
+                                                                    <c:if test="${case1.getStatus() >= 1}">
+                                                                        <c:if test="${case1.getStatus() ==2}">
+                                                                            <span class="clickable" data-toggle="collapse" id="${artcount}${parcount}0${casecount+1}" data-target=".${artcount}${parcount}0${casecount+1}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                                                                <c:set var="target_uri" value="chapter/${chapcount}article/${artcount}/paragraph/${parcount}/case/${casecount+1}"/>
+                                                                            <div class="collapse out budgets ${artcount}${parcount}0${casecount+1}collapsed" style=" background-color: #FFCCCC; border: 6px solid; border-radius: 10px; border-color: #FFCCCC;">
+                                                                                <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
+                                                                                    <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
+                                                                                        <c:forEach var="passage23" items="${frag.getPassages()}" varStatus="loop">
+                                                                                            ${passage23.getText()}
+                                                                                        </c:forEach>
+                                                                                    </c:if>
+                                                                                </c:forEach>
+                                                                            </div>
+                                                                        </c:if>
+                                                                   
+                                                                </c:if>
+                                                            </li>
+                                                                <c:set var="casecount" value="${casecount+1}"/>        
+                                                            </c:forEach>
+                                                        </ol>
+                                                        <c:if test="${not empty paragraph.getTable()}">
+                                                            <br/>${paragraph.getTable()}
+                                                        </c:if>
+                                                        
+                                                    </div>
+                                                    <c:if test="${paragraph.getStatus() >= 1}">
+                                                        <c:if test="${paragraph.getStatus() ==2}">
+                                                        <span class="clickable" data-toggle="collapse" id="${parcount}" data-target=".${parcount}collapsed" style="text-align:right;"><span style="cursor: pointer;" class="glyphicon glyphicon-transfer" aria-hidden="true"></span></span>
+                                                            <c:set var="target_uri" value="chapter/${chapcount}article/${artcount}/paragraph/${parcount}"/>
+                                                        <div class="collapse out budgets ${parcount}collapsed" style=" background-color: #FFCCCC; padding: 6px; border-radius: 10px;">
+                                                            <c:forEach var="frag" items="${fragschanced}" varStatus="loop"> 
+                                                                <c:if test="${fn:endsWith(frag.getURI(),target_uri)}">
+                                                                    <c:forEach var="passage24" items="${frag.getPassages()}" varStatus="loop">
+                                                                        ${passage24.getText()}
+                                                                    </c:forEach>
+                                                                    <c:if test="${frag.getCaseList().size() > 0}">
+                                                                        <ol class="special-list" style="list-style-type: none;">
+                                                                            <c:set var="casecount" value="0"/>
+                                                                            <c:forEach var="case22" items="${frag.getCaseList()}" varStatus="loop">
+                                                                                <c:forEach var="passage22" items="${case22.getPassages()}" varStatus="loop">
+                                                                                    <li data-number="${ionian_nums[casecount]}">${passage22.getText()}</li>
+                                                                                    </c:forEach>
+                                                                                    <c:set var="casecount2" value="${casecount2+1}"/>
+                                                                                </c:forEach>
+                                                                        </ol>
+                                                                    </c:if>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </c:if>
+                                            </c:if></li>
+                                            <br/>
+                                        </c:forEach>
+                                    </ol>
+                                </div>
+                                <br/>
+                            </c:forEach>
+                           </c:if>
+                             </div>
+                        </c:forEach>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">
                         <c:if test="${not empty legaldoc.getCitations()}">
@@ -554,30 +805,42 @@
                         <c:if test="${empty legaldoc.getCitations()}">
                              <br/>
                             <div class="alert alert-warning" role="alert"><spring:message code="basic.nocitations"/></div>
-                        </c:if>
+                        </c:if>       
                         </div>
                         <div role="tabpanel" class="tab-pane" id="messages">
                             <ul id="messagescol">
-                                <c:forEach var="article" items="${legaldoc.getArticles()}" varStatus="loop">
-                                    <% Article a = (Article) pageContext.getAttribute("article");
+                                <c:forEach var="chapter" items="${legaldoc.getChapters()}" varStatus="loop">
+                                    <% Chapter c = (Chapter) pageContext.getAttribute("chapter");
 
-                                        //String[] URIsr = a.getURI().toString().split("uoa.gr/");
-                                        //pageContext.setAttribute("urir", URIsr[1]);
+                                            //String[] URIsr = a.getURI().toString().split("uoa.gr/");
+                                            //pageContext.setAttribute("urir", URIsr[1]);
 
-                                    %>
-                                    <li ><a href="<c:url value="${legaldoc.getId()}/article/${article.getId()}"/>" target="_blank"> <spring:message code="basic.article"/> ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
-                                            <ul>
-                                            <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
-                                                <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
+                                        %>
+                                        <li ><a href="<c:url value="${legaldoc.getId()}/chapter/${chapter.getId()}"/>" target="_blank"> <spring:message code="basic.chapter"/> ${chapter.getId()} <c:if test="${not empty chapter.getTitle()}"> «${chapter.getTitle()}»</c:if></a>
+                                                <ul>
+                                    <c:forEach var="article" items="${chapter.getArticles()}" varStatus="loop">
+                                        <% Article a = (Article) pageContext.getAttribute("article");
 
-                                                    String[] URIs1 = p.getURI().toString().split("/article/");
-                                                    pageContext.setAttribute("uri1", URIs1[1]);
+                                            //String[] URIsr = a.getURI().toString().split("uoa.gr/");
+                                            //pageContext.setAttribute("urir", URIsr[1]);
 
-                                                %>
-                                                <li><a href="<c:url value="${legaldoc.getId()}/article/${uri1}"/>" target="_blank"><spring:message code="basic.par"/> ${paragraph.getId()}</a></li>
-                                                </c:forEach>
-                                            </ul>
-                                    </li>
+                                        %>
+                                        <li ><a href="<c:url value="${legaldoc.getId()}/chapter/${chapter.getId()}/article/${article.getId()}"/>" target="_blank"> <spring:message code="basic.article"/> ${article.getId()} <c:if test="${not empty article.getTitle()}"> «${article.getTitle()}»</c:if></a>
+                                                <ul>
+                                                <c:forEach var="paragraph" items="${article.getParagraphs()}" varStatus="loop">
+                                                    <% Paragraph p = (Paragraph) pageContext.getAttribute("paragraph");
+
+                                                        String[] URIs1 = p.getURI().toString().split("/article/");
+                                                        pageContext.setAttribute("uri1", URIs1[1]);
+
+                                                    %>
+                                                    <li><a href="<c:url value="${legaldoc.getId()}/chapter/${chapter.getId()}/article/${uri1}"/>" target="_blank"><spring:message code="basic.par"/> ${paragraph.getId()}</a></li>
+                                                    </c:forEach>
+                                                </ul>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                                        </li>
                                 </c:forEach>
                             </ul>
                         </div>
@@ -677,18 +940,17 @@
                             </div>        
                         </div>
                         <div role="tabpanel" class="tab-pane" id="images">
-                                <c:if test="${not empty legaldoc.getImages()}">
-                                     <c:set var="imagecount" value="0"/>
-                                    <c:forEach var="image" items="${legaldoc.getImages()}" varStatus="loop">
-                                        <c:set var="imagecount" value="${imagecount+1}"/>
-                                        <a href="/resources/images/leg/${image}" data-lightbox="roadtrip"><img width="200" src="/resources/images/leg/${legaldoc.getYear()}/${image}"</img></a>
-                                    </c:forEach>
-                                </c:if>
-                                <c:if test="${empty legaldoc.getImages()}">
-                                    <div class="alert alert-warning" role="alert"><spring:message code="basic.noimages"/></div>
-                                </c:if>        
-
-                        </div>      
+                            <c:if test="${not empty legaldoc.getImages()}">
+                                 <c:set var="imagecount" value="0"/>
+                                <c:forEach var="image" items="${legaldoc.getImages()}" varStatus="loop">
+                                    <c:set var="imagecount" value="${imagecount+1}"/>
+                                    <a href="/resources/images/leg/${image}" data-lightbox="roadtrip"><img width="200" src="/resources/images/leg/${image}"</img></a>
+                                </c:forEach>
+                            </c:if>
+                            <c:if test="${empty legaldoc.getImages()}">
+                                <div class="alert alert-warning" role="alert"><spring:message code="basic.noimages"/></div>
+                            </c:if>    
+                        </div>  
                         <div role="tabpanel" class="tab-pane" id="problems">
                             <br/>
                             <c:if test="${not empty legaldoc.getIssues()}">
@@ -709,7 +971,7 @@
     <div id="footer" style="text-align: center; font-family:'Jura';" >
         <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/> </h5>
     </div>                        
-    <script src="/resources/js/lightbox.js"></script>
+<script src="/resources/js/lightbox.js"></script>
     <c:if test="${not empty legaldoc.getPlace()}">
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript" src="/resources/js/geoxml3-kmz.js"></script>

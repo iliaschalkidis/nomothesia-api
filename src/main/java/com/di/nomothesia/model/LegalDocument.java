@@ -8,14 +8,17 @@ public class LegalDocument {
      
     private List<Article> articles;
     private List<Chapter> chapters;
+    private List<Part> parts;
+    private List<String> issues;
     private List<Signer> signers;
     private List<Citation> citations;
     private List<String> tags;
-    
+    private List<String> images;
     private String title;
     private String URI;
     private String publicationDate;
     private String FEK;
+    private String FEKfile;
     private String decisionType;
     private String year;
     private String id;
@@ -26,13 +29,32 @@ public class LegalDocument {
         
         articles = new ArrayList<Article>();
         chapters = new ArrayList<Chapter>();
+        parts = new ArrayList<Part>();
         signers = new ArrayList<Signer>();
         citations = new ArrayList<Citation>();
+        images = new ArrayList<String>();
+        issues = new ArrayList<String>();
         this.tags = new ArrayList<String>();
 
     }
     
     //Setters-Getters for LegalDocument
+    
+     public List<String> getIssues() {
+        return issues;
+    }
+    
+    public List<String> getImages() {
+        return images;
+    }
+     
+    public List<Part> getParts() {
+        return parts;
+    }
+    
+    public void setParts(List<Part> parts) {
+        this.parts = parts;
+    }
     
     public List<Chapter> getChapters() {
         return chapters;
@@ -91,6 +113,14 @@ public class LegalDocument {
     
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
+    }
+    
+    public String getFEKfile() {
+        return FEKfile;
+    }
+    
+    public void setFEKfile(String FEKfile) {
+        this.FEKfile = FEKfile;
     }
     
     public String getFEK() {

@@ -8,6 +8,7 @@ public class Paragraph implements Fragment{
     
     private List<Passage> passages;
     private List<Case> caseList;
+    private List<String> images;
     private String table;
     private String URI;
     private int id;
@@ -19,6 +20,7 @@ public class Paragraph implements Fragment{
         this.passages = new ArrayList<Passage>();
         //pass.add(new Passage());
         this.caseList = new ArrayList<Case>();
+        this.images = new ArrayList<String>();
         //cas.add(new Case());
         
     }
@@ -42,6 +44,10 @@ public class Paragraph implements Fragment{
     @Override
     public void setStatus(int s) {
         this.status = s;
+    }
+    
+    public List<String> getImages() {
+        return images;
     }
     
     public List<Passage> getPassages() {

@@ -5,9 +5,12 @@ import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.LegalDocument;
 import com.di.nomothesia.model.Modification;
 import com.di.nomothesia.service.LegislationService;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.TransformerException;
 import org.openrdf.model.Resource;
@@ -36,6 +39,16 @@ public class LegislationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LegislationController.class);
 	
+        @RequestMapping(value = "/gazette/a/{year:\\d+}/{id:\\d+}", method = RequestMethod.GET)
+        public void presentGovernmentGazettePDF(@PathVariable String year, @PathVariable String id, Model model, Locale locale,HttpServletResponse response) throws IOException {
+          InputStream fis = null;
+          fis = getClass().getResourceAsStream("/pdf/"+year+"/GG"+year+"_"+id+".pdf");
+          org.apache.commons.io.IOUtils.copy(fis, response.getOutputStream());
+          response.setContentType("application/pdf");
+          response.flushBuffer();
+
+        }
+        
 	@RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/enacted", method = RequestMethod.GET)
 	public String presentOriginalLegalDocument(@PathVariable String type, @PathVariable String year, @PathVariable String id, Model model, Locale locale) {
 		
@@ -46,8 +59,10 @@ public class LegislationController {
             model.addAttribute("legalmods", legalmods);
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
-            
-            if(legaldoc.getChapters().isEmpty()){
+            if(!legaldoc.getParts().isEmpty()){
+                return "basiclegislation3";
+            }
+            else if(legaldoc.getChapters().isEmpty()){
                 return "basiclegislation";
             }
             else{
@@ -68,7 +83,10 @@ public class LegislationController {
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
             System.out.println("IM ON BOARD!");
-            if(legaldoc.getChapters().isEmpty()){
+            if(!legaldoc.getParts().isEmpty()){
+                return "basiclegislation3";
+            }
+            else if(legaldoc.getChapters().isEmpty()){
                 return "basiclegislation";
             }
             else{
@@ -89,7 +107,10 @@ public class LegislationController {
             model.addAttribute("id", type1 + "-" + id1 + "-" +type2 + "-" + id2);
             model.addAttribute("locale",locale);
             
-            if(legaldoc.getChapters().isEmpty()){
+            if(!legaldoc.getParts().isEmpty()){
+                return "basiclegislation3";
+            }
+            else if(legaldoc.getChapters().isEmpty()){
                 return "basiclegislation";
             }
             else{
@@ -110,7 +131,10 @@ public class LegislationController {
             model.addAttribute("id", type1 + "-" + id1);
             model.addAttribute("locale",locale);
             
-            if(legaldoc.getChapters().isEmpty()){
+            if(!legaldoc.getParts().isEmpty()){
+                return "basiclegislation3";
+            }
+            else if(legaldoc.getChapters().isEmpty()){
                 return "basiclegislation";
             }
             else{
@@ -136,7 +160,10 @@ public class LegislationController {
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
 
-            if(legaldoc.getChapters().isEmpty()){
+            if(!legaldoc.getParts().isEmpty()){
+                return "basiclegislation3";
+            }
+            else if(legaldoc.getChapters().isEmpty()){
                 return "basiclegislation";
             }
             else{
@@ -196,7 +223,15 @@ public class LegislationController {
             List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 2, date);
             lds.getUpdatedById(legaldoc, legalmods);
             
-            return new ModelAndView("pdfView", "legaldocument", legaldoc);
+            if(!legaldoc.getParts().isEmpty()){
+                return new ModelAndView("pdfView3", "legaldocument", legaldoc);
+            }
+            if(!legaldoc.getChapters().isEmpty()){
+                return new ModelAndView("pdfView2", "legaldocument", legaldoc);
+            }
+            else{
+                return new ModelAndView("pdfView", "legaldocument", legaldoc);
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/enacted/data.xml", method = RequestMethod.GET, produces={"application/xml"})
@@ -234,8 +269,16 @@ public class LegislationController {
 	public ModelAndView exportToPDF(@PathVariable String type, @PathVariable String year, @PathVariable String id, Locale locale) {
             
             LegislationService lds = new LegislationService();
-            LegalDocument legal = lds.getById(type,year,id,2);
-            return new ModelAndView("pdfView", "legaldocument", legal);
+            LegalDocument legaldoc = lds.getById(type,year,id,2);
+            if(!legaldoc.getParts().isEmpty()){
+                return new ModelAndView("pdfView3", "legaldocument", legaldoc);
+            }
+            if(!legaldoc.getChapters().isEmpty()){
+                return new ModelAndView("pdfView2", "legaldocument", legaldoc);
+            }
+            else{
+                return new ModelAndView("pdfView", "legaldocument", legaldoc);
+            }
 	}
         
         @RequestMapping(value = "/{type}/{year:\\d+}/{id:\\d+}/data.xml", method = RequestMethod.GET, produces={"application/xml"})
@@ -278,7 +321,15 @@ public class LegislationController {
             List<Modification> legalmods = lds.getAllModificationsById(type, year, id, 2, null);
             lds.getUpdatedById(legaldoc, legalmods);
             
-            return new ModelAndView("pdfView", "legaldocument", legaldoc);
+            if(!legaldoc.getParts().isEmpty()){
+                return new ModelAndView("pdfView3", "legaldocument", legaldoc);
+            }
+            if(!legaldoc.getChapters().isEmpty()){
+                return new ModelAndView("pdfView2", "legaldocument", legaldoc);
+            }
+            else{
+                return new ModelAndView("pdfView", "legaldocument", legaldoc);
+            }
 	}
         
         @RequestMapping(value = "/search", method = RequestMethod.GET)

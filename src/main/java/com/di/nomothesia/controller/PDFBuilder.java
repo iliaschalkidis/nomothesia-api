@@ -2,6 +2,7 @@ package com.di.nomothesia.controller;
 
 import com.di.nomothesia.model.Case;
 import com.di.nomothesia.model.LegalDocument;
+import com.di.nomothesia.model.Passage;
 import com.di.nomothesia.service.AbstractITextPdfView;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -32,24 +33,24 @@ public class PDFBuilder extends AbstractITextPdfView {
                 String relativeWebPath = "/resources/images/banner.png";
                 String absoluteDiskPath = getServletContext().getRealPath(relativeWebPath);
                 Image img = Image.getInstance(absoluteDiskPath);
-                img.scalePercent(65f);
+                img.scalePercent(35f);
                 img.setAlignment(Element.ALIGN_CENTER);
                 doc.add(img);
                 
                 //Add line seperator
-                LineSeparator line = new LineSeparator(1, 100, null, Element.ALIGN_CENTER, -45);
-                doc.add(new Chunk(line));
-                doc.add(new Paragraph("\n\n\n\n\n\n\n"));
+//                LineSeparator line = new LineSeparator(1, 100, null, Element.ALIGN_CENTER, -45);
+//                doc.add(new Chunk(line));
+                doc.add(new Paragraph("\n"));
                 
                 //Fonts
                 BaseFont bf = BaseFont.createFont(getServletContext().getRealPath("/resources/fonts/arial.ttf"),BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 bf.setSubset(true);
-                Font fontTitle = new Font(bf, 18,Font.BOLD);
-                Font fontText = new Font(bf, 12);
+                Font fontTitle = new Font(bf, 16,Font.BOLD);
+                Font fontText = new Font(bf, 10);
                 Font citationText = new Font(bf, 10);
                 Font fontArticle = new Font(bf, 12,Font.BOLD);
                 Font fontDate = new Font(bf, 12);
-                Font fontType = new Font(bf, 20,Font.BOLD);
+                Font fontType = new Font(bf, 16,Font.BOLD);
                 Font fontSignerf = new Font(bf, 11);
                 
                 //Type
@@ -72,31 +73,33 @@ public class PDFBuilder extends AbstractITextPdfView {
                 doc.add(new Paragraph("\n"));
                 
                 //Citations
-                String citation = "Έχοντας υπόψη: \n\n";
-                Paragraph cit1 = new Paragraph(citation, fontText);
-                cit1.setAlignment(Element.ALIGN_LEFT);
-                String citation2 = "";
-                
-                for (int i=0; i<legald.getCitations().size();i++){
-                    citation2 += legald.getCitations().get(i).getId() + ". " + legald.getCitations().get(i).getDescription() + "\n\n";
+                if(!legald.getCitations().isEmpty()){
+                    String citation = "Έχοντας υπόψη: \n\n";
+                    Paragraph cit1 = new Paragraph(citation, fontText);
+                    cit1.setAlignment(Element.ALIGN_LEFT);
+                    String citation2 = "";
+
+                    for (int i=0; i<legald.getCitations().size();i++){
+                        citation2 += legald.getCitations().get(i).getId() + ". " + legald.getCitations().get(i).getDescription() + "\n\n";
+                    }
+
+                    Paragraph cit2 = new Paragraph(citation2, citationText);
+                    cit2.setAlignment(Element.ALIGN_JUSTIFIED);
+
+                    String citation3 = "Αποφασίζουμε: \n";
+                    Paragraph cit3 = new Paragraph(citation3, fontText);
+                    cit3.setAlignment(Element.ALIGN_CENTER);
+                    doc.add(cit1);
+                    doc.add(cit2);
+                    doc.add(cit3);
                 }
-                
-                Paragraph cit2 = new Paragraph(citation2, citationText);
-                cit2.setAlignment(Element.ALIGN_JUSTIFIED);
-                
-                String citation3 = "Αποφασίζουμε: \n";
-                Paragraph cit3 = new Paragraph(citation3, fontText);
-                cit3.setAlignment(Element.ALIGN_CENTER);
-                doc.add(cit1);
-                doc.add(cit2);
-                doc.add(cit3);
                 doc.add(new Paragraph("\n"));
                 
                 //Main Text
                 //Articles
                 for (int i = 0; i<legald.getArticles().size(); i++) {
                     
-                    String[] letter = {"α","β","γ","δ","ε","στ","ζ","η","θ","ι","ια","ιβ","ιγ","ιδ","ιε","ιστ","ιζ","ιη","ιθ"};
+                    String[] letter = {"α","β","γ","δ","ε","στ","ζ","η","θ","ι","ια","ιβ","ιγ","ιδ","ιε","ιστ","ιζ","ιη","ιθ","κ","κα","κβ","κγ","κδ","κε","κστ","κζ","κη","κθ","λ","λα","λβ","λγ","λδ","λε","λστ","λζ","λη","λθ","μ"};
         
                     String par = "";
                     Paragraph paragraph3 = new Paragraph();
@@ -117,6 +120,10 @@ public class PDFBuilder extends AbstractITextPdfView {
                         doc.add(articlet);
                     }
                     
+                    Paragraph space = new Paragraph("\n", fontArticle);
+                    article.setAlignment(Element.ALIGN_CENTER);
+                    doc.add(space);
+                    
                     //For all Paragraphs
                     for (int j = 0; j<legald.getArticles().get(i).getParagraphs().size(); j++) {
                         
@@ -129,6 +136,85 @@ public class PDFBuilder extends AbstractITextPdfView {
                             String a = legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getText();
                             a = trimDoubleQuotes(a);
                             paragraph3.add(a);
+                            
+                            //If passage has modifications
+                            if(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification() != null) {
+
+                                paragraph3.add("\n\n«");
+
+                                //if Modification type = Paraghraph
+                                if(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getType().equals("Article")) {
+                                    
+                                    com.di.nomothesia.model.Article moda = (com.di.nomothesia.model.Article) legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getFragment();
+
+                                    for (int z = 0; z<moda.getParagraphs().size(); z++) {
+                                        //get Modification's text
+                                        for (int n = 0; n<moda.getParagraphs().get(z).getPassages().size(); n++) {
+                                            paragraph3.add(moda.getParagraphs().get(z).getPassages().get(n).getText());
+                                        }
+
+                                        //get Modification Case
+                                        for (int n = 0; n< moda.getParagraphs().get(z).getCaseList().size(); n++) {
+
+                                            paragraph3.add(moda.getParagraphs().get(z).getCaseList().get(n).getId()+"");
+
+                                            //get MOdification Case Passage text
+                                            for (int l = 0; l<moda.getParagraphs().get(z).getCaseList().get(n).getPassages().size(); l++) {
+                                                paragraph3.add(moda.getParagraphs().get(z).getCaseList().get(n).getPassages().get(l).getText());
+                                            }
+
+                                        }
+
+                                        paragraph3.add("\n");
+                                    }
+                                    
+                                }
+                                else if(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getType().equals("Paragraph")) {
+
+                                    com.di.nomothesia.model.Paragraph p = (com.di.nomothesia.model.Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getFragment();
+
+                                    //get Modification's text
+                                    for (int n = 0; n<p.getPassages().size(); n++) {
+                                        paragraph3.add(p.getPassages().get(n).getText());
+                                    }
+
+                                    //get Modification Case
+                                    for (int n = 0; n< p.getCaseList().size(); n++) {
+
+                                        paragraph3.add(p.getCaseList().get(n).getId()+"");
+
+                                        //get MOdification Case Passage text
+                                        for (int l = 0; l<p.getCaseList().get(n).getPassages().size(); l++) {
+                                            paragraph3.add(p.getCaseList().get(n).getPassages().get(l).getText());
+                                        }
+
+                                    }
+
+                                    paragraph3.add("\n");
+
+                                }
+                                else if(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getType().equals("Passage")) {
+                                    
+                                    Passage p = (Passage) legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getFragment();
+                                    
+                                    paragraph3.add(p.getText());
+                                }
+                                //If Modification type = Case
+                                else if(legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getType().equals("Case")) {
+
+                                    //get Fragment
+                                    Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getFragment();
+
+                                    //Get Modification Passage text
+                                    for (int l = 0; l<c.getPassages().size(); l++) {
+                                        paragraph3.add(c.getPassages().get(l).getText());
+                                    }
+
+                                }
+
+                                paragraph3.add("».\n");
+
+                            }
                             
                         }
                         
@@ -176,54 +262,89 @@ public class PDFBuilder extends AbstractITextPdfView {
 
                                 }
                             }
+                            
+                            //If passage has modifications
+                            if(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification() != null) {
+
+                                paragraph3.add("\"");
+
+                                //if Modification type = Paraghraph
+                                if(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getType().equals("Article")) {
+                                    
+                                    com.di.nomothesia.model.Article moda = (com.di.nomothesia.model.Article) legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getFragment();
+
+                                    for (int z = 0; z<moda.getParagraphs().size(); z++) {
+                                        //get Modification's text
+                                        for (int n = 0; n<moda.getParagraphs().get(z).getPassages().size(); n++) {
+                                            paragraph3.add(moda.getParagraphs().get(z).getPassages().get(n).getText());
+                                        }
+
+                                        //get Modification Case
+                                        for (int n = 0; n< moda.getParagraphs().get(z).getCaseList().size(); n++) {
+
+                                            paragraph3.add(moda.getParagraphs().get(z).getCaseList().get(n).getId()+"");
+
+                                            //get MOdification Case Passage text
+                                            for (int l = 0; l<moda.getParagraphs().get(z).getCaseList().get(n).getPassages().size(); l++) {
+                                                paragraph3.add(moda.getParagraphs().get(z).getCaseList().get(n).getPassages().get(l).getText());
+                                            }
+
+                                        }
+
+                                        paragraph3.add("\n");
+                                    }
+                                    
+                                }
+                                else if(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getType().equals("Paragraph")) {
+
+                                    com.di.nomothesia.model.Paragraph p = (com.di.nomothesia.model.Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getFragment();
+
+                                    //get Modification's text
+                                    for (int n = 0; n<p.getPassages().size(); n++) {
+                                        paragraph3.add(p.getPassages().get(n).getText());
+                                    }
+
+                                    //get Modification Case
+                                    for (int n = 0; n< p.getCaseList().size(); n++) {
+
+                                        paragraph3.add(p.getCaseList().get(n).getId()+"");
+
+                                        //get MOdification Case Passage text
+                                        for (int l = 0; l<p.getCaseList().get(n).getPassages().size(); l++) {
+                                            paragraph3.add(p.getCaseList().get(n).getPassages().get(l).getText());
+                                        }
+
+                                    }
+
+                                    paragraph3.add("\n");
+
+                                } 
+                                else if(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getType().equals("Passage")) {
+                                    
+                                    Passage p = (Passage) legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getFragment();
+                                    
+                                    paragraph3.add(p.getText());
+                                }
+                                //If Modification type = Case
+                                else if(legald.getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getType().equals("Case")) {
+
+                                    //get Fragment
+                                    Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getFragment();
+
+                                    //Get Modification Passage text
+                                    for (int l = 0; l<c.getPassages().size(); l++) {
+                                        paragraph3.add(c.getPassages().get(l).getText());
+                                    }
+
+                                }
+
+                                paragraph3.add("\"\n");
+
+                            }
                         
                         }
                                                 
-                        //If document has modifications
-////                        if(legald.getArticles().get(i).getParagraphs().get(j).getModification() != null) {
-////                            
-////                            paragraph3.add("\"");
-////                            
-////                            //if Modification type = Paraghraph
-////                            if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Paragraph")) {
-////                        
-////                                com.di.nomothesia.model.Paragraph p = (com.di.nomothesia.model.Paragraph) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-////                                
-////                                //get Modification's text
-////                                for (int n = 0; n<p.getPassages().size(); n++) {
-////                                    paragraph3.add(p.getPassages().get(n).getText());
-////                                }
-////                                
-////                                //get Modification Case
-////                                for (int n = 0; n< p.getCaseList().size(); n++) {
-////                                    
-////                                    paragraph3.add(p.getCaseList().get(n).getId()+"");
-////                                    
-////                                    //get MOdification Case Passage text
-////                                    for (int l = 0; l<p.getCaseList().get(n).getPassages().size(); l++) {
-////                                        paragraph3.add(p.getCaseList().get(n).getPassages().get(l).getText());
-////                                    }
-////                                
-////                                }
-////                        
-////                                paragraph3.add("\n");
-////                    
-////                            } //If Modification type = Case
-////                            else if(legald.getArticles().get(i).getParagraphs().get(j).getModification().getType().equals("Case")) {
-////                                
-////                                //get Fragment
-////                                Case c = (Case) legald.getArticles().get(i).getParagraphs().get(j).getModification().getFragment();
-////                                
-////                                //Get Modification Passage text
-////                                for (int l = 0; l<c.getPassages().size(); l++) {
-////                                    paragraph3.add(c.getPassages().get(l).getText());
-////                                }
-////                                
-////                            }
-////                            
-////                            paragraph3.add("\"\n");
-////                
-////                        }
+                        
                         
                         paragraph3.add("\n");
                       
@@ -233,9 +354,7 @@ public class PDFBuilder extends AbstractITextPdfView {
                         doc.add(paragraph3);
                         
                 }
-		
-                doc.newPage();
-                
+		                
                 //Date
                 String date = legald.getPublicationDate();
                 date = trimDoubleQuotes(date);
@@ -248,10 +367,10 @@ public class PDFBuilder extends AbstractITextPdfView {
                 //Signers Full
                 for (int i = 0; i<legald.getSigners().size(); i++) {
                     String signerfull = "";
-                    signerfull += "Ο ";
-                    signerfull += legald.getSigners().get(i).getTitle();
-                    //signerfull = trimDoubleQuotes(signer);
-                    signerfull += "\n";
+//                    signerfull += "Ο ";
+//                    signerfull += legald.getSigners().get(i).getTitle();
+//                    //signerfull = trimDoubleQuotes(signer);
+//                    signerfull += "\n";
                     signerfull += legald.getSigners().get(i).getFullName();
                     //signerfull = trimDoubleQuotes(signerfull);
                     signerfull += "\n\n\n";

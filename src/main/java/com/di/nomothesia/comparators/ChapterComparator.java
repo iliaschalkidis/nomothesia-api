@@ -15,19 +15,7 @@ import java.util.Comparator;
 public class ChapterComparator implements Comparator<Chapter> {
     @Override
     public int compare(Chapter c1, Chapter c2) {
-        
-        String[] bits = c1.getURI().split("/");
-        String lastOne = bits[bits.length-1];
-        
-        String[] bits2 = c2.getURI().split("/");
-        String lastOne2 = bits2[bits2.length-1];
-        
-        int i = Integer.parseInt(lastOne);
-        int j = Integer.parseInt(lastOne2);
-        
-        c1.setId(i);
-        c2.setId(j);
-        
-        return i - j;
+
+        return c1.getId() - c2.getId();
     }
 }

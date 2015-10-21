@@ -80,6 +80,9 @@
                         <li>
                             <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                         </li>
+                        <li>
+                            <a href="/gazette" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.gazette"/></a>
+                        </li>
                     </ul>
                     
                     <ul class="nav navbar-nav navbar-right">

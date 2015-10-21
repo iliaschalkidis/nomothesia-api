@@ -5,16 +5,16 @@
  */
 package com.di.nomothesia.comparators;
 
-import com.di.nomothesia.model.Paragraph;
+import com.di.nomothesia.model.Article;
 import java.util.Comparator;
 
 /**
  *
  * @author Panagiotis
  */
-public class ParagraphComparator implements Comparator<Paragraph> {
+public class ImageComparator implements Comparator<String> {
     @Override
-    public int compare(Paragraph a1, Paragraph a2) {
-        return a1.getId() - a2.getId();
+    public int compare(String a1, String a2) {
+        return Integer.parseInt(a1.split("_")[2].split("\\.")[0]) - Integer.parseInt(a2.split("_")[2].split("\\.")[0]);
     }
 }

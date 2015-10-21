@@ -7,8 +7,8 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ', ',')}" scope="application" />
-<c:set var="chap_nums" value="${fn:split('Α,Β,Γ,Δ,Ε,Ζ,Η,Θ,Ι,ΙΑ,ΙΒ,ΙΓ,ΙΔ,ΙΕ,ΙΣΤ,ΙΖ,ΙΗ,ΙΘ', ',')}" scope="application" />
+<c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ,κ,κα,κβ,,κγ,κδ,κε,κστ,κζ,κη,κθ,λ,λα,λβ,,λγ,λδ,λε,λστ,λζ,λη,λθ', ',')}" scope="application" />
+<c:set var="chap_nums" value="${fn:split('Α,Β,Γ,Δ,Ε,ΣΤ,Ζ,Η,Θ,Ι,ΙΑ,ΙΒ,ΙΓ,ΙΔ,ΙΕ,ΙΣΤ,ΙΖ,ΙΗ,ΙΘ', ',')}" scope="application" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -35,6 +35,7 @@
         <!-- Load CSS -->
         <link href="/resources/css/navbar.css" rel="stylesheet"/>
         <link href="/resources/css/bootstrap-social.css" rel="stylesheet"/>
+        <link href="/resources/css/lightbox.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
 
@@ -164,6 +165,9 @@
                     <li>
                         <a href="/developer" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.info"/></a>
                     </li>
+                    <li>
+                        <a href="/gazette" style="font-family: 'Comfortaa', cursive;" ><spring:message code="navbar.gazette"/></a>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -204,15 +208,15 @@
                             </c:when>
                         </c:choose>
                         <c:set var="fek2" value="${fn:split(fek, '/')}" />
-                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a> <a href="http://localhost:8080/gazette/a/${fek2[1]}/${fek2[2]}" target="_blank"><img height="15px" src="/resources/images/pdf-icon.jpg" alt="PDF" /></a><br/>
                     <u style="color:  #1087dd"><spring:message code="basic.signer"/></u><br/>
                         <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
-                            ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>     
+                            ${signer.getFullName()}<br/> 
                     </c:forEach>
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">[συνέχεια ...]</a>
                     <div class="collapse" id="collapseExample">
                         <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="2">
-                            ${signer.getFullName()}<br/>(${signer.getTitle()})<br/>
+                            ${signer.getFullName()}<br/>
                         </c:forEach>
                     </div><br/>
                     <c:if test="${not empty legaldoc.getTags()}">
@@ -265,6 +269,8 @@
                         <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><spring:message code="basic.cit"/></a></li>
                         <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><spring:message code="basic.content"/></a></li>
                         <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><spring:message code="basic.timeline"/></a></li>
+                        <li role="presentation"><a href="#images" aria-controls="images" role="tab" data-toggle="tab"><spring:message code="basic.images"/></a></li>
+                        <li role="presentation"><a href="#problems" aria-controls="problems" role="tab" data-toggle="tab"><spring:message code="basic.problems"/></a></li>
                         <div id="share-buttons">
                             <li style="display: inline;">
                                 <!-- Facebook -->
@@ -278,16 +284,16 @@
                                 <!-- Google+ -->
                                 <a href="https://plus.google.com/share?url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/google.png" alt="Google" /></a>
                             </li>
-                            <li style="display: inline;">
-                                <!-- LinkedIn -->
-                                <a href="http://www.linkedin.com/shareArticle?mini=true&url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/linkedin.png" alt="LinkedIn" /></a>
-                            </li>
                         </div>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="home">
+                            <c:if test="${empty legaldoc.getChapters()}">
+                                <br/>
+                                <div class="alert alert-warning" role="alert"><spring:message code="basic.notext"/></div>
+                            </c:if>
                             <c:set var="chapcount" value="0"/>
                             <c:forEach var="chapter" items="${legaldoc.getChapters()}" varStatus="loop">
                                 <c:set var="chapcount" value="${chapcount+1}"/>
@@ -327,6 +333,7 @@
                                                                             ${passage.getModification().getFragment().getText()}
                                                                         </c:when>
                                                                         <c:when test="${passage.getModification().getType() == 'Paragraph'}">
+                                                                            ${passage.getModification().getFragment().getId()}. 
                                                                             <c:forEach var="passage4" items="${passage.getModification().getFragment().getPassages()}" varStatus="loop">
                                                                                 ${passage4.getText()}
                                                                             </c:forEach>
@@ -386,7 +393,7 @@
                                                         <ol class="special-list" style="list-style-type: none;">
                                                             <c:set var="casecount" value="0"/>
                                                             <c:forEach var="case1" items="${paragraph.getCaseList()}" varStatus="loop">
-                                                                    <li${case1.getStatus() >= 1?' class="modification"':"" } data-number="${ionian_nums[casecount]}">
+                                                                    <li ${case1.getStatus() >= 1?' class="modification"':"" } data-number="${ionian_nums[casecount]}">
                                                                         <c:forEach var="passage2" items="${case1.getPassages()}" varStatus="loop">
                                                                             <c:if test="${passage2.getStatus() >= 1}">
                                                                                 <div id="modification">
@@ -431,6 +438,7 @@
                                                                             ${case1.getModification().getFragment().getText()}
                                                                         </c:when>
                                                                         <c:when test="${case1.getModification().getType() == 'Paragraph'}">
+                                                                            ${case1.getModification().getFragment().getId()}. 
                                                                             <c:forEach var="passage4" items="${case1.getModification().getFragment().getPassages()}" varStatus="loop">
                                                                                 ${passage4.getText()}
                                                                             </c:forEach>
@@ -533,23 +541,26 @@
                         </c:forEach>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">
+                        <c:if test="${not empty legaldoc.getCitations()}">
                         <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                                 <thead>
                                 <td><spring:message code="basic.mind"/></td>
                                 </thead>
                                 <tbody>
-                                    <c:if test="${not empty legaldoc.getCitations()}">
                                         <c:forEach var="citation" items="${legaldoc.getCitations()}" varStatus="loop">
                                             <tr>
                                                 <td>${citation.getDescription()}</td>
                                             </tr>
                                         </c:forEach>
-                                    </c:if>
                                 </tbody>
                             </table>
                         </div>
-
+                        </c:if>
+                        <c:if test="${empty legaldoc.getCitations()}">
+                             <br/>
+                            <div class="alert alert-warning" role="alert"><spring:message code="basic.nocitations"/></div>
+                        </c:if>       
                         </div>
                         <div role="tabpanel" class="tab-pane" id="messages">
                             <ul id="messagescol">
@@ -683,6 +694,29 @@
                             </table>
                             </div>        
                         </div>
+                        <div role="tabpanel" class="tab-pane" id="images">
+                           <c:if test="${not empty legaldoc.getImages()}">
+                                 <c:set var="imagecount" value="0"/>
+                                <c:forEach var="image" items="${legaldoc.getImages()}" varStatus="loop">
+                                    <c:set var="imagecount" value="${imagecount+1}"/>
+                                    <a href="/resources/images/leg/${image}" data-lightbox="roadtrip"><img width="200" src="/resources/images/leg/${image}"</img></a>
+                                </c:forEach>
+                            </c:if>
+                            <c:if test="${empty legaldoc.getImages()}">
+                                <div class="alert alert-warning" role="alert"><spring:message code="basic.noimages"/></div>
+                            </c:if>    
+                        </div>       
+                        <div role="tabpanel" class="tab-pane" id="problems">
+                            <br/>
+                        <c:if test="${not empty legaldoc.getIssues()}">
+                            <c:forEach var="issue" items="${legaldoc.getIssues()}" varStatus="loop">
+                                <div class="alert alert-danger" role="alert">${issue}</div>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${empty legaldoc.getIssues()}">
+                            <div class="alert alert-warning" role="alert">Πιθανότατα δεν υπάρχουν προβλήματα</div>
+                        </c:if>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -692,7 +726,7 @@
     <div id="footer" style="text-align: center; font-family:'Jura';" >
         <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/> </h5>
     </div>                        
-
+<script src="/resources/js/lightbox.js"></script>
     <c:if test="${not empty legaldoc.getPlace()}">
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript" src="/resources/js/geoxml3-kmz.js"></script>

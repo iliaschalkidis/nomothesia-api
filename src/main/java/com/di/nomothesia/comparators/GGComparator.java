@@ -5,16 +5,18 @@
  */
 package com.di.nomothesia.comparators;
 
-import com.di.nomothesia.model.Paragraph;
+import com.di.nomothesia.model.GovernmentGazette;
+import com.di.nomothesia.model.Passage;
 import java.util.Comparator;
 
 /**
  *
  * @author Panagiotis
  */
-public class ParagraphComparator implements Comparator<Paragraph> {
+public class GGComparator implements Comparator<GovernmentGazette> {
     @Override
-    public int compare(Paragraph a1, Paragraph a2) {
+    public int compare(GovernmentGazette a1, GovernmentGazette a2) {
+  
         return a1.getId() - a2.getId();
     }
 }

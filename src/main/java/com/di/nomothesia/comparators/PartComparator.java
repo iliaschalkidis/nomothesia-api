@@ -5,16 +5,17 @@
  */
 package com.di.nomothesia.comparators;
 
-import com.di.nomothesia.model.Paragraph;
+import com.di.nomothesia.model.Part;
 import java.util.Comparator;
 
 /**
  *
  * @author Panagiotis
  */
-public class ParagraphComparator implements Comparator<Paragraph> {
+public class PartComparator implements Comparator<Part> {
     @Override
-    public int compare(Paragraph a1, Paragraph a2) {
-        return a1.getId() - a2.getId();
+    public int compare(Part c1, Part c2) {
+
+        return c1.getId() - c2.getId();
     }
 }
