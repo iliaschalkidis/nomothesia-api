@@ -7,7 +7,7 @@ import java.util.List;
 public class Article implements Fragment{
     
     private String Title;
-    private int id;
+    private String id;
     private String URI;
     List<Paragraph> paragraphs;
     private int status;
@@ -38,11 +38,11 @@ public class Article implements Fragment{
         this.Title = Title;
     }
     
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
     

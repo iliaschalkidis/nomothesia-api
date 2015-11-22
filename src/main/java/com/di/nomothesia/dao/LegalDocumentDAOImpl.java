@@ -56,25 +56,25 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         legald.setYear(year);
         
         if (decisionType.equals("pd")) {
-            legald.setDecisionType("(��) ��������� ��������");
+            legald.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
         }
         else if (decisionType.equals("law")) {
-            legald.setDecisionType("�����");
+            legald.setDecisionType("ΝΟΜΟΣ");
         }
         else if(decisionType.equals("amc")){
-            legald.setDecisionType("(���) ����� ���������� ����������");
+            legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
         }
         else if(decisionType.equals("md")){
-            legald.setDecisionType("(��) ��������� �������");
+            legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
         }
         else if(decisionType.equals("rd")){
-            legald.setDecisionType("(��) �������� ��������");
+            legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
         }
         else if(decisionType.equals("la")){
-            legald.setDecisionType("(���) ����� ����������� ������������");
+            legald.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
         }
         else if(decisionType.equals("rp")){
-            legald.setDecisionType("(��) ����������� �������");
+            legald.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
         }
         
         legald.setURI("http://legislation.di.uoa.gr/"+ decisionType + "/" + year + "/" + id);
@@ -538,10 +538,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 Chapter chapter = new Chapter();
                                 chapter.setURI(bindingSet.getValue("part").toString());
                                 if(mod==1&&chapter.getURI().contains("modification")){
-                                    chapter.setId(Integer.parseInt(chapter.getURI().split("chapter\\/")[2].replaceAll("[�-�]+","")));
+                                    chapter.setId(Integer.parseInt(chapter.getURI().split("chapter\\/")[2].replaceAll("[Î“Â?-Î“Â™]+","")));
                                 }
                                 else{
-                                   chapter.setId(Integer.parseInt(chapter.getURI().split("chapter\\/")[1].replaceAll("[�-�]+","")));
+                                   chapter.setId(Integer.parseInt(chapter.getURI().split("chapter\\/")[1].replaceAll("[Î“Â?-Î“Â™]+","")));
                                 }
                                 if (bindingSet.getValue("title")!=null) {
                                     String title = bindingSet.getValue("title").toString().replace("@el", "");
@@ -571,10 +571,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 Part part = new Part();
                                 part.setURI(bindingSet.getValue("part").toString());
                                 if(mod==1&&part.getURI().contains("modification")){
-                                    part.setId(Integer.parseInt(part.getURI().split("part\\/")[2].replaceAll("[�-�]+","")));
+                                    part.setId(Integer.parseInt(part.getURI().split("part\\/")[2].replaceAll("[Î“Â?-Î“Â™]+","")));
                                 }
                                 else{
-                                    part.setId(Integer.parseInt(part.getURI().split("part\\/")[1].replaceAll("[�-�]+","")));
+                                    part.setId(Integer.parseInt(part.getURI().split("part\\/")[1].replaceAll("[Î“Â?-Î“Â™]+","")));
                                 }
                                 if (bindingSet.getValue("title")!=null) {
                                     String title = bindingSet.getValue("title").toString().replace("@el", "");
@@ -598,10 +598,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 article = new Article();
                                 article.setURI(bindingSet.getValue("part").toString());
                                 if(mod==1&&article.getURI().contains("modification")){
-                                    article.setId(Integer.parseInt(article.getURI().split("article\\/")[2].replaceAll("[�-�]+","")));
+                                    article.setId(article.getURI().split("article\\/")[2]);
                                 }
                                 else{
-                                    article.setId(Integer.parseInt(article.getURI().split("article\\/")[1].replaceAll("[�-�]+","")));
+                                    article.setId(article.getURI().split("article\\/")[1]);
                                 }
                                 if (bindingSet.getValue("title")!=null) {
                                     String title = bindingSet.getValue("title").toString().replace("@el", "");
@@ -751,10 +751,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 
                                 paragraph.setURI(bindingSet.getValue("part").toString());
                                 if(mod>=1&&paragraph.getURI().contains("modification")){
-                                    paragraph.setId(Integer.parseInt(paragraph.getURI().split("paragraph\\/")[2].replaceAll("[�-�]+","")));
+                                    paragraph.setId(Integer.parseInt(paragraph.getURI().split("paragraph\\/")[2].replaceAll("[Î“Â?-Î“Â™]+","")));
                                 }
                                 else{
-                                    paragraph.setId(Integer.parseInt(paragraph.getURI().split("paragraph\\/")[1].replaceAll("[�-�]+","")));
+                                    paragraph.setId(Integer.parseInt(paragraph.getURI().split("paragraph\\/")[1].replaceAll("[Î“Â?-Î“Â™]+","")));
                                 }
                                 
                                 if ((mod==0)||(mod==2)||((mod==1)&&(!paragraph.getURI().contains("modification")))) {
@@ -1867,7 +1867,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             if (bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Article")) {
                                 
                                 Article article = new Article();
-                                article.setId(count+2);
+                                article.setId(Integer.toString(count+2));
                                 article.setURI(bindingSet.getValue("part").toString());
                                 //System.out.println(article.getURI());
                                 //System.out.println("NEW ARTICLE");
@@ -2271,7 +2271,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             tokens[i] = tokens[i].replaceAll(" ", "");
                         }
                     }
-                    List<String> stopWords = Arrays.asList("�","�","��","��","��","���","���","���","���","���","���","��","�","�����","�����","�����","�������","�����","���","����","���","����","��" ,"����","���","���","����","��","��","��","����","����","����","����","��","��","��","���","��","���","���","���","���","��","����","���" ,"���" ,"�����" ,"����","����","�����","�����","�����","������","�����","����","����","�����","�����","������","�����","����","�������","������","������","�������","�������","������","�������","��������","����","����","����","���","���");
+                    List<String> stopWords = Arrays.asList("Î“â€•","Î“Â§","Î“Î„Î“â€•","Î“â€•Î“Â©","Î“Î„Î“Ê½","Î“Î„Î“â€•Î“Î…","Î“Î„Î“Â§Î“Â²","Î“Î„Î“Î‰Î“Â­","Î“Î„Î“â€•Î“Â­","Î“Î„Î“Â§Î“Â­","Î“ïŸ„Î“Ê½Î“Â©","Î“ïŸ„Î“Â©","Î“ïŸ„","Î“ïŸƒÎ“ÂŸÎ“Â¬Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â³Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â­Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â¬Î“Ê½Î“Â³Î“Î„Î“ïŸƒ","Î“ïŸƒÎ“ÂŸÎ“Â³Î“Î„Î“ïŸƒ","Î“Â³Î“Î„Î“â€•","Î“Â³Î“Î„Î“â€•Î“Â­","Î“Â³Î“Î„Î“Â§","Î“Â³Î“Î„Î“Â§Î“Â­","Î“Â¬Î“Ê½" ,"Î“Ê½Î“Â«Î“Â«Î“Âœ","Î“Ê½Î“Â°Î“ÎŒ","Î“Â£Î“Â©Î“Ê½","Î“Â°Î“Â±Î“â€•Î“Â²","Î“Â¬Î“ïŸƒ","Î“Â³Î“ïŸƒ","Î“Î‰Î“Â²","Î“Â°Î“Ê½Î“Â±Î“Âœ","Î“Ê½Î“Â­Î“Î„Î“ÂŸ","Î“ïŸ„Î“Ê½Î“Î„Î“Âœ","Î“Â¬Î“ïŸƒÎ“Î„Î“Âœ","Î“Â¨Î“Ê½","Î“Â­Î“Ê½","Î“ïŸ‚Î“ïŸƒ","Î“ïŸ‚Î“ïŸƒÎ“Â­","Î“Â¬Î“Â§","Î“Â¬Î“Â§Î“Â­","Î“ïŸƒÎ“Â°Î“Â©","Î“ïŸƒÎ“Â­Î“ÎŽ","Î“ïŸƒÎ“ÂœÎ“Â­","Î“Ê½Î“Â­","Î“Î„Î“ÎŒÎ“Î„Î“ïŸƒ","Î“Â°Î“â€•Î“Î…" ,"Î“Â°Î“Î‰Î“Â²" ,"Î“Â°Î“â€•Î“Â©Î“ÎŒÎ“Â²" ,"Î“Â°Î“â€•Î“Â©Î“Âœ","Î“Â°Î“â€•Î“Â©Î“ÎŒ","Î“Â°Î“â€•Î“Â©Î“â€•Î“Â©","Î“Â°Î“â€•Î“Â©Î“ïŸƒÎ“Â²","Î“Â°Î“â€•Î“Â©Î“Î‰Î“Â­","Î“Â°Î“â€•Î“Â©Î“â€•Î“Î…Î“Â²","Î“Ê½Î“Î…Î“Î„Î“ÎŒÎ“Â²","Î“Ê½Î“Î…Î“Î„Î“Âž","Î“Ê½Î“Î…Î“Î„Î“ÎŒ","Î“Ê½Î“Î…Î“Î„Î“â€•Î“ÂŸ","Î“Ê½Î“Î…Î“Î„Î“ÎŽÎ“Â­","Î“Ê½Î“Î…Î“Î„Î“â€•Î“Â½Î“Â²","Î“Ê½Î“Î…Î“Î„Î“Â?Î“Â²","Î“Ê½Î“Î…Î“Î„Î“Âœ","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Â²","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Â§","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Â©","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“ïŸƒÎ“Â²","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Ê½","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Î‰Î“Â­","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Î…Î“Â²","Î“ÎŒÎ“Â°Î“Î‰Î“Â²","Î“ÎŒÎ“Â¬Î“Î‰Î“Â²","Î“ÂŸÎ“Â³Î“Î‰Î“Â²","Î“ÎŒÎ“Â³Î“â€•","Î“ÎŒÎ“Î„Î“Â©");
                     List<String> keywords = new ArrayList<String>();
                     
                     // Stop Words Filtering
@@ -2349,28 +2349,28 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             String type = bindingSet.getValue("type").toString();
                            
                             if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-                                ld.setDecisionType("��������");
+                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-                                ld.setDecisionType("��������� �������� (��)");
+                                ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-                                ld.setDecisionType("�����");
+                                ld.setDecisionType("ΝΟΜΟΣ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-                                ld.setDecisionType("(���) ����� ���������� ����������");
+                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-                                ld.setDecisionType("(��) ��������� �������");
+                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-                                ld.setDecisionType("(��) �������� ��������");
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-                                ld.setDecisionType("(���) ����� ����������� ������������");
+                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
-                                ld.setDecisionType("(��) ����������� �������");
+                                ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
                             }
                             
                         }
@@ -2379,28 +2379,28 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             String type = params.get("type");
                             
                             if (type.equals("con")) {
-                                ld.setDecisionType("��������");
+                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
                             }
                             else if (type.equals("pd")) {
-                                ld.setDecisionType("��������� �������� (��)");
+                                ld.setDecisionType("ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             else if (type.equals("law")) {
-                                ld.setDecisionType("�����");
+                                ld.setDecisionType("ΝΟΜΟΣ");
                             }
                             else if (type.equals("amc")) {
-                                ld.setDecisionType("(���) ����� ���������� ����������");
+                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
                             }
                             else if (type.equals("md")) {
-                                ld.setDecisionType("(��) ��������� �������");
+                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
                             }
                             else if (type.equals("rd")) {
-                                ld.setDecisionType("(��) �������� ��������");
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             else if (type.equals("la")) {
-                                ld.setDecisionType("(���) ����� ����������� ������������");
+                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
                             }
                             else if(type.equals(("rp"))) {
-                                 ld.setDecisionType("(��) �����������");
+                                 ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
                             }
                             
                         }
@@ -2598,27 +2598,30 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         String type = bindingSet.getValue("type").toString();
                            
-                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-                                legald.setDecisionType("��������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-                                legald.setDecisionType("��������� �������� (��)");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-                                legald.setDecisionType("�����");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-                                legald.setDecisionType("(���) ����� ���������� ����������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-                                legald.setDecisionType("(��) ��������� �������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-                                legald.setDecisionType("(��) �������� ��������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-                                legald.setDecisionType("(���) ����� ����������� ������������");
-                            }
+                        if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
+                            legald.setDecisionType("ΣΥΝΤΑΓΜΑ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
+                            legald.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
+                            legald.setDecisionType("ΝΟΜΟΣ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
+                            legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
+                            legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                            legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
+                            legald.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
+                            legald.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
+                        }
                             
                         legalviewed.add(legald);
                         
@@ -2820,27 +2823,30 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         String type = bindingSet.getValue("type").toString();
                            
-                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-                                legald.setDecisionType("��������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-                                legald.setDecisionType("��������� �������� (��)");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-                                legald.setDecisionType("�����");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-                                legald.setDecisionType("(���) ����� ���������� ����������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-                                legald.setDecisionType("(��) ��������� �������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-                                legald.setDecisionType("(��) �������� ��������");
-                            }
-                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-                                legald.setDecisionType("(���) ����� ����������� ������������");
-                            }
+                        if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
+                            legald.setDecisionType("ΣΥΝΤΑΓΜΑ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
+                            legald.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
+                            legald.setDecisionType("ΝΟΜΟΣ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
+                            legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
+                            legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                            legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
+                            legald.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+                        }
+                        else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
+                            legald.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
+                        }
                             
                         legalrecent.add(legald);
                         
@@ -2959,25 +2965,25 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             if(gaz.getDocs()!=0){
                                 String type = bindingSet.getValue("type").toString();
                                 if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-                                    ld.setDecisionType("��������");
+                                    ld.setDecisionType("Î“Â“Î“Â•Î“Â?Î“Â”Î“Â?Î“ÂƒÎ“ÂŒÎ“Â?");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-                                    ld.setDecisionType("��������� �������� (��)");
+                                    ld.setDecisionType("Î“ÂŽÎ’Â Î“ÂŽÎ’Ê½Î“ÂŽÎ•ÎˆÎ“ÂŽÎ²Â€Ê¼Î“ÂŽÎ²Â€Â?Î“ÂŽÎ’Ê½Î“ÂŽÎ²Â„Ê¼Î“ÂŽÎ•Ê½Î“ÂŽÎ•Îˆ Î“ÂŽÎ²Â€Â?Î“ÂŽÎ²Â„Ê¼Î“ÂŽÎ²Â€Â˜Î“ÂŽÎ’ïŸ‚Î“ÂŽÎ²Â€Â˜Î“ÂŽÎ²Â€ÂœÎ“ÂŽÎ•Â“Î“ÂŽÎ²Â€Â˜");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-                                    ld.setDecisionType("�����");
+                                    ld.setDecisionType("Î“Â?Î“Â?Î“ÂŒÎ“Â?Î“Â“");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-                                    ld.setDecisionType("(���) ����� ���������� ����������");
+                                    ld.setDecisionType("(Î“Â?Î“Â•Î“Â“) Î“Â?Î“Â‘Î“Â?Î“ÂŽÎ“Â‡ Î“Â•Î“Â?Î“Â?Î“Â•Î“Â‘Î“ÂƒÎ“Â‰Î“ÂŠÎ“Â?Î“Â• Î“Â“Î“Â•Î“ÂŒÎ“Â‚Î“Â?Î“Â•Î“Â‹Î“Â‰Î“Â?Î“Â•");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-                                    ld.setDecisionType("(��) ��������� �������");
+                                    ld.setDecisionType("(Î“Â•Î“Â?) Î“Â•Î“Â?Î“Â?Î“Â•Î“Â‘Î“ÂƒÎ“Â‰Î“ÂŠÎ“Â‡ Î“Â?Î“Â?Î“Â?Î“Â–Î“Â?Î“Â“Î“Â‡");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-                                    ld.setDecisionType("(��) �������� ��������");
+                                    ld.setDecisionType("(Î“Â‚Î“Â„) Î“Â‚Î“Â?Î“Â“Î“Â‰Î“Â‹Î“Â‰Î“ÂŠÎ“Â? Î“Â„Î“Â‰Î“Â?Î“Â”Î“Â?Î“ÂƒÎ“ÂŒÎ“Â?");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-                                    ld.setDecisionType("(���) ����� ����������� ������������");
+                                    ld.setDecisionType("(Î“Â?Î“Â?Î“Â?) Î“Â?Î“Â‘Î“Â?Î“ÂŽÎ“Â‡ Î“Â?Î“Â?Î“ÂŒÎ“Â?Î“ÂˆÎ“Â…Î“Â”Î“Â‰Î“ÂŠÎ“Â?Î“Â• Î“Â?Î“Â…Î“Â‘Î“Â‰Î“Â…Î“Â—Î“Â?Î“ÂŒÎ“Â…Î“Â?Î“Â?Î“Â•");
                                 }
                                 ld.setURI(bindingSet.getValue("doc").toString());
                                 ld.setId(ld.getURI().split("gr\\/")[1].split("\\/",2)[1]);
@@ -2987,26 +2993,29 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         else{
                             LegalDocument ld = new LegalDocument();
                             String type = bindingSet.getValue("type").toString();
-                             if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-                                ld.setDecisionType("��������");
+                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
+                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-                                ld.setDecisionType("��������� �������� (��)");
+                                ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-                                ld.setDecisionType("�����");
+                                ld.setDecisionType("ΝΟΜΟΣ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-                                ld.setDecisionType("(���) ����� ���������� ����������");
+                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-                                ld.setDecisionType("(��) ��������� �������");
+                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-                                ld.setDecisionType("(��) �������� ��������");
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
                             }
                             else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-                                ld.setDecisionType("(���) ����� ����������� ������������");
+                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
+                                ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
                             }
                             gaz.setDocs(gaz.getDocs()+1);
                             String issues = bindingSet.getValue("issues").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");

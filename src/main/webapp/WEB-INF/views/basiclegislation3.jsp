@@ -7,7 +7,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ,κ,κα,κβ,,κγ,κδ,κε,κστ,κζ,κη,κθ,λ,λα,λβ,,λγ,λδ,λε,λστ,λζ,λη,λθ', ',')}" scope="application" />
+<c:set var="ionian_nums" value="${fn:split('α,β,γ,δ,ε,στ,ζ,η,θ,ι,ια,ιβ,ιγ,ιδ,ιε,ιστ,ιζ,ιη,ιθ,κ,κα,κβ,,κγ,κδ,κε,κστ,κζ,κη,κθ,λ,λα,λβ,,λγ,λδ,λε,λστ,λζ,λη,λθ', ',')}" scope="application" />
 <c:set var="chap_nums" value="${fn:split('Α,Β,Γ,Δ,Ε,ΣΤ,Ζ,Η,Θ,Ι,ΙΑ,ΙΒ,ΙΓ,ΙΔ,ΙΕ,ΙΣΤ,ΙΖ,ΙΗ,ΙΘ', ',')}" scope="application" />
 <!DOCTYPE html>
 <html lang="en">
