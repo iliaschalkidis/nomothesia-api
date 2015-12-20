@@ -49,7 +49,7 @@
         <!-- Navigation Bar -->
         <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
             <div class="container-fluid">
-                <div class="navbar-header"><a class="navbar-brand"  href="/"><img style="height: 40px; margin-top: -10px;" src="/resources/images/logo.png"</img></a>
+                <div class="navbar-header"><a class="navbar-brand"  href="/"><img style="height: 40px; margin-top: -5px;" src="/resources/images/logo.png"</img></a>
                     <a class="navbar-brand"  href="/" style="font-family:'Jura'; font-size: 33px"><spring:message code="navbar.brand"/></a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                         <span class="sr-only">Toggle navigation</span>
@@ -213,7 +213,7 @@
                                         <tbody>
                                             <c:forEach var="ldr" items="${ldrecent}" varStatus="loop">
                                                 <tr>
-                                                    <td><a href="<c:url value="${ldr.getURI()}"/>">${ldr.getTitle()}</a></td>
+                                                    <td><a href="<c:url value="${fn:replace(ldr.getURI(),'legislation.di.uoa.gr','localhost:8080')}"/>"><c:if test="${not empty ldr.getTitle()}">${ldr.getTitle()}</c:if><c:if test="${empty ldr.getTitle()}">${ldr.getDecisionType()} ${ldr.getYear()}/${ldr.getId()} (ΑΓΝΩΣΤΟΣ ΤΙΤΛΟΣ)</c:if></a></td>
                                                     <td>${ldr.getDecisionType()} ${ldr.getYear()}/${ldr.getId()}</td>
                                                     <td>${ldr.getPublicationDate()}</td>
                                                 </tr>
@@ -237,7 +237,7 @@
                                         <tbody>
                                             <c:forEach var="ldv" items="${ldviewed}" varStatus="loop">
                                                 <tr>
-                                                    <td><a href="<c:url value="${ldv.getURI()}"/>">${ldv.getTitle()}</a></td>
+                                                    <td><a href="${ldv.getURI()}"/>"><c:if test="${not empty ldv.getTitle()}">${ldr.getTitle()}</c:if><c:if test="${empty ldv.getTitle()}">${ldv.getDecisionType()} ${ldv.getYear()}/${ldv.getId()} (ΑΓΝΩΣΤΟΣ ΤΙΤΛΟΣ)</c:if></a></td>
                                                     <td>${ldv.getDecisionType()} ${ldv.getYear()}/${ldv.getId()}</td>
                                                     <td>${ldv.getPublicationDate()}</td>
                                                 </tr>

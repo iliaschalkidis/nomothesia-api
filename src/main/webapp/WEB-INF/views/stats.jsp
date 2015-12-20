@@ -87,7 +87,7 @@
                                 showInLegend: true,
                                 dataPoints: [
                                 <c:set var="yearcount" value="0"/>
-                                <c:forEach var="num" items="${lists.get(5)}" varStatus="loop">
+                                <c:forEach var="num" items="${lists.get(6)}" varStatus="loop">
                                     { label: "${years[yearcount]}", y: ${num} },
                                     <c:set var="yearcount" value="${yearcount+1}"/>
                                 </c:forEach>

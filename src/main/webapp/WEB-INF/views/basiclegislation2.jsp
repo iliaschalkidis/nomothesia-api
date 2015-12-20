@@ -280,10 +280,6 @@
                                 <!-- Twitter -->
                                 <a href="http://twitter.com/share?url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/twitter.png" alt="Twitter" /></a>
                             </li>
-                            <li style="display: inline;">
-                                <!-- Google+ -->
-                                <a href="https://plus.google.com/share?url=${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}" target="_blank"><img src="/resources/images/google.png" alt="Google" /></a>
-                            </li>
                         </div>
                     </ul>
 
@@ -620,7 +616,7 @@
 
                                                 <tr class="clickable" data-toggle="collapse" id="mod" data-target=".modcollapsed">
                                                     <td>${legalmod.getCompetenceGround().getPublicationDate()}</td>
-                                                    <td>${legalmod.getCompetenceGround().getTitle()} <span style="cursor: pointer;" class="glyphicon glyphicon-download" aria-hidden="true"></span></td>
+                                                    <td><a href="${legalmod.getCompetenceGround().getURI()} ">${legalmod.getCompetenceGround().getTitle()}</a> <span style="cursor: pointer;" class="glyphicon glyphicon-download" aria-hidden="true"></span></td>
                                                     <td>${legalmod.getCompetenceGround().getFEK()}</td>
                                                 </tr>
                                             </c:if>
@@ -633,11 +629,12 @@
                                                             <spring:message var="pas" code='basic.pas'/>
                                                             <spring:message var="case2" code='basic.case'/>
                                                             <spring:message var="art" code='basic.article'/>
-                                                            <c:set var="uris" value="${fn:split(legalmod.getURI(),'l')}"/>
-                                                            <c:set var="modname" value="${fn:replace(uris[3],'paragraph',par)}"/>
+                                                            <spring:message var="chap" code='basic.chapter'/>
+                                                            <c:set var="modname" value="${fn:replace(legalmod.getTarget(),'paragraph',par)}"/>
                                                             <c:set var="modname" value="${fn:replace(modname,'passage',pas)}"/>
                                                             <c:set var="modname" value="${fn:replace(modname,'case',case2)}"/>
-                                                            <c:set var="modname" value="${fn:replace(modname,'e',art)}"/>
+                                                            <c:set var="modname" value="${fn:replace(modname,'article',art)}"/>
+                                                            <c:set var="modname" value="${fn:replace(modname,'chapter',chap)}"/>
                                                         <td><spring:message code="basic.mod"/> ${modname}</td>
                                                         <td><spring:message code="basic.type"/></td>
                                                         </thead>

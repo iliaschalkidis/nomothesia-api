@@ -219,7 +219,7 @@
                         <tbody>
                             <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
                                 <tr>
-                                    <td><a href="<c:url value="${fn:replace(legaldoc.getURI(),'legislation.di.uoa.gr','localhost:8080')}"/>"><c:if test="${not empty legaldoc.getTitle()}">${legaldoc.getTitle()}</c:if><c:if test="${empty legaldoc.getTitle()}">${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()} (ΑΓΝΩΣΤΟΣ ΤΙΤΛΟΣ)</c:if></a></td>
+                                    <td><a href="<c:url value="${legaldoc.getURI()}"/>"><c:if test="${not empty legaldoc.getTitle()}">${legaldoc.getTitle()}</c:if><c:if test="${empty legaldoc.getTitle()}">${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()} (ΑΓΝΩΣΤΟΣ ΤΙΤΛΟΣ)</c:if></a></td>
                                     <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                                     <td>${legaldoc.getPublicationDate()}</td>
                                 </tr>

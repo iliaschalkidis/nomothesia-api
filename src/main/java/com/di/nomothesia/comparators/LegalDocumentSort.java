@@ -204,7 +204,7 @@ public class LegalDocumentSort {
                                     for (int l=0;l<art.getParagraphs().size();l++) {
                                         Collections.sort(art.getParagraphs().get(l).getPassages(), new PassageComparator());
                                         if (art.getParagraphs().get(l).getCaseList() != null) {
-                                            Collections.sort(art.getParagraphs().get(j).getCaseList(), new CaseComparator());
+                                            Collections.sort(art.getParagraphs().get(l).getCaseList(), new CaseComparator());
                                         }
                                     }
                                     legald.getArticles().get(i).getParagraphs().get(j).getPassages().get(z).getModification().setFragment(art);

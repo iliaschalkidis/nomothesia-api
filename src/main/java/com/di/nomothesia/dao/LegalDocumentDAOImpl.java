@@ -39,7 +39,23 @@ import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import eu.earthobservatory.org.StrabonEndpoint.client.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.Update;
 import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
@@ -751,10 +767,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 
                                 paragraph.setURI(bindingSet.getValue("part").toString());
                                 if(mod>=1&&paragraph.getURI().contains("modification")){
-                                    paragraph.setId(Integer.parseInt(paragraph.getURI().split("paragraph\\/")[2].replaceAll("[Î“Â?-Î“Â™]+","")));
+                                    paragraph.setId(paragraph.getURI().split("paragraph\\/")[2]);
                                 }
                                 else{
-                                    paragraph.setId(Integer.parseInt(paragraph.getURI().split("paragraph\\/")[1].replaceAll("[Î“Â?-Î“Â™]+","")));
+                                    paragraph.setId(paragraph.getURI().split("paragraph\\/")[1]);
                                 }
                                 
                                 if ((mod==0)||(mod==2)||((mod==1)&&(!paragraph.getURI().contains("modification")))) {
@@ -1888,7 +1904,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             else if (bindingSet.getValue("type2").toString().equals("http://legislation.di.uoa.gr/ontology/Paragraph")) {
                                 
                                 Paragraph paragraph = new Paragraph();
-                                paragraph.setId(count2+2);
+                                paragraph.setId(Integer.toString(count2+2));
                                 paragraph.setURI(bindingSet.getValue("part").toString());
                                 //System.out.println(paragraph.getURI());
                                 //System.out.println("NEW PARAGRAPH");
@@ -2044,9 +2060,117 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         return modifications;
             
     }
+   
+//    @Override
+//    public List<LegalDocument> search(Map<String, String> params) {
+//        List<LegalDocument> LDs = new ArrayList<LegalDocument>();
+//        //Apache Lucene searching via criteria
+//        String uri = "";
+//        try {
+//            System.out.println(getClass().getResource("/fek_index").toString());
+//            Path path = Paths.get(getClass().getResource("/fek_index").toString());
+//            Directory directory2 = FSDirectory.open(path);       
+//            IndexReader indexReader =  DirectoryReader.open(directory2);
+//            IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+//            BooleanQuery finalQuery = new BooleanQuery();
+//            if(params.get("keywords")!=null&&!params.get("keywords").isEmpty()){
+//                if(params.get("keywords").contains(",")){
+//                    String[] keywords = params.get("keywords").split(",");
+//                    for (String keyword : keywords) {
+//                        QueryParser queryParser = new QueryParser("text",  new StandardAnalyzer());
+//                        Query query = queryParser.parse("\"" + keyword + "\"~");
+//                        finalQuery.add(query, Occur.MUST);
+//                    }
+//                }
+//                else{
+//                    QueryParser queryParser = new QueryParser("text",  new StandardAnalyzer());
+//                    Query query = queryParser.parse("\""+params.get("keywords")+"\"~");
+//                    finalQuery.add(query, Occur.MUST);
+//                }
+//            }
+//            if(params.get("year")!=null&&!params.get("year").isEmpty()){
+//                Query query2 = NumericRangeQuery.newIntRange("year", 1, Integer.parseInt(params.get("year")), Integer.parseInt(params.get("year")), true, true);//queryParser2.parse(params.get("year"));
+//                finalQuery.add(query2, Occur.MUST);
+//            }
+//            if(params.get("fek_year")!=null&&!params.get("fek_year").isEmpty()){
+//                Query query3 = NumericRangeQuery.newIntRange("year", 1, Integer.parseInt(params.get("fek_year")), Integer.parseInt(params.get("fek_year")), true, true);//queryParser3.parse(params.get("fek_year"));
+//                finalQuery.add(query3, Occur.MUST);
+//            }
+//            if(params.get("fek_id")!=null&&!params.get("fek_id").isEmpty()){
+//                Query query4 = NumericRangeQuery.newIntRange("fek_id", 1, Integer.parseInt(params.get("fek_id")), Integer.parseInt(params.get("fek_id")), true, true);//queryParser4.parse(params.get("fek_id"));
+//                finalQuery.add(query4, Occur.MUST);
+//            }
+//            if(params.get("type")!=null&&!params.get("type").isEmpty()){
+//                QueryParser queryParser5 = new QueryParser("type",  new StandardAnalyzer());
+//                Query query5 = queryParser5.parse("\""+params.get("type")+"\"~");
+//                finalQuery.add(query5, Occur.MUST);
+//            }
+//            if(params.get("id")!=null&&!params.get("id").isEmpty()){
+//                Query query6 = NumericRangeQuery.newIntRange("id", 1, Integer.parseInt(params.get("id")), Integer.parseInt(params.get("id")), true, true);//queryParser6.parse(params.get("id"));
+//                finalQuery.add(query6, Occur.MUST);
+//            }
+//            if(params.get("date")!=null&&!params.get("date").isEmpty()){
+//                Query query6 = NumericRangeQuery.newIntRange("date", 1, Integer.parseInt(params.get("date").replace("-", "")), Integer.parseInt(params.get("date").replace("-", "")), true, true);//queryParser6.parse(params.get("id"));
+//                finalQuery.add(query6, Occur.MUST);
+//            }
+//            if(params.get("datefrom")!=null&&!params.get("datefrom").isEmpty()){
+//                Query query6 = NumericRangeQuery.newIntRange("date", 1, Integer.parseInt(params.get("datefrom").replace("-", "")), Integer.parseInt(params.get("dateto").replace("-", "")), true, true);//queryParser6.parse(params.get("id"));
+//                finalQuery.add(query6, Occur.MUST); 
+//            }
+//            //System.out.println("FINAL QUERY: "+finalQuery.toString());
+//            TopDocs topDocs = indexSearcher.search(finalQuery,300);
+//            System.out.println(topDocs.totalHits); 
+//            System.out.println(topDocs.scoreDocs.length);
+//            if(topDocs.totalHits>0){ //
+//                //System.out.print(" | TOTAL_HITS: " + topDocs.totalHits);
+//                for (ScoreDoc scoreDoc : topDocs.scoreDocs) { 
+//                    Document document = indexSearcher.doc(scoreDoc.doc);
+//                    
+//                    LegalDocument ld = new LegalDocument();
+//                    ld.setURI(document.get("uri"));
+//                    ld.setFEK(document.get("fek"));
+//                    ld.setPublicationDate(document.get("date").substring(0, 4)+"-"+document.get("date").substring(4,6)+"-"+document.get("date").substring(6,8));
+//                    String type = document.get("type");
+//                    if (type.equals("con")) {
+//                        ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
+//                    }
+//                    else if (type.equals("pd")) {
+//                        ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
+//                    }
+//                    else if (type.equals("law")) {
+//                        ld.setDecisionType("ΝΟΜΟΣ");
+//                    }
+//                    else if (type.equals("amc")) {
+//                        ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+//                    }
+//                    else if (type.equals("md")) {
+//                        ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+//                    }
+//                    else if (type.equals("rd")) {
+//                        ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+//                    }
+//                    else if (type.equals("la")) {
+//                        ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+//                    }
+//                    else if (type.equals("rp")) {
+//                        ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
+//                    }
+//                    String yearid = document.get("uri").split(document.get("type")+"\\/",2)[1];
+//                    ld.setYear(yearid.split("\\/")[0]);
+//                    ld.setId(yearid.split("\\/")[1]);
+//                    ld.setTitle(document.get("title"));
+//                    LDs.add(ld);
+//                }
+//            }
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//            e.printStackTrace();
+//        }
+//        
+//        return LDs;
+//    }
     
-
-    @Override
+     @Override
     public List<LegalDocument> search(Map<String, String> params) {
         
         /*for (Map.Entry entry : params.entrySet()) {
@@ -2965,25 +3089,28 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             if(gaz.getDocs()!=0){
                                 String type = bindingSet.getValue("type").toString();
                                 if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-                                    ld.setDecisionType("Î“Â“Î“Â•Î“Â?Î“Â”Î“Â?Î“ÂƒÎ“ÂŒÎ“Â?");
+                                    ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-                                    ld.setDecisionType("Î“ÂŽÎ’Â Î“ÂŽÎ’Ê½Î“ÂŽÎ•ÎˆÎ“ÂŽÎ²Â€Ê¼Î“ÂŽÎ²Â€Â?Î“ÂŽÎ’Ê½Î“ÂŽÎ²Â„Ê¼Î“ÂŽÎ•Ê½Î“ÂŽÎ•Îˆ Î“ÂŽÎ²Â€Â?Î“ÂŽÎ²Â„Ê¼Î“ÂŽÎ²Â€Â˜Î“ÂŽÎ’ïŸ‚Î“ÂŽÎ²Â€Â˜Î“ÂŽÎ²Â€ÂœÎ“ÂŽÎ•Â“Î“ÂŽÎ²Â€Â˜");
+                                    ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-                                    ld.setDecisionType("Î“Â?Î“Â?Î“ÂŒÎ“Â?Î“Â“");
+                                    ld.setDecisionType("ΝΟΜΟΣ");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-                                    ld.setDecisionType("(Î“Â?Î“Â•Î“Â“) Î“Â?Î“Â‘Î“Â?Î“ÂŽÎ“Â‡ Î“Â•Î“Â?Î“Â?Î“Â•Î“Â‘Î“ÂƒÎ“Â‰Î“ÂŠÎ“Â?Î“Â• Î“Â“Î“Â•Î“ÂŒÎ“Â‚Î“Â?Î“Â•Î“Â‹Î“Â‰Î“Â?Î“Â•");
+                                    ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-                                    ld.setDecisionType("(Î“Â•Î“Â?) Î“Â•Î“Â?Î“Â?Î“Â•Î“Â‘Î“ÂƒÎ“Â‰Î“ÂŠÎ“Â‡ Î“Â?Î“Â?Î“Â?Î“Â–Î“Â?Î“Â“Î“Â‡");
+                                    ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-                                    ld.setDecisionType("(Î“Â‚Î“Â„) Î“Â‚Î“Â?Î“Â“Î“Â‰Î“Â‹Î“Â‰Î“ÂŠÎ“Â? Î“Â„Î“Â‰Î“Â?Î“Â”Î“Â?Î“ÂƒÎ“ÂŒÎ“Â?");
+                                    ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
                                 }
                                 else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-                                    ld.setDecisionType("(Î“Â?Î“Â?Î“Â?) Î“Â?Î“Â‘Î“Â?Î“ÂŽÎ“Â‡ Î“Â?Î“Â?Î“ÂŒÎ“Â?Î“ÂˆÎ“Â…Î“Â”Î“Â‰Î“ÂŠÎ“Â?Î“Â• Î“Â?Î“Â…Î“Â‘Î“Â‰Î“Â…Î“Â—Î“Â?Î“ÂŒÎ“Â…Î“Â?Î“Â?Î“Â•");
+                                    ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+                                }
+                                else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
+                                    ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
                                 }
                                 ld.setURI(bindingSet.getValue("doc").toString());
                                 ld.setId(ld.getURI().split("gr\\/")[1].split("\\/",2)[1]);
@@ -3052,6 +3179,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         List<ArrayList<String>> lists= new ArrayList<ArrayList<String>>();
 
         String[] types = {"PresidentialDecree","Law","ActOfMinisterialCabinet","MinisterialDecision","RegulatoryProvision","LegislativeAct"};
+        String[] years =  {"2006","2007","2008","2009","2010","2011","2012","2013","2014","2015"};
         String sesameServer ="";
         String repositoryID ="";
         String URI= "";
@@ -3109,10 +3237,22 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     try {
                         ArrayList<String> typed = new ArrayList<String>();
                         // iterate the result set
+                        int k=0;
                         while (result.hasNext()) {
                             BindingSet bindingSet = result.next();  
                             if(bindingSet.getValue("year")!=null){
+                                while(!trimDoubleQuotes(bindingSet.getValue("year").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>","")).equals(years[k])){
+                                    typed.add("0");
+                                    if(k<years.length-1){
+                                        k++;
+                                    }
+                                    else{
+                                        break;
+                                    }
+                                }
                                 typed.add(trimDoubleQuotes(bindingSet.getValue("sum").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>","")));
+                                k++;
+
                             }
                         }
                         lists.add(typed);

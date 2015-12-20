@@ -38,6 +38,11 @@ public class Modification {
     public String getURI() {
         return URI;
     }
+    
+    public String getTarget(){
+        String target = patient.split("(law|pd|la|rd|con|md|rp|amc)+\\/[0-9]+\\/")[1].split("\\/",2)[1];
+        return target;
+    }
 
     public void setURI(String URI) {
         this.URI = URI;

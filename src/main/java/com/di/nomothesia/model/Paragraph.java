@@ -11,7 +11,7 @@ public class Paragraph implements Fragment{
     private List<String> images;
     private String table;
     private String URI;
-    private int id;
+    private String id;
     private int status;
     private String type;
     
@@ -83,11 +83,11 @@ public class Paragraph implements Fragment{
         this.URI = uri;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
     
