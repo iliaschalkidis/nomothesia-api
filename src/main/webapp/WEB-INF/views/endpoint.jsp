@@ -119,6 +119,9 @@
                     <div align="center" style="padding:10px;">
                         <a href="/endpoint/query/3" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
                     </div>
+                    <div align="center" style="padding:10px;">
+                        <a href="/endpoint/query/4" class="btn btn-default" style="width:100%; text-align: justify;"><spring:message code="endpoint.q4"/></a>
+                    </div>
                 </div>
                 <div class="col-md-9">
                     <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ENDPOINT</h3></span>

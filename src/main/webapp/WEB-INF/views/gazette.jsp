@@ -196,17 +196,53 @@
                         <div role="tabpanel">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#introduction" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="gazette.full"/></a></li>
-                                <li role="presentation"><a href="#background" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="gazette.year"/></a></li>
+                                <li role="presentation" class="active"><a href="#byyear" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="gazette.year"/></a></li>
+                                <li role="presentation"><a href="#full" aria-controls="home" role="tab" data-toggle="tab" style="font-family: 'Comfortaa', cursive;"><spring:message code="gazette.full"/></a></li>
 
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content" style="text-align:justify;">
-                                <div role="tabpanel" style="text-align: center;" class="tab-pane fade in active" id="introduction">
+                                
+                                <div role="tabpanel" class="tab-pane fade in active" id="byyear">
                                     <br/>
                                     <div class="table-responsive">
-                                    <br/><table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <br/><table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th><spring:message code="stats.year"/></th>
+                                                <th><spring:message code="stats.fek1"/></th>
+                                                <th><spring:message code="stats.fek2"/></th>
+                                                <th><spring:message code="stats.feknum"/></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>2006</td><td>205 (<c:out value="${fn:substringBefore(20500/284,'.')}"/>%)</td><td>268 (<c:out value="${fn:substringBefore(26800/284,'.')}"/>%)</td><td>284</td></tr>
+                                            <tr><td>2007</td><td>230 (<c:out value="${fn:substringBefore(23000/293,'.')}"/>%)</td><td>284 (<c:out value="${fn:substringBefore(28400/293,'.')}"/>%)</td><td>293</td></tr>
+                                            <tr><td>2008</td><td>209 (<c:out value="${fn:substringBefore(20900/266,'.')}"/>%)</td><td>255 (<c:out value="${fn:substringBefore(25500/266,'.')}"/>%)</td><td>266</td></tr>
+                                            <tr><td>2009</td><td>148 (<c:out value="${fn:substringBefore(14800/239,'.')}"/>%)</td><td>226 (<c:out value="${fn:substringBefore(22600/239,'.')}"/>%)</td><td>239</td></tr>
+                                            <tr><td>2010</td><td>204 (<c:out value="${fn:substringBefore(20400/247,'.')}"/>%)</td><td>233 (<c:out value="${fn:substringBefore(23300/247,'.')}"/>%)</td><td>247</td></tr>
+                                            <tr><td>2011</td><td>238 (<c:out value="${fn:substringBefore(23800/272,'.')}"/>%)</td><td>263 (<c:out value="${fn:substringBefore(26300/272,'.')}"/>%)</td><td>272</td></tr>
+                                            <tr><td>2012</td><td>212 (<c:out value="${fn:substringBefore(21200/257,'.')}"/>%)</td><td>251 (<c:out value="${fn:substringBefore(25100/257,'.')}"/>%)</td><td>257</td></tr>
+                                            <tr><td>2013</td><td>237 (<c:out value="${fn:substringBefore(23700/287,'.')}"/>%)</td><td>275 (<c:out value="${fn:substringBefore(27500/287,'.')}"/>%)</td><td>287</td></tr>
+                                            <tr><td>2014</td><td>246 (<c:out value="${fn:substringBefore(24600/281,'.')}"/>%)</td><td>264 (<c:out value="${fn:substringBefore(26400/281,'.')}"/>%)</td><td>281</td></tr>
+                                            <tr><td>2015</td><td>137 (<c:out value="${fn:substringBefore(13700/167,'.')}"/>%)</td><td>159 (<c:out value="${fn:substringBefore(15900/167,'.')}"/>%)</td><td>167</td></tr>
+                                            <tr><td>ΣΥΝΟΛΟ</td><td>1866 (<c:out value="${fn:substringBefore(186600/2593,'.')}"/>%)</td><td>2478 (<c:out value="${fn:substringBefore(247800/2593,'.')}"/>%)</td><td>2593</td></tr>
+                                        </tbody>
+                                    </table>  
+                                    </div>
+                                     <br/>
+                                    <br/>
+                                    <div  class="row" >
+                                    <br/>
+                                        <div  class="row" style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;"><spring:message code="stats.comment1"/></div>
+                                    <div  class="row" style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;"><spring:message code="stats.comment2"/></div>
+                                    </div>
+                                    </div>
+                                    <div role="tabpanel" style="text-align: center;" class="tab-pane fade" id="full">
+                                    <br/>
+                                    <div class="table-responsive">
+                                    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th><spring:message code="gazette.title"/></th>
@@ -233,44 +269,6 @@
                                     </div>
                                         
                                 </div>
-                                <div role="tabpanel" class="tab-pane fade" id="background">
-                                    <br/>
-                                    <div class="table-responsive">
-                                    <br/><table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Έτος</th>
-                                                <th>Κατηγορία ΦΕΚ 1*</th>
-                                                <th>Κατηγορία ΦΕΚ 2**</th>
-                                                <th>Αριθμός ΦΕΚ</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr><td>2006</td><td>205 (<c:out value="${fn:substringBefore(20500/284,'.')}"/>%)</td><td>268 (<c:out value="${fn:substringBefore(26800/284,'.')}"/>%)</td><td>284</td></tr>
-                                            <tr><td>2007</td><td>230 (<c:out value="${fn:substringBefore(23000/293,'.')}"/>%)</td><td>284 (<c:out value="${fn:substringBefore(28400/293,'.')}"/>%)</td><td>293</td></tr>
-                                            <tr><td>2008</td><td>209 (<c:out value="${fn:substringBefore(20900/266,'.')}"/>%)</td><td>255 (<c:out value="${fn:substringBefore(25500/266,'.')}"/>%)</td><td>266</td></tr>
-                                            <tr><td>2009</td><td>148 (<c:out value="${fn:substringBefore(14800/239,'.')}"/>%)</td><td>226 (<c:out value="${fn:substringBefore(22600/239,'.')}"/>%)</td><td>239</td></tr>
-                                            <tr><td>2010</td><td>204 (<c:out value="${fn:substringBefore(20400/247,'.')}"/>%)</td><td>233 (<c:out value="${fn:substringBefore(23300/247,'.')}"/>%)</td><td>247</td></tr>
-                                            <tr><td>2011</td><td>238 (<c:out value="${fn:substringBefore(23800/272,'.')}"/>%)</td><td>263 (<c:out value="${fn:substringBefore(26300/272,'.')}"/>%)</td><td>272</td></tr>
-                                            <tr><td>2012</td><td>212 (<c:out value="${fn:substringBefore(21200/257,'.')}"/>%)</td><td>251 (<c:out value="${fn:substringBefore(25100/257,'.')}"/>%)</td><td>257</td></tr>
-                                            <tr><td>2013</td><td>237 (<c:out value="${fn:substringBefore(23700/287,'.')}"/>%)</td><td>275 (<c:out value="${fn:substringBefore(27500/287,'.')}"/>%)</td><td>287</td></tr>
-                                            <tr><td>2014</td><td>246 (<c:out value="${fn:substringBefore(24600/281,'.')}"/>%)</td><td>264 (<c:out value="${fn:substringBefore(26400/281,'.')}"/>%)</td><td>281</td></tr>
-                                            <tr><td>2015</td><td>137 (<c:out value="${fn:substringBefore(13700/167,'.')}"/>%)</td><td>159 (<c:out value="${fn:substringBefore(15900/167,'.')}"/>%)</td><td>167</td></tr>
-                                            <tr><td>ΣΥΝΟΛΟ</td><td>1866 (<c:out value="${fn:substringBefore(186600/2593,'.')}"/>%)</td><td>2478 (<c:out value="${fn:substringBefore(247800/2593,'.')}"/>%)</td><td>2593</td></tr>
-                                        </tbody>
-                                    </table>  
-                                    </div>
-                                     <br/>
-                                    <br/>
-                                    <div  class="row" >
-                                        <div  class="row">
-                                    <div id="chartContainer" style="height: 300px; width: 100%;">
-                                    </div></div>
-                                    <br/>
-                                        <div  class="row" style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;">*Η κατηγορία ΦΕΚ 1 ορίζεται ως το υποσύνολο των ΦΕΚ με τουλάχιστον ένα νομοθετικό έγγραφο.</div>
-                                    <div  class="row" style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;">**Η κατηγορία ΦΕΚ 2 ορίζεται ως το υποσύνολο των ΦΕΚ που αναγνωρίστηκαν επιτυχώς.</div>
-                                    </div>
-                                    </div>
                             </div>
                         </div>
                     </div>
@@ -296,17 +294,26 @@
         <script type="text/javascript" charset="utf-8">
                     $(document).ready(function() {
             $('#example').dataTable({
-            aaSorting: [[ 2, "desc" ]],
-                    bSortable: true,
+            aaSorting: [[ 1, "desc" ]],
                     "iDisplayLength": 10,
+                    "autoWidth": false,
+                    "scrollY": "500px",
+                    "scrollCollapse": true,
+                    "paging": true,
                     aoColumnDefs: [
                     { "aTargets": [ 0 ], "bSortable": true },
                     { "aTargets": [ 1 ], "bSortable": true },
-                    { "aTargets": [ 2 ], "bSortable": false }
+                    { "aTargets": [ 2 ], "bSortable": false },
+                    { "aTargets": [ 3 ], "bSortable": false },
+                    { "aTargets": [ 4 ], "bSortable": false },
+                    { "aTargets": [ 5 ], "bSortable": false }
                     ],
                     "columns": [
-                    { "width": "70%" },
-                    { "width": "20%" },
+                    { "width": "10%" },
+                    { "width": "10%" },
+                    { "width": "10%" },
+                    { "width": "50%" },
+                    { "width": "10%" },
                     { "width": "10%" }
                    ],
             <c:set var="localeCode2" value="${pageContext.response.locale}" />

@@ -113,6 +113,7 @@
                     <ul>
                         <li><spring:message code="error3"/></li>
                         <li><spring:message code="error4"/></li>
+                        <li><spring:message code="error6"/></li>
                         <li><spring:message code="error5"/></li>
                     </ul>
                     

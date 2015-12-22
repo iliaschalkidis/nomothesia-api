@@ -178,13 +178,15 @@
       
     <!-- Stats -->
     <div class="container">
-        <div class="row" style="min-height: 505px;">
+        <div class="row" style="min-height: 630px;">
             <div >
+            <br/>
+            <div class="alert alert-warning" role="alert"><spring:message code="stats.comment"/></div>
             <div class="row" style="padding:10px;">
             <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 25px;"><spring:message code="stats.header"/></div>        
             </div>
             <div class="row" style="padding:10px;">
-                <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 20px;">Ένταση νομοθετικού έργου κατ'έτος<br/></div>       
+                <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 20px;"><spring:message code="stats.header2"/><br/></div>       
                 <div id="chartContainer"></div>
             </div>
             </div>
@@ -216,7 +218,7 @@
         <div class="row" style="min-height: 505px;">
             <div >
             <div class="row" style="padding:10px;">
-            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 20px;">Έκδοση ΠΝΠ (Πράξεων Νομοθετικού Περιεχομένου)* κατ'έτος<br/></div>
+            <div style="font-family: 'Comfortaa', cursive; text-align: center; font-size: 20px;"><spring:message code="stats.header3"/><br/></div>
             <div id="chartContainer2"></div>
             </div>
             </div>
@@ -243,7 +245,7 @@
             <br/>
             <br/>
             <br/>
-            <div style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;">*Οι ΠΝΠ (Πράξεις Νομοθετικού Περιεχομένου) δεν χρειάζονται άμεση έγκριση μέσω ψηφοφορίας από την Βουλή των Ελλήνων.</div>
+            <div style="font-family: 'Comfortaa', cursive; text-align: justify; font-size: 15px;"><spring:message code="stats.comment3"/></div>
 
           </div>
           </div>

@@ -208,7 +208,7 @@
                             </c:when>
                         </c:choose>
                         <c:set var="fek2" value="${fn:split(fek, '/')}" />
-                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a> <a href="http://localhost:8080/gazette/a/${fek2[1]}/${fek2[2]}" target="_blank"><img height="15px" src="/resources/images/pdf-icon.jpg" alt="PDF" /></a><br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a> <a href="http://legislation.di.uoa.gr/gazette/a/${fek2[1]}/${fek2[2]}" target="_blank"><img height="15px" src="/resources/images/pdf-icon.jpg" alt="PDF" /></a><br/>
                     <u style="color:  #1087dd"><spring:message code="basic.signer"/></u><br/>
                         <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
                             ${signer.getFullName()}<br/> 
@@ -265,10 +265,10 @@
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><spring:message code="basic.text"/></a></li>
-                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><spring:message code="basic.cit"/></a></li>
-                        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><spring:message code="basic.content"/></a></li>
-                        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><spring:message code="basic.timeline"/></a></li>
+                        <li role="presentation" class="active"><a href="#text" aria-controls="home" role="tab" data-toggle="tab"><spring:message code="basic.text"/></a></li>
+                        <li role="presentation"><a href="#citations" aria-controls="profile" role="tab" data-toggle="tab"><spring:message code="basic.cit"/></a></li>
+                        <li role="presentation"><a href="#list" aria-controls="messages" role="tab" data-toggle="tab"><spring:message code="basic.content"/></a></li>
+                        <li role="presentation"><a href="#timeline" aria-controls="settings" role="tab" data-toggle="tab"><spring:message code="basic.timeline"/></a></li>
                         <li role="presentation"><a href="#images" aria-controls="images" role="tab" data-toggle="tab"><spring:message code="basic.images"/></a></li>
                         <li role="presentation"><a href="#problems" aria-controls="problems" role="tab" data-toggle="tab"><spring:message code="basic.problems"/></a></li>
                         <div id="share-buttons">
@@ -285,7 +285,7 @@
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="home">
+                        <div role="tabpanel" class="tab-pane active" id="text">
                             <c:if test="${empty legaldoc.getChapters()}">
                                 <br/>
                                 <div class="alert alert-warning" role="alert"><spring:message code="basic.notext"/></div>
@@ -536,7 +536,7 @@
                             </div>
                         </c:forEach>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="profile">
+                        <div role="tabpanel" class="tab-pane" id="citations">
                         <c:if test="${not empty legaldoc.getCitations()}">
                         <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
@@ -558,7 +558,7 @@
                             <div class="alert alert-warning" role="alert"><spring:message code="basic.nocitations"/></div>
                         </c:if>       
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="messages">
+                        <div role="tabpanel" class="tab-pane" id="list">
                             <ul id="messagescol">
                                 <c:forEach var="chapter" items="${legaldoc.getChapters()}" varStatus="loop">
                                     <% Chapter c = (Chapter) pageContext.getAttribute("chapter");
@@ -595,7 +595,7 @@
                                 </c:forEach>
                             </ul>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="settings">
+                        <div role="tabpanel" class="tab-pane" id="timeline">
                             <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="text-align: left;" cellspacing="0" width="100%">
                                 <thead>
