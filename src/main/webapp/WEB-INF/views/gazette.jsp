@@ -259,7 +259,7 @@
                                                     <td>${gaz.getTitle()}</td>
                                                     <td>${gaz.getPublicationDate()}</td>
                                                     <td>${gaz.getDocs()}</td>
-                                                    <td><c:choose><c:when test="${not empty gaz.getList()}"><c:forEach var="doc" items="${gaz.getList()}" varStatus="loop"><a href="${doc.getURI()}" target="_blank">${doc.getDecisionType()} ${doc.getId()}</a>,</c:forEach></c:when><c:when test="${empty gaz.getList()}">-</c:when></c:choose></td>
+                                                    <td><c:choose><c:when test="${not empty gaz.getList()}"><c:forEach var="doc" items="${gaz.getList()}" varStatus="loop"><a href="${doc.getURI()}" target="_blank"><spring:message code="home.${doc.getDecisionType()}"/> ${doc.getId()}</a>,</c:forEach></c:when><c:when test="${empty gaz.getList()}">-</c:when></c:choose></td>
                                                     <td>${gaz.getIssues()}</td>
                                                     <td><a href="${gaz.getURI()}" target="_blank"><img src="/resources/images/pdf-icon.jpg" alt="PDF" /></a></td>
                                                 </tr>

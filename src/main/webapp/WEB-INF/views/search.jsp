@@ -219,9 +219,8 @@
                         <tbody>
                             <c:forEach var="legaldoc" items="${legalDocuments}" varStatus="loop">
                                 <tr>
-                                    <c:set var="uri2" value="${fn:replace(legaldoc.getURI(),'http://legislation.di.uoa.gr', 'http://localhost:8080')}" />
-                                    <td><a href="<c:url value="${uri2}"/>"><c:if test="${not empty legaldoc.getTitle()}">${legaldoc.getTitle()}</c:if><c:if test="${empty legaldoc.getTitle()}">${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()} (ΑΓΝΩΣΤΟΣ ΤΙΤΛΟΣ)</c:if></a></td>
-                                    <td>${legaldoc.getDecisionType()} ${legaldoc.getYear()}/${legaldoc.getId()}</td>
+                                    <td><a href="${legaldoc.getURI()}"><c:if test="${not empty legaldoc.getTitle()}">${legaldoc.getTitle()}</c:if><c:if test="${empty legaldoc.getTitle()}"><spring:message code="home.${legaldoc.getDecisionType()}"/> ${legaldoc.getYear()}/${legaldoc.getId()} (ΑΓΝΩΣΤΟΣ ΤΙΤΛΟΣ)</c:if></a></td>
+                                    <td><spring:message code="home.${legaldoc.getDecisionType()}"/> ${legaldoc.getYear()}/${legaldoc.getId()}</td>
                                     <td>${legaldoc.getPublicationDate()}</td>
                                 </tr>
                             </c:forEach>

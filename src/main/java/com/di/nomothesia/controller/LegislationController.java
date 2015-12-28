@@ -85,9 +85,9 @@ public class LegislationController {
             model.addAttribute("legaldoc", legaldoc);
             model.addAttribute("id","custom-bootstrap-menu");
             model.addAttribute("locale",locale);
-//            if(legaldoc.getPublicationDate()==null){
-//                return "error";
-//            }
+            if(legaldoc.getPublicationDate()==null){
+                return "error";
+            }
             if(!legaldoc.getParts().isEmpty()){
                 return "basiclegislation3";
             }
@@ -421,13 +421,13 @@ public class LegislationController {
             return "endpoint";
 	}
 	
-//       @ExceptionHandler(Exception.class)
-//	public String handleAllException(Exception ex) {
-// 
-//		//ModelAndView model = new ModelAndView("error/exception_error");
-//                //model.addAttribute("locale",locale);
-//		return "error";
-// 
-//	}
+       @ExceptionHandler(Exception.class)
+	public String handleAllException(Exception ex) {
+ 
+		//ModelAndView model = new ModelAndView("error/exception_error");
+                //model.addAttribute("locale",locale);
+		return "error";
+ 
+	}
         
 }
