@@ -219,7 +219,7 @@
                                         <tbody>
                                             <tr><td>2006</td><td>205 (<c:out value="${fn:substringBefore(20500/284,'.')}"/>%)</td><td>268 (<c:out value="${fn:substringBefore(26800/284,'.')}"/>%)</td><td>284</td></tr>
                                             <tr><td>2007</td><td>230 (<c:out value="${fn:substringBefore(23000/293,'.')}"/>%)</td><td>284 (<c:out value="${fn:substringBefore(28400/293,'.')}"/>%)</td><td>293</td></tr>
-                                            <tr><td>2008</td><td>209 (<c:out value="${fn:substringBefore(20900/266,'.')}"/>%)</td><td>255 (<c:out value="${fn:substringBefore(25500/266,'.')}"/>%)</td><td>266</td></tr>
+                                            <tr><td>2008</td><td>209 (<c:out value="${fn:substringBefore(20900/266,'.')}"/>%)</td><td>257 (<c:out value="${fn:substringBefore(25700/266,'.')}"/>%)</td><td>266</td></tr>
                                             <tr><td>2009</td><td>148 (<c:out value="${fn:substringBefore(14800/239,'.')}"/>%)</td><td>226 (<c:out value="${fn:substringBefore(22600/239,'.')}"/>%)</td><td>239</td></tr>
                                             <tr><td>2010</td><td>204 (<c:out value="${fn:substringBefore(20400/247,'.')}"/>%)</td><td>233 (<c:out value="${fn:substringBefore(23300/247,'.')}"/>%)</td><td>247</td></tr>
                                             <tr><td>2011</td><td>238 (<c:out value="${fn:substringBefore(23800/272,'.')}"/>%)</td><td>263 (<c:out value="${fn:substringBefore(26300/272,'.')}"/>%)</td><td>272</td></tr>
@@ -227,7 +227,7 @@
                                             <tr><td>2013</td><td>237 (<c:out value="${fn:substringBefore(23700/287,'.')}"/>%)</td><td>275 (<c:out value="${fn:substringBefore(27500/287,'.')}"/>%)</td><td>287</td></tr>
                                             <tr><td>2014</td><td>246 (<c:out value="${fn:substringBefore(24600/281,'.')}"/>%)</td><td>264 (<c:out value="${fn:substringBefore(26400/281,'.')}"/>%)</td><td>281</td></tr>
                                             <tr><td>2015</td><td>137 (<c:out value="${fn:substringBefore(13700/167,'.')}"/>%)</td><td>159 (<c:out value="${fn:substringBefore(15900/167,'.')}"/>%)</td><td>167</td></tr>
-                                            <tr><td>ΣΥΝΟΛΟ</td><td>1866 (<c:out value="${fn:substringBefore(186600/2593,'.')}"/>%)</td><td>2478 (<c:out value="${fn:substringBefore(247800/2593,'.')}"/>%)</td><td>2593</td></tr>
+                                            <tr><td>ΣΥΝΟΛΟ</td><td>1866 (<c:out value="${fn:substringBefore(186600/2593,'.')}"/>%)</td><td>2480 (<c:out value="${fn:substringBefore(248000/2593,'.')}"/>%)</td><td>2593</td></tr>
                                         </tbody>
                                     </table>  
                                     </div>

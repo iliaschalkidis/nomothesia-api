@@ -142,8 +142,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "SELECT DISTINCT ?title ?date ?gaztitle ?signername ?views ?place ?htmltitle\n" +
                 "WHERE{\n" +
                 "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
-                " dc:title ?title.\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " dc:created ?date.\n" +
                 "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:gazette ?gazette.\n" +
@@ -151,6 +149,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 //" leg:views ?views.\n" +
                 "?gazette dc:title ?gaztitle.\n" +
                 "?gazette leg:pdfFile ?pdfile.\n" +
+                "OPTIONAL{<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                " dc:title ?title.}\n" +
                 "OPTIONAL{<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:html ?htmltitle.}\n" +
                 "OPTIONAL{ <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +"> leg:place ?place.}"+
@@ -169,9 +169,15 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         BindingSet bindingSet = result.next(); 
                         Signer sign = new Signer();
                         legald.setURI("http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id);
-                        String title_el = bindingSet.getValue("title").toString().replace("@el", "");
+                        String title_el = "";
+                        if(bindingSet.getValue("title")!=null){
+                            title_el = bindingSet.getValue("title").toString().replace("@el", "");
+                        }
+                        else{
+                            title_el = legald.getDecisionType() + "" + legald.getYear() + " " + legald.getId();
+                        }
                         if(bindingSet.getValue("htmltitle")!=null){
-                            title_el = bindingSet.getValue("htmltitle").toString().split("\\^\\^",2)[0];;
+                            title_el = bindingSet.getValue("htmltitle").toString().split("\\^\\^",2)[0];
                         }
                         legald.setTitle(trimDoubleQuotes(title_el));
                         String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
@@ -1792,10 +1798,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     " ?mod metalex:part+ ?part.\n" +
                     " ?part rdf:type ?type2.\n" +
                     " ?mod  metalex:legislativeCompetenceGround ?work.\n" +
-                    " ?work  dc:title ?title.\n" +
                     " ?work leg:gazette ?gazette.\n" +
                     " ?work dc:created ?date.\n" +
-                    " ?gazette dc:title ?gaztitle.\n" ;
+                    " ?gazette dc:title ?gaztitle.\n" +
+                    " OPTIONAL{?work  dc:title ?title.}\n" ;
                     
                     if (date !=null) {
                         
@@ -1874,7 +1880,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                 mod.getCompetenceGround().setFEK(trimDoubleQuotes(gaztitle));
                                 String date2 = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
                                 mod.getCompetenceGround().setPublicationDate(trimDoubleQuotes(date2));
-                                mod.getCompetenceGround().setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
+                                if(bindingSet.getValue("title")!=null){
+                                    mod.getCompetenceGround().setTitle(trimDoubleQuotes(bindingSet.getValue("title").toString().replace("@el", "")));
+                                }
                                 current = bindingSet.getValue("mod").toString();
                                 frag = 0;
                                 
@@ -2061,490 +2069,498 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             
     }
    
-    @Override
-    public List<LegalDocument> search(Map<String, String> params) {
-        List<LegalDocument> LDs = new ArrayList<LegalDocument>();
-        //Apache Lucene searching via criteria
-        String uri = "";
-        try {
-            Path path = Paths.get(getClass().getResource("/fek_index").toString().replace("file:/", ""));
-            Directory directory2 = FSDirectory.open(path);       
-            IndexReader indexReader =  DirectoryReader.open(directory2);
-            IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-            BooleanQuery finalQuery = new BooleanQuery();
-            if(params.get("keywords")!=null&&!params.get("keywords").isEmpty()){
-                if(params.get("keywords").contains(",")){
-                    String[] keywords = params.get("keywords").split(",");
-                    for (String keyword : keywords) {
-                        QueryParser queryParser = new QueryParser("text",  new StandardAnalyzer());
-                        Query query = queryParser.parse("\"" + keyword + "\"~");
-                        finalQuery.add(query, Occur.MUST);
-                    }
-                }
-                else{
-                    QueryParser queryParser = new QueryParser("text",  new StandardAnalyzer());
-                    Query query = queryParser.parse("\""+params.get("keywords")+"\"~");
-                    finalQuery.add(query, Occur.MUST);
-                }
-            }
-            if(params.get("year")!=null&&!params.get("year").isEmpty()){
-                Query query2 = NumericRangeQuery.newIntRange("year", 1, Integer.parseInt(params.get("year")), Integer.parseInt(params.get("year")), true, true);//queryParser2.parse(params.get("year"));
-                finalQuery.add(query2, Occur.MUST);
-            }
-            if(params.get("fek_year")!=null&&!params.get("fek_year").isEmpty()){
-                Query query3 = NumericRangeQuery.newIntRange("year", 1, Integer.parseInt(params.get("fek_year")), Integer.parseInt(params.get("fek_year")), true, true);//queryParser3.parse(params.get("fek_year"));
-                finalQuery.add(query3, Occur.MUST);
-            }
-            if(params.get("fek_id")!=null&&!params.get("fek_id").isEmpty()){
-                Query query4 = NumericRangeQuery.newIntRange("fek_id", 1, Integer.parseInt(params.get("fek_id")), Integer.parseInt(params.get("fek_id")), true, true);//queryParser4.parse(params.get("fek_id"));
-                finalQuery.add(query4, Occur.MUST);
-            }
-            if(params.get("type")!=null&&!params.get("type").isEmpty()){
-                QueryParser queryParser5 = new QueryParser("type",  new StandardAnalyzer());
-                Query query5 = queryParser5.parse("\""+params.get("type")+"\"~");
-                finalQuery.add(query5, Occur.MUST);
-            }
-            if(params.get("id")!=null&&!params.get("id").isEmpty()){
-                Query query6 = NumericRangeQuery.newIntRange("id", 1, Integer.parseInt(params.get("id")), Integer.parseInt(params.get("id")), true, true);//queryParser6.parse(params.get("id"));
-                finalQuery.add(query6, Occur.MUST);
-            }
-            if(params.get("date")!=null&&!params.get("date").isEmpty()){
-                Query query6 = NumericRangeQuery.newIntRange("date", 1, Integer.parseInt(params.get("date").replace("-", "")), Integer.parseInt(params.get("date").replace("-", "")), true, true);//queryParser6.parse(params.get("id"));
-                finalQuery.add(query6, Occur.MUST);
-            }
-            if(params.get("datefrom")!=null&&!params.get("datefrom").isEmpty()){
-                Query query6 = NumericRangeQuery.newIntRange("date", 1, Integer.parseInt(params.get("datefrom").replace("-", "")), Integer.parseInt(params.get("dateto").replace("-", "")), true, true);//queryParser6.parse(params.get("id"));
-                finalQuery.add(query6, Occur.MUST); 
-            }
-            TopDocs topDocs = indexSearcher.search(finalQuery,300);
-            if(topDocs.totalHits>0){ //
-                for (ScoreDoc scoreDoc : topDocs.scoreDocs) { 
-                    Document document = indexSearcher.doc(scoreDoc.doc);
-                    
-                    LegalDocument ld = new LegalDocument();
-                    ld.setURI(document.get("uri"));
-                    ld.setFEK(document.get("fek"));
-                    ld.setPublicationDate(document.get("date").substring(0, 4)+"-"+document.get("date").substring(4,6)+"-"+document.get("date").substring(6,8));
-                    String type = document.get("type");
-                    if (type.equals("con")) {
-                        ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
-                    }
-                    else if (type.equals("pd")) {
-                        ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
-                    }
-                    else if (type.equals("law")) {
-                        ld.setDecisionType("ΝΟΜΟΣ");
-                    }
-                    else if (type.equals("amc")) {
-                        ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
-                    }
-                    else if (type.equals("md")) {
-                        ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
-                    }
-                    else if (type.equals("rd")) {
-                        ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
-                    }
-                    else if (type.equals("la")) {
-                        ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
-                    }
-                    else if (type.equals("rp")) {
-                        ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
-                    }
-                    String yearid = document.get("uri").split(document.get("type")+"\\/",2)[1];
-                    ld.setYear(yearid.split("\\/")[0]);
-                    ld.setId(yearid.split("\\/")[1]);
-                    ld.setTitle(document.get("title"));
-                    LDs.add(ld);
-                }
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-        
-        return LDs;
-    }
-    
-//     @Override
+//    @Override
 //    public List<LegalDocument> search(Map<String, String> params) {
-//        
-//        /*for (Map.Entry entry : params.entrySet()) {
-//            System.out.println(entry.getKey() + "" + entry.getValue());
-//        }*/
-//        
 //        List<LegalDocument> LDs = new ArrayList<LegalDocument>();
-//        String sesameServer ="";
-//        String repositoryID ="";
-//        
-//        Properties props = new Properties();
-//        InputStream fis = null;
-//        
+//        //Apache Lucene searching via criteria
+//        String uri = "";
 //        try {
-//            
-//            fis = getClass().getResourceAsStream("/properties.properties");
-//            props.load(fis);
-//            
-//            // get the properties values
-//            sesameServer = props.getProperty("SesameServer");
-//            repositoryID = props.getProperty("SesameRepositoryID");
-//
-//        } catch (IOException e) {
+//            Path path = Paths.get(getClass().getResource("/fek_index").toString().replace("file:/", ""));
+//            Directory directory2 = FSDirectory.open(path);       
+//            IndexReader indexReader =  DirectoryReader.open(directory2);
+//            IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+//            BooleanQuery finalQuery = new BooleanQuery();
+//            if(params.get("keywords")!=null&&!params.get("keywords").isEmpty()){
+//                if(params.get("keywords").contains(",")){
+//                    String[] keywords = params.get("keywords").split(",");
+//                    for (String keyword : keywords) {
+//                        QueryParser queryParser = new QueryParser("text",  new StandardAnalyzer());
+//                        Query query = queryParser.parse("\"" + keyword + "\"~");
+//                        finalQuery.add(query, Occur.MUST);
+//                    }
+//                }
+//                else{
+//                    QueryParser queryParser = new QueryParser("text",  new StandardAnalyzer());
+//                    Query query = queryParser.parse("\""+params.get("keywords")+"\"~");
+//                    finalQuery.add(query, Occur.MUST);
+//                }
+//            }
+//            if(params.get("year")!=null&&!params.get("year").isEmpty()){
+//                Query query2 = NumericRangeQuery.newIntRange("year", 1, Integer.parseInt(params.get("year")), Integer.parseInt(params.get("year")), true, true);//queryParser2.parse(params.get("year"));
+//                finalQuery.add(query2, Occur.MUST);
+//            }
+//            if(params.get("fek_year")!=null&&!params.get("fek_year").isEmpty()){
+//                Query query3 = NumericRangeQuery.newIntRange("year", 1, Integer.parseInt(params.get("fek_year")), Integer.parseInt(params.get("fek_year")), true, true);//queryParser3.parse(params.get("fek_year"));
+//                finalQuery.add(query3, Occur.MUST);
+//            }
+//            if(params.get("fek_id")!=null&&!params.get("fek_id").isEmpty()){
+//                Query query4 = NumericRangeQuery.newIntRange("fek_id", 1, Integer.parseInt(params.get("fek_id")), Integer.parseInt(params.get("fek_id")), true, true);//queryParser4.parse(params.get("fek_id"));
+//                finalQuery.add(query4, Occur.MUST);
+//            }
+//            if(params.get("type")!=null&&!params.get("type").isEmpty()){
+//                QueryParser queryParser5 = new QueryParser("type",  new StandardAnalyzer());
+//                Query query5 = queryParser5.parse("\""+params.get("type")+"\"~");
+//                finalQuery.add(query5, Occur.MUST);
+//            }
+//            if(params.get("id")!=null&&!params.get("id").isEmpty()){
+//                Query query6 = NumericRangeQuery.newIntRange("id", 1, Integer.parseInt(params.get("id")), Integer.parseInt(params.get("id")), true, true);//queryParser6.parse(params.get("id"));
+//                finalQuery.add(query6, Occur.MUST);
+//            }
+//            if(params.get("date")!=null&&!params.get("date").isEmpty()){
+//                Query query6 = NumericRangeQuery.newIntRange("date", 1, Integer.parseInt(params.get("date").replace("-", "")), Integer.parseInt(params.get("date").replace("-", "")), true, true);//queryParser6.parse(params.get("id"));
+//                finalQuery.add(query6, Occur.MUST);
+//            }
+//            if(params.get("datefrom")!=null&&!params.get("datefrom").isEmpty()){
+//                Query query6 = NumericRangeQuery.newIntRange("date", 1, Integer.parseInt(params.get("datefrom").replace("-", "")), Integer.parseInt(params.get("dateto").replace("-", "")), true, true);//queryParser6.parse(params.get("id"));
+//                finalQuery.add(query6, Occur.MUST); 
+//            }
+//            TopDocs topDocs = indexSearcher.search(finalQuery,300);
+//            if(topDocs.totalHits>0){ //
+//                for (ScoreDoc scoreDoc : topDocs.scoreDocs) { 
+//                    Document document = indexSearcher.doc(scoreDoc.doc);
+//                    
+//                    LegalDocument ld = new LegalDocument();
+//                    ld.setURI(document.get("uri"));
+//                    ld.setFEK(document.get("fek"));
+//                    ld.setPublicationDate(document.get("date").substring(0, 4)+"-"+document.get("date").substring(4,6)+"-"+document.get("date").substring(6,8));
+//                    String type = document.get("type");
+//                    if (type.equals("con")) {
+//                        ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
+//                    }
+//                    else if (type.equals("pd")) {
+//                        ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
+//                    }
+//                    else if (type.equals("law")) {
+//                        ld.setDecisionType("ΝΟΜΟΣ");
+//                    }
+//                    else if (type.equals("amc")) {
+//                        ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+//                    }
+//                    else if (type.equals("md")) {
+//                        ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+//                    }
+//                    else if (type.equals("rd")) {
+//                        ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+//                    }
+//                    else if (type.equals("la")) {
+//                        ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+//                    }
+//                    else if (type.equals("rp")) {
+//                        ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
+//                    }
+//                    String yearid = document.get("uri").split(document.get("type")+"\\/",2)[1];
+//                    ld.setYear(yearid.split("\\/")[0]);
+//                    ld.setId(yearid.split("\\/")[1]);
+//                    ld.setTitle(document.get("title"));
+//                    LDs.add(ld);
+//                }
+//            }
+//        } catch (Exception e) {
+//            // TODO: handle exception
 //            e.printStackTrace();
-//        }
-//
-//        // Connect to Sesame
-//        Repository repo = new HTTPRepository(sesameServer, repositoryID);
-//        
-//        try {
-//            repo.initialize();
-//        } catch (RepositoryException ex) {
-//            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        TupleQueryResult result;
-//         
-//        try {
-//           
-//            RepositoryConnection con = repo.getConnection();
-//                
-//                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-//                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-//                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-//                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-//                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-//                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-//                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-//                "\n" +
-//                "SELECT DISTINCT ?legaldocument ?title ?type ?date ?id\n" +
-//                "WHERE{\n" +
-//                " ?legaldocument dc:title ?title.\n";
-//                  
-//                //search by specific date
-//                if((params.get("date")==null) || (params.get("date").equals(""))){
-//                    queryString += "?legaldocument dc:created ?date.\n";
-//                }
-//                else if ((params.get("year")==null) || (params.get("year").equals(""))){
-//                    queryString += "?legaldocument dc:created ?date.\n" + 
-//                    "FILTER (?date = \"" + params.get("date") + "\"^^xsd:date)\n";
-//                }
-//                  
-//                //search between two dates
-//                if ((params.get("datefrom")==null) || (params.get("datefrom").equals(""))) {
-//
-//                }
-//                else if((params.get("year")==null) || (params.get("year").equals(""))) {
-//                    queryString += "FILTER ( ?date >= \"" + params.get("datefrom") + "\"^^xsd:date)\n";
-//                }
-//
-//                if ((params.get("dateto")==null) || (params.get("dateto").equals(""))) {
-//
-//                }
-//                else if ((params.get("year")==null) || (params.get("year").equals(""))){
-//                    queryString += "FILTER ( ?date <= \"" + params.get("dateto") + "\"^^xsd:date)\n";
-//                }
-//                  
-//                //search by year
-//                if ((params.get("year")==null) || (params.get("year").equals(""))) {
-//
-//                }
-//                else if (((params.get("date")==null) || (params.get("date").equals(""))) && ((params.get("datefrom")==null) || (params.get("datefrom").equals(""))) && ((params.get("dateto")==null) || (params.get("dateto").equals("")))) {
-//                    queryString += "FILTER ( ?date >= \"" + params.get("year") + "-01-01\"^^xsd:date && ?date <= \"" + params.get("year") + "-12-30\"^^xsd:date)\n";
-//                }
-//                  
-//                //search by fek year, issue and id
-//                if (((params.get("fek_year")==null) || (params.get("fek_year").equals(""))) && ((params.get("fek_id")==null) || (params.get("fek_id").equals("")))) {
-//
-//                }
-//                else {
-//                    queryString += "?legaldocument leg:gazette ?gazette.\n" +
-//                    "?gazette dc:title \"" + params.get("fek_issue") + "/" + params.get("fek_year") + "/" + params.get("fek_id") + "\".\n";
-//                }
-//                
-//                //search by legal document id
-//                if((params.get("id")==null) || (params.get("id").equals(""))){
-//                    queryString += "?legaldocument leg:legislationID ?id.\n";
-//                }
-//                else {
-//                    queryString += "?legaldocument leg:legislationID \""+ params.get("id") +"\"^^xsd:integer.\n";
-//                }
-//                  
-//                //search by type
-//                if((params.get("type")==null) || (params.get("type").equals(""))){
-//                    queryString += " ?legaldocument rdf:type ?type.\n";
-//                }
-//                else {
-//                    String type =  params.get("type");
-//                    List<String> items = Arrays.asList(type.split("\\s*,\\s*"));
-//                      
-//                    if (items.size()>1) {
-//                          
-//                        queryString += " ?legaldocument rdf:type ?type.\n";
-//                        queryString += "FILTER(";
-//                          
-//                        for (int i=0;i<items.size();i++) {
-//                              
-//                            if (i == items.size()-1) {
-//                                  
-//                                if (items.get(i).equals("con")) {
-//                                    queryString += "?type=leg:Constitution";    
-//                                }
-//                                else if (items.get(i).equals("pd")) {
-//                                    queryString += "?type=leg:PresidentialDecree";
-//                                }
-//                                else if (items.get(i).equals("law")) {
-//                                    queryString += "?type=leg:Law";
-//                                }
-//                                else if (items.get(i).equals("amc")) {
-//                                    queryString += "?type=leg:ActOfMinisterialCabinet";
-//                                  }
-//                                else if (items.get(i).equals("md")) {
-//                                    queryString += "?type=leg:MinisterialDecision";
-//                                }
-//                                else if (items.get(i).equals("rd")) {
-//                                    queryString += "?type=leg:RoyalDecree";
-//                                }
-//                                else if (items.get(i).equals("la")) {
-//                                    queryString += "?type=leg:LegislativeAct";
-//                                }
-//                                else if (items.get(i).equals("rp")){
-//                                    queryString += "?type=leg:RegulatoryProvision";
-//                                }
-//                                  
-//                            }
-//                            else {
-//                                  
-//                                if (items.get(i).equals("con")) {
-//                                    queryString += "?type=leg:Constitution || ";    
-//                                }
-//                                else if (items.get(i).equals("pd")) {
-//                                    queryString += "?type=leg:PresidentialDecree || ";
-//                                }
-//                                else if (items.get(i).equals("law")) {
-//                                    queryString += "?type=leg:Law || ";
-//                                }
-//                                else if (items.get(i).equals("amc")) {
-//                                    queryString += "?type=leg:ActOfMinisterialCabinet || ";
-//                                }
-//                                else if (items.get(i).equals("md")) {
-//                                    queryString += "?type=leg:MinisterialDecision || ";
-//                                }
-//                                else if (items.get(i).equals("rd")) {
-//                                    queryString += "?type=leg:RoyalDecree || ";
-//                                }
-//                                else if (items.get(i).equals("la")) {
-//                                    queryString += "?type=leg:LegislativeAct || ";
-//                                }
-//                                 else if (items.get(i).equals("rp")){
-//                                    queryString += "?type=leg:RegulatoryProvision || ";
-//                                }
-//                                  
-//                            }
-//                              
-//                        }
-//                          
-//                        queryString += " )\n";
-//                          
-//                    }
-//                    else {
-//                          
-//                        if (items.get(0).equals("con")) {
-//                            queryString += "?legaldocument rdf:type leg:Constitution.\n";  
-//                        }
-//                        else if (items.get(0).equals("pd")) {
-//                            queryString += "?legaldocument rdf:type leg:PresidentialDecree.\n";  
-//                        }
-//                        else if (items.get(0).equals("law")) {
-//                            queryString += "?legaldocument rdf:type leg:Law.\n";  
-//                        }
-//                        else if (items.get(0).equals("amc")) {
-//                            queryString += "?legaldocument rdf:type leg:ActOfMinisterialCabinet.\n";  
-//                        }
-//                        else if (items.get(0).equals("md")) {
-//                            queryString += "?legaldocument rdf:type leg:MinisterialDecision.\n";  
-//                        }
-//                        else if (items.get(0).equals("rd")) {
-//                            queryString += "?legaldocument rdf:type leg:RoyalDecree.\n";  
-//                        }
-//                        else if (items.get(0).equals("la")) {
-//                            queryString += "?legaldocument rdf:type leg:LegislativeAct.\n";  
-//                        }
-//                        else if (items.get(0).equals("rp")){
-//                            queryString += "?legaldocument rdf:type leg:RegulatoryProvision. \n";
-//                        }
-//                    
-//                    }
-//
-//                }
-//                
-//                //search by keyword
-//                if((params.get("keywords")!=null) && !params.get("keywords").equals("")) {
-//                    
-//                    // Tokenize keywords field
-//                    String[] tokens;
-//                    if(params.get("keywords").contains(",")){
-//                        tokens = params.get("keywords").replaceAll(" ", "").split(",");
-//                    }
-//                    else{
-//                        tokens = params.get("keywords").split(" ");
-//                        for(int i=0; i<tokens.length;i++){
-//                            tokens[i] = tokens[i].replaceAll(" ", "");
-//                        }
-//                    }
-//                    List<String> stopWords = Arrays.asList("Î“â€•","Î“Â§","Î“Î„Î“â€•","Î“â€•Î“Â©","Î“Î„Î“Ê½","Î“Î„Î“â€•Î“Î…","Î“Î„Î“Â§Î“Â²","Î“Î„Î“Î‰Î“Â­","Î“Î„Î“â€•Î“Â­","Î“Î„Î“Â§Î“Â­","Î“ïŸ„Î“Ê½Î“Â©","Î“ïŸ„Î“Â©","Î“ïŸ„","Î“ïŸƒÎ“ÂŸÎ“Â¬Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â³Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â­Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â¬Î“Ê½Î“Â³Î“Î„Î“ïŸƒ","Î“ïŸƒÎ“ÂŸÎ“Â³Î“Î„Î“ïŸƒ","Î“Â³Î“Î„Î“â€•","Î“Â³Î“Î„Î“â€•Î“Â­","Î“Â³Î“Î„Î“Â§","Î“Â³Î“Î„Î“Â§Î“Â­","Î“Â¬Î“Ê½" ,"Î“Ê½Î“Â«Î“Â«Î“Âœ","Î“Ê½Î“Â°Î“ÎŒ","Î“Â£Î“Â©Î“Ê½","Î“Â°Î“Â±Î“â€•Î“Â²","Î“Â¬Î“ïŸƒ","Î“Â³Î“ïŸƒ","Î“Î‰Î“Â²","Î“Â°Î“Ê½Î“Â±Î“Âœ","Î“Ê½Î“Â­Î“Î„Î“ÂŸ","Î“ïŸ„Î“Ê½Î“Î„Î“Âœ","Î“Â¬Î“ïŸƒÎ“Î„Î“Âœ","Î“Â¨Î“Ê½","Î“Â­Î“Ê½","Î“ïŸ‚Î“ïŸƒ","Î“ïŸ‚Î“ïŸƒÎ“Â­","Î“Â¬Î“Â§","Î“Â¬Î“Â§Î“Â­","Î“ïŸƒÎ“Â°Î“Â©","Î“ïŸƒÎ“Â­Î“ÎŽ","Î“ïŸƒÎ“ÂœÎ“Â­","Î“Ê½Î“Â­","Î“Î„Î“ÎŒÎ“Î„Î“ïŸƒ","Î“Â°Î“â€•Î“Î…" ,"Î“Â°Î“Î‰Î“Â²" ,"Î“Â°Î“â€•Î“Â©Î“ÎŒÎ“Â²" ,"Î“Â°Î“â€•Î“Â©Î“Âœ","Î“Â°Î“â€•Î“Â©Î“ÎŒ","Î“Â°Î“â€•Î“Â©Î“â€•Î“Â©","Î“Â°Î“â€•Î“Â©Î“ïŸƒÎ“Â²","Î“Â°Î“â€•Î“Â©Î“Î‰Î“Â­","Î“Â°Î“â€•Î“Â©Î“â€•Î“Î…Î“Â²","Î“Ê½Î“Î…Î“Î„Î“ÎŒÎ“Â²","Î“Ê½Î“Î…Î“Î„Î“Âž","Î“Ê½Î“Î…Î“Î„Î“ÎŒ","Î“Ê½Î“Î…Î“Î„Î“â€•Î“ÂŸ","Î“Ê½Î“Î…Î“Î„Î“ÎŽÎ“Â­","Î“Ê½Î“Î…Î“Î„Î“â€•Î“Â½Î“Â²","Î“Ê½Î“Î…Î“Î„Î“Â?Î“Â²","Î“Ê½Î“Î…Î“Î„Î“Âœ","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Â²","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Â§","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Â©","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“ïŸƒÎ“Â²","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Ê½","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Î‰Î“Â­","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Î…Î“Â²","Î“ÎŒÎ“Â°Î“Î‰Î“Â²","Î“ÎŒÎ“Â¬Î“Î‰Î“Â²","Î“ÂŸÎ“Â³Î“Î‰Î“Â²","Î“ÎŒÎ“Â³Î“â€•","Î“ÎŒÎ“Î„Î“Â©");
-//                    List<String> keywords = new ArrayList<String>();
-//                    
-//                    // Stop Words Filtering
-//                    for (String token : tokens) {
-//                        if ((!stopWords.contains(token)) || token.equals("")) {
-//                            keywords.add(token);
-//                        }
-//                    }
-//                    // Stemming
-//                    for(int i=0; i< keywords.size(); i++){
-//                        int size;
-//                        if(keywords.get(i).length() <=5){
-//                            size = keywords.get(i).length();
-//                        }
-//                        else if (keywords.get(i).length() <= 8){
-//                            size = (int) (keywords.get(i).length() * 0.95);
-//                        }
-//                        else{
-//                            size = (int) (keywords.get(i).length() * 0.8);
-//                        }
-//                        keywords.set(i,keywords.get(i).substring(0, size-1));
-//                        System.out.println(keywords.get(i));
-//                    }
-//                    
-//                    // Add regex filtering
-//                    queryString += " ?legaldocument metalex:part+ ?part.\n";
-//                    queryString += " ?part leg:text ?text.\n";
-//                    queryString += " ?legaldocument leg:tag ?tag.\n";
-//                    queryString += "FILTER( ";
-//                    for(String keyword : keywords){
-//                        queryString += "regex(?text, \"" + keyword +"\") || regex(?title,\"" + keyword +"\") || " +"regex(?tag,\"" + keyword +"\") || ";
-//                    }
-//                    queryString += "FALSE )\n";
-//                }
-//                  
-//                queryString += "}";
-//                
-//                //System.out.println(queryString);
-//                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-//                result = tupleQuery.evaluate();
-//
-//                try {
-//                    
-//                    //iterate the result set
-//                    while (result.hasNext()) {
-//                        
-//                        BindingSet bindingSet = result.next();
-//                        LegalDocument ld = new LegalDocument();
-//                       
-//                        if ((params.get("date")==null) || (params.get("date").equals(""))) {
-//                            String date = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
-//                            //String date = bindingSet.getValue("date").toString();
-//                            date = trimDoubleQuotes(date);
-//                            ld.setPublicationDate(date);
-//                            String[] year = date.split("-");
-//                            ld.setYear(year[0]);
-//                        }
-//                        else {
-//                            String date = params.get("date");
-//                            ld.setPublicationDate(date);
-//                            String[] year = date.split("-");
-//                            ld.setYear(year[0]);
-//                        }
-//                        if ((params.get("id")==null) || (params.get("id").equals(""))) {
-//                            String[] ids = bindingSet.getValue("id").toString().split("^^");
-//                            String id = ids[0].replace("^^<http://www.w3.org/2001/XMLSchema#integer>","");
-//                            ld.setId(trimDoubleQuotes(id));
-//                        }
-//                        else {
-//                            String id = params.get("id");
-//                            ld.setId(trimDoubleQuotes(id));
-//                        }
-//                        if ((params.get("type")==null) || (params.get("type").equals(""))) {
-//                            
-//                            String type = bindingSet.getValue("type").toString();
-//                           
-//                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-//                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-//                                ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-//                                ld.setDecisionType("ΝΟΜΟΣ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-//                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-//                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-//                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-//                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
-//                                ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
-//                            }
-//                            
-//                        }
-//                        else {
-//                            
-//                            String type = params.get("type");
-//                            
-//                            if (type.equals("con")) {
-//                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
-//                            }
-//                            else if (type.equals("pd")) {
-//                                ld.setDecisionType("ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
-//                            }
-//                            else if (type.equals("law")) {
-//                                ld.setDecisionType("ΝΟΜΟΣ");
-//                            }
-//                            else if (type.equals("amc")) {
-//                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
-//                            }
-//                            else if (type.equals("md")) {
-//                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
-//                            }
-//                            else if (type.equals("rd")) {
-//                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
-//                            }
-//                            else if (type.equals("la")) {
-//                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
-//                            }
-//                            else if(type.equals(("rp"))) {
-//                                 ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
-//                            }
-//                            
-//                        }
-//                       
-//                        String title = bindingSet.getValue("title").toString().replace("@el", "");
-//                        ld.setTitle(trimDoubleQuotes(title));
-//                        //String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
-//                        ld.setURI(trimDoubleQuotes(bindingSet.getValue("legaldocument").toString()));
-//                        LDs.add(ld);
-//                   
-//                    }
-//                
-//                }
-//                finally {
-//                    result.close();
-//                }
-//            
-//        }
-//        catch (OpenRDFException e) {
-//            // handle exception
 //        }
 //        
 //        return LDs;
-//        
 //    }
+    
+     @Override
+    public List<LegalDocument> search(Map<String, String> params) {
+        
+        /*for (Map.Entry entry : params.entrySet()) {
+            System.out.println(entry.getKey() + "" + entry.getValue());
+        }*/
+        List<LegalDocument> LDs = new ArrayList<LegalDocument>();
+        
+        if(!params.isEmpty()){
+
+        String sesameServer ="";
+        String repositoryID ="";
+        
+        Properties props = new Properties();
+        InputStream fis = null;
+        
+        try {
+            
+            fis = getClass().getResourceAsStream("/properties.properties");
+            props.load(fis);
+            
+            // get the properties values
+            sesameServer = props.getProperty("SesameServer");
+            repositoryID = props.getProperty("SesameRepositoryID");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Connect to Sesame
+        Repository repo = new HTTPRepository(sesameServer, repositoryID);
+        
+        try {
+            repo.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TupleQueryResult result;
+         
+        try {
+           
+            RepositoryConnection con = repo.getConnection();
+                
+                String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
+                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
+                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+                "\n" +
+                "SELECT DISTINCT ?legaldocument ?title ?type ?date ?id\n" +
+                "WHERE{\n" +
+                " ?legaldocument dc:title ?title.\n";
+                  
+                //search by specific date
+                if((params.get("date")==null) || (params.get("date").equals(""))){
+                    queryString += "?legaldocument dc:created ?date.\n";
+                }
+                else if ((params.get("year")==null) || (params.get("year").equals(""))){
+                    queryString += "?legaldocument dc:created ?date.\n" + 
+                    "FILTER (?date = \"" + params.get("date") + "\"^^xsd:date)\n";
+                }
+                  
+                //search between two dates
+                if ((params.get("datefrom")==null) || (params.get("datefrom").equals(""))) {
+
+                }
+                else if((params.get("year")==null) || (params.get("year").equals(""))) {
+                    queryString += "FILTER ( ?date >= \"" + params.get("datefrom") + "\"^^xsd:date)\n";
+                }
+
+                if ((params.get("dateto")==null) || (params.get("dateto").equals(""))) {
+
+                }
+                else if ((params.get("year")==null) || (params.get("year").equals(""))){
+                    queryString += "FILTER ( ?date <= \"" + params.get("dateto") + "\"^^xsd:date)\n";
+                }
+                  
+                //search by year
+                if ((params.get("year")==null) || (params.get("year").equals(""))) {
+
+                }
+                else if (((params.get("date")==null) || (params.get("date").equals(""))) && ((params.get("datefrom")==null) || (params.get("datefrom").equals(""))) && ((params.get("dateto")==null) || (params.get("dateto").equals("")))) {
+                    queryString += "FILTER ( ?date >= \"" + params.get("year") + "-01-01\"^^xsd:date && ?date <= \"" + params.get("year") + "-12-30\"^^xsd:date)\n";
+                }
+                  
+                //search by fek year, issue and id
+                if (((params.get("fek_year")==null) || (params.get("fek_year").equals(""))) && ((params.get("fek_id")==null) || (params.get("fek_id").equals("")))) {
+
+                }
+                else {
+                    queryString += "?legaldocument leg:gazette ?gazette.\n" +
+                    "?gazette dc:title \"" + "Α/" + params.get("fek_year") + "/" + params.get("fek_id") + "\".\n";
+                }
+                
+                //search by legal document id
+                if((params.get("id")==null) || (params.get("id").equals(""))){
+                    queryString += "?legaldocument leg:legislationID ?id.\n";
+                }
+                else {
+                    queryString += "?legaldocument leg:legislationID \""+ params.get("id") +"\"^^xsd:integer.\n";
+                }
+                  
+                //search by type
+                if((params.get("type")==null) || (params.get("type").equals(""))){
+                    queryString += " ?legaldocument rdf:type ?type.\n";
+                }
+                else {
+                    String type =  params.get("type");
+                    List<String> items = Arrays.asList(type.split("\\s*,\\s*"));
+                    queryString += " ?legaldocument rdf:type ?type.\n";
+                    if (items.size()>1) {
+                          
+                        queryString += " ?legaldocument rdf:type ?type2.\n";
+                        queryString += "FILTER(";
+                          
+                        for (int i=0;i<items.size();i++) {
+                              
+                            if (i == items.size()-1) {
+                                  
+                                if (items.get(i).equals("con")) {
+                                    queryString += "?type2=leg:Constitution";    
+                                }
+                                else if (items.get(i).equals("pd")) {
+                                    queryString += "?type2=leg:PresidentialDecree";
+                                }
+                                else if (items.get(i).equals("law")) {
+                                    queryString += "?type2=leg:Law";
+                                }
+                                else if (items.get(i).equals("amc")) {
+                                    queryString += "?type2=leg:ActOfMinisterialCabinet";
+                                  }
+                                else if (items.get(i).equals("md")) {
+                                    queryString += "?type2=leg:MinisterialDecision";
+                                }
+                                else if (items.get(i).equals("rd")) {
+                                    queryString += "?type2=leg:RoyalDecree";
+                                }
+                                else if (items.get(i).equals("la")) {
+                                    queryString += "?type2=leg:LegislativeAct";
+                                }
+                                else if (items.get(i).equals("rp")){
+                                    queryString += "?type2=leg:RegulatoryProvision";
+                                }
+                                  
+                            }
+                            else {
+                                  
+                                if (items.get(i).equals("con")) {
+                                    queryString += "?type2=leg:Constitution || ";    
+                                }
+                                else if (items.get(i).equals("pd")) {
+                                    queryString += "?type2=leg:PresidentialDecree || ";
+                                }
+                                else if (items.get(i).equals("law")) {
+                                    queryString += "?type2=leg:Law || ";
+                                }
+                                else if (items.get(i).equals("amc")) {
+                                    queryString += "?type2=leg:ActOfMinisterialCabinet || ";
+                                }
+                                else if (items.get(i).equals("md")) {
+                                    queryString += "?type2=leg:MinisterialDecision || ";
+                                }
+                                else if (items.get(i).equals("rd")) {
+                                    queryString += "?type2=leg:RoyalDecree || ";
+                                }
+                                else if (items.get(i).equals("la")) {
+                                    queryString += "?type2=leg:LegislativeAct || ";
+                                }
+                                 else if (items.get(i).equals("rp")){
+                                    queryString += "?type2=leg:RegulatoryProvision || ";
+                                }
+                                  
+                            }
+                              
+                        }
+                          
+                        queryString += " )\n";
+                          
+                    }
+                    else {
+                          
+                        if (items.get(0).equals("con")) {
+                            queryString += "?legaldocument rdf:type leg:Constitution.\n";  
+                        }
+                        else if (items.get(0).equals("pd")) {
+                            queryString += "?legaldocument rdf:type leg:PresidentialDecree.\n";  
+                        }
+                        else if (items.get(0).equals("law")) {
+                            queryString += "?legaldocument rdf:type leg:Law.\n";  
+                        }
+                        else if (items.get(0).equals("amc")) {
+                            queryString += "?legaldocument rdf:type leg:ActOfMinisterialCabinet.\n";  
+                        }
+                        else if (items.get(0).equals("md")) {
+                            queryString += "?legaldocument rdf:type leg:MinisterialDecision.\n";  
+                        }
+                        else if (items.get(0).equals("rd")) {
+                            queryString += "?legaldocument rdf:type leg:RoyalDecree.\n";  
+                        }
+                        else if (items.get(0).equals("la")) {
+                            queryString += "?legaldocument rdf:type leg:LegislativeAct.\n";  
+                        }
+                        else if (items.get(0).equals("rp")){
+                            queryString += "?legaldocument rdf:type leg:RegulatoryProvision. \n";
+                        }
+                    
+                    }
+
+                }
+                
+                //search by keyword
+                if((params.get("keywords")!=null) && !params.get("keywords").equals("")) {
+                    
+                    // Tokenize keywords field
+                    String[] tokens;
+                    if(params.get("keywords").contains(",")){
+                        tokens = params.get("keywords").replaceAll(" ", "").split(",");
+                    }
+                    else{
+                        tokens = params.get("keywords").split(" ");
+                        for(int i=0; i<tokens.length;i++){
+                            tokens[i] = tokens[i].replaceAll(" ", "");
+                        }
+                    }
+                    List<String> stopWords = Arrays.asList("Î“â€•","Î“Â§","Î“Î„Î“â€•","Î“â€•Î“Â©","Î“Î„Î“Ê½","Î“Î„Î“â€•Î“Î…","Î“Î„Î“Â§Î“Â²","Î“Î„Î“Î‰Î“Â­","Î“Î„Î“â€•Î“Â­","Î“Î„Î“Â§Î“Â­","Î“ïŸ„Î“Ê½Î“Â©","Î“ïŸ„Î“Â©","Î“ïŸ„","Î“ïŸƒÎ“ÂŸÎ“Â¬Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â³Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â­Î“Ê½Î“Â©","Î“ïŸƒÎ“ÂŸÎ“Â¬Î“Ê½Î“Â³Î“Î„Î“ïŸƒ","Î“ïŸƒÎ“ÂŸÎ“Â³Î“Î„Î“ïŸƒ","Î“Â³Î“Î„Î“â€•","Î“Â³Î“Î„Î“â€•Î“Â­","Î“Â³Î“Î„Î“Â§","Î“Â³Î“Î„Î“Â§Î“Â­","Î“Â¬Î“Ê½" ,"Î“Ê½Î“Â«Î“Â«Î“Âœ","Î“Ê½Î“Â°Î“ÎŒ","Î“Â£Î“Â©Î“Ê½","Î“Â°Î“Â±Î“â€•Î“Â²","Î“Â¬Î“ïŸƒ","Î“Â³Î“ïŸƒ","Î“Î‰Î“Â²","Î“Â°Î“Ê½Î“Â±Î“Âœ","Î“Ê½Î“Â­Î“Î„Î“ÂŸ","Î“ïŸ„Î“Ê½Î“Î„Î“Âœ","Î“Â¬Î“ïŸƒÎ“Î„Î“Âœ","Î“Â¨Î“Ê½","Î“Â­Î“Ê½","Î“ïŸ‚Î“ïŸƒ","Î“ïŸ‚Î“ïŸƒÎ“Â­","Î“Â¬Î“Â§","Î“Â¬Î“Â§Î“Â­","Î“ïŸƒÎ“Â°Î“Â©","Î“ïŸƒÎ“Â­Î“ÎŽ","Î“ïŸƒÎ“ÂœÎ“Â­","Î“Ê½Î“Â­","Î“Î„Î“ÎŒÎ“Î„Î“ïŸƒ","Î“Â°Î“â€•Î“Î…" ,"Î“Â°Î“Î‰Î“Â²" ,"Î“Â°Î“â€•Î“Â©Î“ÎŒÎ“Â²" ,"Î“Â°Î“â€•Î“Â©Î“Âœ","Î“Â°Î“â€•Î“Â©Î“ÎŒ","Î“Â°Î“â€•Î“Â©Î“â€•Î“Â©","Î“Â°Î“â€•Î“Â©Î“ïŸƒÎ“Â²","Î“Â°Î“â€•Î“Â©Î“Î‰Î“Â­","Î“Â°Î“â€•Î“Â©Î“â€•Î“Î…Î“Â²","Î“Ê½Î“Î…Î“Î„Î“ÎŒÎ“Â²","Î“Ê½Î“Î…Î“Î„Î“Âž","Î“Ê½Î“Î…Î“Î„Î“ÎŒ","Î“Ê½Î“Î…Î“Î„Î“â€•Î“ÂŸ","Î“Ê½Î“Î…Î“Î„Î“ÎŽÎ“Â­","Î“Ê½Î“Î…Î“Î„Î“â€•Î“Â½Î“Â²","Î“Ê½Î“Î…Î“Î„Î“Â?Î“Â²","Î“Ê½Î“Î…Î“Î„Î“Âœ","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Â²","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Â§","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Â©","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“ïŸƒÎ“Â²","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Ê½","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“Î‰Î“Â­","Î“ïŸƒÎ“ïŸ„Î“ïŸƒÎ“ÂŸÎ“Â­Î“â€•Î“Î…Î“Â²","Î“ÎŒÎ“Â°Î“Î‰Î“Â²","Î“ÎŒÎ“Â¬Î“Î‰Î“Â²","Î“ÂŸÎ“Â³Î“Î‰Î“Â²","Î“ÎŒÎ“Â³Î“â€•","Î“ÎŒÎ“Î„Î“Â©");
+                    List<String> keywords = new ArrayList<String>();
+                    
+                    // Stop Words Filtering
+                    for (String token : tokens) {
+                        if ((!stopWords.contains(token)) || token.equals("")) {
+                            keywords.add(token);
+                        }
+                    }
+                    // Stemming
+                    for(int i=0; i< keywords.size(); i++){
+                        int size;
+                        if(keywords.get(i).length() <=5){
+                            size = keywords.get(i).length();
+                        }
+                        else if (keywords.get(i).length() <= 8){
+                            size = (int) (keywords.get(i).length() * 0.95);
+                        }
+                        else{
+                            size = (int) (keywords.get(i).length() * 0.8);
+                        }
+                        keywords.set(i,keywords.get(i).substring(0, size-1));
+                        System.out.println(keywords.get(i));
+                    }
+                    
+                    // Add regex filtering
+                    queryString += " ?legaldocument metalex:part+ ?part.\n";
+                    queryString += " ?part leg:text ?text.\n";
+                    queryString += " ?legaldocument leg:tag ?tag.\n";
+                    queryString += "FILTER( ";
+                    for(String keyword : keywords){
+                        queryString += "regex(?text, \"" + keyword +"\") || regex(?title,\"" + keyword +"\") || " +"regex(?tag,\"" + keyword +"\") || ";
+                    }
+                    queryString += "FALSE )\n";
+                }
+                  
+                queryString += "}";
+                
+                //System.out.println(queryString);
+                TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+                result = tupleQuery.evaluate();
+
+                try {
+                    
+                    //iterate the result set
+                    while (result.hasNext()) {
+                        
+                        BindingSet bindingSet = result.next();
+                        LegalDocument ld = new LegalDocument();
+                       
+                        if ((params.get("date")==null) || (params.get("date").equals(""))) {
+                            String date = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");
+                            //String date = bindingSet.getValue("date").toString();
+                            date = trimDoubleQuotes(date);
+                            ld.setPublicationDate(date);
+                            String[] year = date.split("-");
+                            ld.setYear(year[0]);
+                        }
+                        else {
+                            String date = params.get("date");
+                            ld.setPublicationDate(date);
+                            String[] year = date.split("-");
+                            ld.setYear(year[0]);
+                        }
+                        if ((params.get("id")==null) || (params.get("id").equals(""))) {
+                            String[] ids = bindingSet.getValue("id").toString().split("^^");
+                            String id = ids[0].replace("^^", "").replace("\"", "");
+                            ld.setId(trimDoubleQuotes(id));
+                        }
+                        else {
+                            String id = params.get("id");
+                            ld.setId(trimDoubleQuotes(id));
+                        }
+                        if ((params.get("type")==null) || (params.get("type").equals(""))) {
+                            
+                            String type = bindingSet.getValue("type").toString();
+                           
+                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
+                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
+                                ld.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
+                                ld.setDecisionType("ΝΟΜΟΣ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
+                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
+                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
+                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+                            }
+                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
+                                ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
+                            }
+                            
+                        }
+                        else {
+                            
+                            String type = params.get("type");
+                            
+                            if (type.equals("con")) {
+                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
+                            }
+                            else if (type.equals("pd")) {
+                                ld.setDecisionType("ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
+                            else if (type.equals("law")) {
+                                ld.setDecisionType("ΝΟΜΟΣ");
+                            }
+                            else if (type.equals("amc")) {
+                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
+                            }
+                            else if (type.equals("md")) {
+                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
+                            }
+                            else if (type.equals("rd")) {
+                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
+                            }
+                            else if (type.equals("la")) {
+                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
+                            }
+                            else if(type.equals(("rp"))) {
+                                 ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
+                            }
+                            
+                        }
+                        String title = "";
+                        if(bindingSet.getValue("title")!=null){
+                            title = bindingSet.getValue("title").toString().replace("@el", "");
+                        }
+                        else{
+                            title = ld.getDecisionType() + "" + ld.getYear() + " " + ld.getId();
+                        }
+                        ld.setTitle(trimDoubleQuotes(title));
+                        //String[] URIs = bindingSet.getValue("legaldocument").toString().split("uoa.gr/");
+                        ld.setURI(trimDoubleQuotes(bindingSet.getValue("legaldocument").toString()));
+                        LDs.add(ld);
+                   
+                    }
+                
+                }
+                finally {
+                    result.close();
+                }
+            
+        }
+        catch (OpenRDFException e) {
+            // handle exception
+        }
+        }
+        
+        return LDs;
+        
+    }
     
     @Override
     public List<String> getTags() {
@@ -2705,9 +2721,15 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         LegalDocument legald = new LegalDocument();
                         //String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
                         legald.setURI(trimDoubleQuotes(bindingSet.getValue("uri").toString()));
-                        String title = bindingSet.getValue("title").toString().replace("@el", "");
+                        String title = "";
+                        if(bindingSet.getValue("title")!=null){
+                            title = bindingSet.getValue("title").toString().replace("@el", "");
+                        }
+                        else{
+                            title = legald.getDecisionType() + "" + legald.getYear() + " " + legald.getId();
+                        }
                         legald.setTitle(trimDoubleQuotes(title));
-                        String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
+                        String id = bindingSet.getValue("id").toString().replace("^^", "").replace("\"", "");
                         legald.setId(trimDoubleQuotes(id));
                         String date = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");  
                         date = trimDoubleQuotes(date);
@@ -2930,9 +2952,15 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         LegalDocument legald = new LegalDocument();
                         //String[] URIs = bindingSet.getValue("uri").toString().split("uoa.gr/");
                         legald.setURI(trimDoubleQuotes(bindingSet.getValue("uri").toString()));
-                        String title = bindingSet.getValue("title").toString().replace("@el", "");
+                        String title = "";
+                        if(bindingSet.getValue("title")!=null){
+                            title = bindingSet.getValue("title").toString().replace("@el", "");
+                        }
+                        else{
+                            title = legald.getDecisionType() + "" + legald.getYear() + " " + legald.getId();
+                        }
                         legald.setTitle(trimDoubleQuotes(title));
-                        String id = bindingSet.getValue("id").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
+                        String id = bindingSet.getValue("id").toString().replace("^^", "").replace("\"", "");
                         legald.setId(trimDoubleQuotes(id));
                         String date = bindingSet.getValue("date").toString().replace("^^<http://www.w3.org/2001/XMLSchema#date>", "");  
                         date = trimDoubleQuotes(date);
