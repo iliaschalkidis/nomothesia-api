@@ -195,7 +195,7 @@
             <div class="col-md-3">  
                 <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
                     <div align="center"><h4><spring:message code="basic.data"/></h4></div><br/>
-                    <u style="color:  #1087dd"><spring:message code="basic.code"/></u> ${legaldoc.getDecisionType()}/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
+                    <u style="color:  #1087dd"><spring:message code="basic.code"/></u> <spring:message code="home.${legaldoc.getDecisionType()}"/>/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
                     <u style="color:  #1087dd"><spring:message code="basic.date"/></u> ${legaldoc.getPublicationDate()} <br/>
                         <c:set var="repl" value='"' />
                         <c:choose>
