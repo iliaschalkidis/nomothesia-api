@@ -148,7 +148,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 //"<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 //" leg:views ?views.\n" +
                 "?gazette dc:title ?gaztitle.\n" +
-                "?gazette leg:pdfFile ?pdfile.\n" +
+                //"?gazette leg:pdfFile ?pdfile.\n" +
                 "OPTIONAL{<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
                 " dc:title ?title.}\n" +
                 "OPTIONAL{<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
@@ -170,13 +170,13 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         Signer sign = new Signer();
                         legald.setURI("http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id);
                         String title_el = "";
-                        if(bindingSet.getValue("title")!=null){
+                        if(bindingSet.hasBinding("title")){
                             title_el = bindingSet.getValue("title").toString().replace("@el", "");
                         }
                         else{
                             title_el = legald.getDecisionType() + "" + legald.getYear() + " " + legald.getId();
                         }
-                        if(bindingSet.getValue("htmltitle")!=null){
+                        if(bindingSet.hasBinding("htmltitle")){
                             title_el = bindingSet.getValue("htmltitle").toString().split("\\^\\^",2)[0];
                         }
                         legald.setTitle(trimDoubleQuotes(title_el));
@@ -184,8 +184,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         legald.setPublicationDate(trimDoubleQuotes(date2));
                         String fek = bindingSet.getValue("gaztitle").toString().replace("^^","");
                         legald.setFEK(trimDoubleQuotes(fek));
-                        String fekfile = bindingSet.getValue("pdfile").toString().replace("^^","");
-                        legald.setFEKfile(trimDoubleQuotes(fekfile));
+                        //String fekfile = bindingSet.getValue("pdfile").toString().replace("^^","");
+                        //legald.setFEKfile(trimDoubleQuotes(fekfile));
                        // String views = bindingSet.getValue("views").toString().replace("^^<http://www.w3.org/2001/XMLSchema#integer>", "");
                         //legald.setViews(trimDoubleQuotes(views));
                         
