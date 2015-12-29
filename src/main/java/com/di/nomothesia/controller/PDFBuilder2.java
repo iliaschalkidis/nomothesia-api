@@ -14,7 +14,10 @@ import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,9 +26,39 @@ public class PDFBuilder2 extends AbstractITextPdfView {
 	@Override
 	protected void buildPdfDocument(Map<String, Object> model, Document doc, PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+                String chap_header ="";
+                String article_header ="";
+                String citation_header ="";
+                String city = "";
+                String decide = "";
+                String type = "";
+                String num_header = "";
+                Properties props = new Properties();
+                InputStream fis = null;
+                String[] letter = null;
+                String[] quotes = null;
+                String[] chap_letters = null;
                 // Get data model which is passed by the Controller
 		LegalDocument legald = (LegalDocument) model.get("legaldocument");
-                
+                try {
+
+                    fis = getClass().getResourceAsStream("/messages_el_GR.properties");
+                    props.load(fis);
+
+                    // get the properties values
+                    chap_header = props.getProperty("basic.chapter");
+                    article_header = props.getProperty("basic.article");
+                    citation_header = props.getProperty("basic.mind");
+                    city = props.getProperty("basic.athens");
+                    decide = props.getProperty("basic.decide");
+                    type = props.getProperty("home."+legald.getDecisionType());
+                    num_header = props.getProperty("basic.numh");
+                    letter = props.getProperty("basic.smallionian").split(",");
+                    chap_letters = props.getProperty("basic.capitalionian").split(",");
+                    quotes = props.getProperty("basic.quotes").split(",");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 //Doc margins
                 //doc.setMargins(60, 60, 20, 20);
                 
@@ -56,16 +89,15 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                 //Type
                 String tid = legald.getId();
                 tid = trimDoubleQuotes(tid);
-                String type = legald.getDecisionType();
                 type = trimDoubleQuotes(type);
-                type += " ÕÐ' ÁÑÉÈ. " + tid;
+                type += " "+num_header+" " + tid;
                 Paragraph typ = new Paragraph(type, fontType);
                 typ.setAlignment(Element.ALIGN_CENTER);
                 doc.add(typ);
                 doc.add(new Paragraph("\n"));
                 
                 //Title
-                String title = legald.getTitle();
+                String title = legald.getTitle().replaceAll("<a href=\"(?s).*\">","").replaceAll("</a>", "");
                 title = trimDoubleQuotes(title);
                 Paragraph titl = new Paragraph(title, fontTitle);
                 titl.setAlignment(Element.ALIGN_CENTER);
@@ -74,7 +106,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                 
                 //Citations
                 if(!legald.getCitations().isEmpty()){
-                    String citation = "¸÷ïíôáò õðüøç: \n\n";
+                    String citation = citation_header+" \n\n";
                     Paragraph cit1 = new Paragraph(citation, fontText);
                     cit1.setAlignment(Element.ALIGN_LEFT);
                     String citation2 = "";
@@ -86,19 +118,19 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                     Paragraph cit2 = new Paragraph(citation2, citationText);
                     cit2.setAlignment(Element.ALIGN_JUSTIFIED);
 
-                    String citation3 = "Áðïöáóßæïõìå: \n";
+                    String citation3 = decide+" \n";
                     Paragraph cit3 = new Paragraph(citation3, fontText);
                     cit3.setAlignment(Element.ALIGN_CENTER);
                     doc.add(cit1);
                     doc.add(cit2);
-                    doc.add(cit3);
+                    //doc.add(cit3);
                 }
                 doc.add(new Paragraph("\n"));
                 
                 //Main Text
                 //Chapters
                 for (int w = 0; w<legald.getChapters().size(); w++) {
-                    String[] chap_letters = {"Á","Â","Ã","Ä","Å","ÓÔ","Æ","Ç","È","É","ÉÁ","ÉÂ","ÉÃ","ÉÄ","ÉÅ","ÉÓÔ","ÉÆ","ÉÇ","ÉÈ"};
+                    //String[] chap_letters = {"Î‘","Î’","Î“","Î”","Î£Î¤","","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½"};
 
                     String par = "";
                     Paragraph paragraph3 = new Paragraph();
@@ -106,7 +138,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
 
                     //Article id and title
                     //ID
-                    String par2 = "ÊÅÖÁËÁÉÏ " + chap_letters[legald.getChapters().get(w).getId()-1] + "\n";
+                    String par2 = chap_header +" " + chap_letters[legald.getChapters().get(w).getId()-1] + "\n";
                     Paragraph article = new Paragraph(par2, fontArticle);
                     article.setAlignment(Element.ALIGN_CENTER);
                     doc.add(article);
@@ -125,7 +157,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                     //Articles
                     for (int i = 0; i<legald.getChapters().get(w).getArticles().size(); i++) {
 
-                        String[] letter = {"á","â","ã","ä","å","óô","æ","ç","è","é","éá","éâ","éã","éä","éå","éóô","éæ","éç","éè","ê","êá","êâ","êã","êä","êå","êóô","êæ","êç","êè","ë","ëá","ëâ","ëã","ëä","ëå","ëóô","ëæ","ëç","ëè","ì"};
+                        //String[] letter = {"ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½","ï¿½"};
 
                         par = "";
                         paragraph3 = new Paragraph();
@@ -133,7 +165,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
 
                         //Article id and title
                         //ID
-                        par2 = "'Áñèñï " + legald.getChapters().get(w).getArticles().get(i).getId() + "\n";
+                        par2 = article_header + " " + legald.getChapters().get(w).getArticles().get(i).getId() + "\n";
                         article = new Paragraph(par2, fontArticle);
                         article.setAlignment(Element.ALIGN_CENTER);
                         doc.add(article);
@@ -166,7 +198,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                                 //If passage has modifications
                                 if(legald.getChapters().get(w).getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification() != null) {
 
-                                    paragraph3.add("\n\n«");
+                                    paragraph3.add("\n\n"+quotes[0]);
 
                                     //if Modification type = Paraghraph
                                     if(legald.getChapters().get(w).getArticles().get(i).getParagraphs().get(j).getPassages().get(k).getModification().getType().equals("Article")) {
@@ -238,7 +270,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
 
                                     }
 
-                                    paragraph3.add("».\n");
+                                    paragraph3.add(quotes[1]+".\n\n");
 
                                 }
 
@@ -292,7 +324,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                                 //If passage has modifications
                                 if(legald.getChapters().get(w).getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification() != null) {
 
-                                    paragraph3.add("\"");
+                                    paragraph3.add("\n\n"+quotes[0]);
 
                                     //if Modification type = Paraghraph
                                     if(legald.getChapters().get(w).getArticles().get(i).getParagraphs().get(j).getCaseList().get(k).getModification().getType().equals("Article")) {
@@ -363,8 +395,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
 //                                        }
 
                                     }
-
-                                    paragraph3.add("\"\n");
+                                    paragraph3.add(quotes[1]+"\n\n");
 
                                 }
 
@@ -385,7 +416,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                 //Date
                 String date = legald.getPublicationDate();
                 date = trimDoubleQuotes(date);
-                String finaldate = "\n\n ÁèÞíá, " + date;
+                String finaldate = "\n\n"+city+", " + date;
                 Paragraph dat = new Paragraph(finaldate, fontDate);
                 dat.setAlignment(Element.ALIGN_CENTER);
                 doc.add(dat);
@@ -394,7 +425,7 @@ public class PDFBuilder2 extends AbstractITextPdfView {
                 //Signers Full
                 for (int i = 0; i<legald.getSigners().size(); i++) {
                     String signerfull = "";
-//                    signerfull += "Ï ";
+//                    signerfull += "ï¿½ ";
 //                    signerfull += legald.getSigners().get(i).getTitle();
 //                    //signerfull = trimDoubleQuotes(signer);
 //                    signerfull += "\n";
