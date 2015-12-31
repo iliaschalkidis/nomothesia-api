@@ -132,7 +132,7 @@
                                             <label><input type="checkbox" class="category" value="md" <c:if test="${type != null && fn:contains(type, 'md')}">checked='checked'</c:if>><spring:message code="home.md"/></label>
                                         </div>
                                         <div class="checkbox">
-                                            <label><input type="checkbox" class="category" value="la" <c:if test="${type != null && fn:contains(type, 'la')}">checked='checked'</c:if>><spring:message code="home.la"/></label>
+                                            <label><input type="checkbox" class="category" value="la" <c:if test="${type != null && type == 'la'}">checked='checked'</c:if>><spring:message code="home.la"/></label>
                                         </div>
                                         <div class="checkbox">
                                             <label><input type="checkbox" class="category" value="rp" <c:if test="${type != null && fn:contains(type, 'rp')}">checked='checked'</c:if>><spring:message code="home.rp"/></label>

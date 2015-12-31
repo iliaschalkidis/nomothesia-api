@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.xml.transform.TransformerException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class LegislationService {
@@ -46,6 +47,7 @@ public class LegislationService {
         return mods;
     }
 
+    @Cacheable(value="NomothesiaCache", key="#query")
     public EndpointResultSet sparqlQuery(String query, String format) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
@@ -113,24 +115,24 @@ public class LegislationService {
         }
         else if(query.equals("4")) {
             eprs.setQuery("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
-"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> \n" +
-"PREFIX owl: <http://www.w3.org/2002/07/owl#> \n" +
-"PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> \n" +
-"PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/> \n" +
-"PREFIX dc: <http://purl.org/dc/terms/>\n" +
-"\n" +
-"SELECT  ?legaldocumentURI ?title (COUNT(DISTINCT ?version) AS ?versions)\n" +
-"WHERE{\n" +
-"?legaldocumentURI metalex:realizedBy ?version.\n" +
-"?legaldocumentURI dc:title ?title.\n" +
-"?modification metalex:legislativeCompetenceGround ?work.\n" +
-"?work dc:created ?date.\n" +
-"FILTER (?date >= \"2008-01-01\"^^xsd:date && ?date <= \"2013-01-31\"^^xsd:date)\n" +
-"} \n" +
-"GROUP BY ?legaldocumentURI ?title\n" +
-"ORDER BY DESC(?versions)\n" +
-"LIMIT 10");
+            "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+            "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> \n" +
+            "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n" +
+            "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> \n" +
+            "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/> \n" +
+            "PREFIX dc: <http://purl.org/dc/terms/>\n" +
+            "\n" +
+            "SELECT  ?legaldocumentURI ?title (COUNT(DISTINCT ?version) AS ?versions)\n" +
+            "WHERE{\n" +
+            "?legaldocumentURI metalex:realizedBy ?version.\n" +
+            "?legaldocumentURI dc:title ?title.\n" +
+            "?modification metalex:legislativeCompetenceGround ?work.\n" +
+            "?work dc:created ?date.\n" +
+            "FILTER (?date >= \"2008-01-01\"^^xsd:date && ?date <= \"2013-01-31\"^^xsd:date)\n" +
+            "} \n" +
+            "GROUP BY ?legaldocumentURI ?title\n" +
+            "ORDER BY DESC(?versions)\n" +
+            "LIMIT 10");
         }
         else{
             eprs.setQuery(query);

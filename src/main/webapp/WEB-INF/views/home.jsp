@@ -301,7 +301,7 @@
                         "scrollY": "500px",
                         "scrollCollapse": true,
                         "paging": true,
-                        "iDisplayLength": 4,
+                        "iDisplayLength": 6,
                         "aaSorting": [],
                         "bSortable": true,
                         "aoColumnDefs": [
@@ -379,7 +379,7 @@
                     "scrollY": "500px",
                     "scrollCollapse": true,
                     "paging": true,
-                    "iDisplayLength": 4,
+                    "iDisplayLength": 6,
                     "aaSorting": [],
                     "bSortable": true,
                     "aoColumnDefs": [
