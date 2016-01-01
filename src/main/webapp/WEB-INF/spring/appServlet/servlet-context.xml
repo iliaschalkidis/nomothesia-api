@@ -3,11 +3,8 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:beans="http://www.springframework.org/schema/beans"
             xmlns:context="http://www.springframework.org/schema/context"
-            xmlns:cache="http://www.springframework.org/schema/cache"
-            xmlns:p="http://www.springframework.org/schema/p"
             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.2.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
@@ -42,18 +39,6 @@
             <beans:property name="defaultLocale" value="el_GR" />
             <beans:property name="cookieName" value="myAppLocaleCookie"></beans:property>
             <beans:property name="cookieMaxAge" value="3600"></beans:property>
-        </beans:bean>
-        
-        <!-- Enables caching -->
-        <cache:annotation-driven />
-        
-        <!-- Generic cache manager based on the JDK ConcurrentMap -->
-        <beans:bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-            <beans:property name="caches">
-                <beans:set>
-                    <beans:bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="NomothesiaCache" />
-                </beans:set>
-            </beans:property>
         </beans:bean>
  
         <interceptors>

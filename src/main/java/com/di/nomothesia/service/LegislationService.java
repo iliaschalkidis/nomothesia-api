@@ -47,7 +47,7 @@ public class LegislationService {
         return mods;
     }
 
-    @Cacheable(value="NomothesiaCache", key="#query")
+    //@Cacheable(value="NomothesiaCache", key="#query")
     public EndpointResultSet sparqlQuery(String query, String format) {
         //Get the Spring Context
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
