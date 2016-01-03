@@ -172,7 +172,7 @@ public class LegalDocument {
     }
 
     public List<Fragment> applyModifications(List<Modification> mods) {
-        List<Fragment> frags= new ArrayList();
+        List<Fragment> frags= new ArrayList<Fragment>();
         int issue_flag=0;
         for (Modification mod : mods) {
             String[] hierarchy = mod.getPatient().split("/");
