@@ -694,7 +694,7 @@
                             <br/>
                             <c:if test="${not empty legaldoc.getIssues()}">
                                 <c:forEach var="issue" items="${legaldoc.getIssues()}" varStatus="loop">
-                                    <div class="alert alert-danger" role="alert">${issue}</div>
+                                    <div class="alert alert-danger" role="alert"><c:if test="${issue='mods'}"><spring:message code="basic.modissue"/></c:if><c:if test="${issue!='mods'}">${issue}</c:if></div>
                                 </c:forEach>
                             </c:if>
                             <c:if test="${empty legaldoc.getIssues()}">

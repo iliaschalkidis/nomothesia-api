@@ -39,6 +39,7 @@ import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import eu.earthobservatory.org.StrabonEndpoint.client.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -2078,8 +2079,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         List<LegalDocument> LDs = new ArrayList<LegalDocument>();
         //Apache Lucene searching via criteria
         try {
-            Path path = Paths.get(getClass().getResource("/fek_index").toString().replace("file:/", ""));
-            Directory directory2 = FSDirectory.open(path);       
+            //Path path = Paths.get(getClass().getResource("/fek_index").toString().replace("file:/", ""));
+            Directory directory2 = FSDirectory.open(new File(getClass().getResource("/fek_index").toString().replace("file:/", "")));       
             IndexReader indexReader =  DirectoryReader.open(directory2);
             IndexSearcher indexSearcher = new IndexSearcher(indexReader);
             BooleanQuery finalQuery = new BooleanQuery();

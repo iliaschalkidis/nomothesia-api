@@ -240,7 +240,7 @@ public class LegalDocument {
             }
             catch(Exception e){
                 if(issue_flag==0){
-                    issues.add("Η αναγνώριση των νομοθετικών τροποποιήσεων έχει προβλήματα. Πιθανές ελλείψεις στην αναπαράσταση αναβαθμισμένων εκδόσεων.");
+                    issues.add("mods");
                     issue_flag=1;
                 }
             }
