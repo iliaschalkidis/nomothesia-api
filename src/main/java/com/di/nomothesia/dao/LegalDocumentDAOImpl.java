@@ -2137,7 +2137,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 }
                 else{
                     QueryParser queryParser5 = new QueryParser("type",  new StandardAnalyzer());
-                    Query query5 = queryParser5.parse("\""+params.get("type")+"\"~");
+                    Query query5 = queryParser5.parse(params.get("type"));
                     finalQuery.add(query5, Occur.MUST);
                 }
             }
@@ -2175,7 +2175,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
             }
         } catch (Exception e) {
             // TODO: handle exception
-            e.printStackTrace();
+            Logger.getLogger(LegalDocumentDAOImpl.class.getName()).log(Level.SEVERE, null, e);
         }
         
         return LDs;
