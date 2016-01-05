@@ -72,27 +72,6 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         legald.setId(id);
         legald.setYear(year);
         legald.setDecisionType(decisionType);
-//        if (decisionType.equals("pd")) {
-//            legald.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
-//        }
-//        else if (decisionType.equals("law")) {
-//            legald.setDecisionType("ΝΟΜΟΣ");
-//        }
-//        else if(decisionType.equals("amc")){
-//            legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
-//        }
-//        else if(decisionType.equals("md")){
-//            legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
-//        }
-//        else if(decisionType.equals("rd")){
-//            legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
-//        }
-//        else if(decisionType.equals("la")){
-//            legald.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
-//        }
-//        else if(decisionType.equals("rp")){
-//            legald.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
-//        }
         
         legald.setURI("http://legislation.di.uoa.gr/"+ decisionType + "/" + year + "/" + id);
         String sesameServer ="";
@@ -2483,68 +2462,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 //                            
 //                            String type = bindingSet.getValue("type").toString();
 //                           
-//                            if (type.equals("http://legislation.di.uoa.gr/ontology/Constitution")) {
-//                                //legald.setDecisionType("ΣΥΝΤΑΓΜΑ");
-//                                ld.setDecisionType("con");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/PresidentialDecree")) {
-//                                //legald.setDecisionType("(ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
-//                                ld.setDecisionType("pd");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/Law")) {
-//                                //legald.setDecisionType("ΝΟΜΟΣ");
-//                                ld.setDecisionType("law");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/ActOfMinisterialCabinet")) {
-//                                //legald.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
-//                                ld.setDecisionType("amc");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/MinisterialDecision")) {
-//                                //legald.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
-//                                ld.setDecisionType("md");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RoyalDecree")) {
-//                                //legald.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
-//                                ld.setDecisionType("rd");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/LegislativeAct")) {
-//                                //legald.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
-//                                ld.setDecisionType("la");
-//                            }
-//                            else if (type.equals("http://legislation.di.uoa.gr/ontology/RegulatoryProvision")) {
-//                                //legald.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
-//                                ld.setDecisionType("rp");
-//                            }
+//                           
 //                            
 //                        }
 //                        else {
 //                            
-//                            String type = params.get("type");
-//                            ld.setDecisionType(type);
-////                            if (type.equals("con")) {
-////                                ld.setDecisionType("ΣΥΝΤΑΓΜΑ");
-////                            }
-////                            else if (type.equals("pd")) {
-////                                ld.setDecisionType("ΠΔ) ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ");
-////                            }
-////                            else if (type.equals("law")) {
-////                                ld.setDecisionType("ΝΟΜΟΣ");
-////                            }
-////                            else if (type.equals("amc")) {
-////                                ld.setDecisionType("(ΠΥΣ) ΠΡΑΞΗ ΥΠΟΥΡΓΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ");
-////                            }
-////                            else if (type.equals("md")) {
-////                                ld.setDecisionType("(ΥΑ) ΥΠΟΥΡΓΙΚΗ ΑΠΟΦΑΣΗ");
-////                            }
-////                            else if (type.equals("rd")) {
-////                                ld.setDecisionType("(ΒΔ) ΒΑΣΙΛΙΚΟ ΔΙΑΤΑΓΜΑ");
-////                            }
-////                            else if (type.equals("la")) {
-////                                ld.setDecisionType("(ΠΝΠ) ΠΡΑΞΗ ΝΟΜΟΘΕΤΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ");
-////                            }
-////                            else if(type.equals(("rp"))) {
-////                                 ld.setDecisionType("(ΚΔ) ΚΑΝΟΝΙΣΤΙΚΗ ΔΙΑΤΑΞΗ");
-////                            }
+//                            
 //                            
 //                        }
 //                        String title = "";
