@@ -2056,7 +2056,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         List<LegalDocument> LDs = new ArrayList<LegalDocument>();
         //Apache Lucene searching via criteria
         try {
-            Path path = Paths.get(getClass().getResource("/fek_index").toString().replace("file:/", ""));
+            Path path = Paths.get(getClass().getResource("/fek_index").toString().replace("file:/", "").replaceFirst("\\/storage\\/nomothesia", ""));
             Directory directory2 = FSDirectory.open(path);       
             IndexReader indexReader =  DirectoryReader.open(directory2);
             IndexSearcher indexSearcher = new IndexSearcher(indexReader);
