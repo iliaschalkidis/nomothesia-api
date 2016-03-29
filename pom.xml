@@ -11,10 +11,10 @@
 		<java-version>1.8</java-version>
 		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
-		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.slf4j-version>1.1.6</org.slf4j-version>
 	 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-        <repositories>
+        <!--<repositories>
             <repository>
             <releases>
                     <enabled>true</enabled>
@@ -26,32 +26,18 @@
             <name>Strabon - maven repository</name>
             <url>http://maven.strabon.di.uoa.gr/content/repositories/releases</url>
             </repository>
-        </repositories>
+        </repositories>-->
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframework-version}</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				 </exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
-                        <exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				 </exclusion>
-			</exclusions>
 		</dependency>
                 <dependency>
                     <groupId>org.springframework</groupId>
@@ -67,13 +53,13 @@
                         <type>jar</type>
                 </dependency>
                 
-                <!-- Strabon -->
+                <!-- Strabon 
                 <dependency>
                         <groupId>eu.earthobservatory</groupId>
                         <artifactId>strabon-endpoint-client</artifactId>
                         <version>3.2.10</version>
                         <type>jar</type>
-                </dependency>
+                </dependency>-->
                 
 		<!-- AspectJ -->
 		<dependency>
@@ -82,17 +68,17 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
-		<!-- Logging -->
+		<!-- Logging 
                 <dependency>
                         <groupId>ch.qos.logback</groupId>
                         <artifactId>logback-core</artifactId>
-                        <version>1.1.2</version>
+                        <version>${org.slf4j-version}</version>
                         <scope>runtime</scope>
                 </dependency>
                 <dependency>
                         <groupId>ch.qos.logback</groupId>
                         <artifactId>logback-classic</artifactId>
-                        <version>1.1.2</version>
+                        <version>${org.slf4j-version}</version>
                         <scope>runtime</scope>
                 </dependency>
 		<dependency>
@@ -136,7 +122,7 @@
 				</exclusion>
 			</exclusions>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency>-->
 
 		<!-- @Inject -->
 		<dependency>
@@ -168,7 +154,7 @@
                 <dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-runtime</artifactId>
-			<version>2.8.4</version>
+			<version>2.8.10</version>
                         <exclusions>
                                 <exclusion>
                                         <groupId>org.apache.lucene</groupId>
@@ -179,7 +165,7 @@
                 <dependency>
                   <groupId>org.openrdf.sesame</groupId>
                   <artifactId>sesame-rio-rdfxml</artifactId>
-                  <version>2.8.4</version>
+                  <version>2.8.10</version>
                   <type>jar</type>
                 </dependency>
 
@@ -201,6 +187,14 @@
                     <artifactId>lucene-queryparser</artifactId>
                     <version>5.1.0</version>
                 </dependency>
+                
+                <!-- Apache Commons DBCP -->
+                <dependency>
+                    <groupId>commons-dbcp</groupId>
+                    <artifactId>commons-dbcp</artifactId>
+                    <version>1.4</version>
+                </dependency>
+
 
 		<!-- Test -->
 		<dependency>
@@ -209,14 +203,6 @@
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
-                
-                <!-- Ehcache -->
-                <dependency>
-                    <groupId>net.sf.ehcache</groupId>
-                    <artifactId>ehcache</artifactId>
-                    <version>2.10.1</version>
-                </dependency>
-                
                 
                 <!-- JSON Support -->         
                 <dependency>

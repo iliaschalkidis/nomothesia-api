@@ -13,8 +13,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.TransformerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LegislationController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(LegislationController.class);
+//	private static final Logger logger = LoggerFactory.getLogger(LegislationController.class);
 	
         @RequestMapping(value = "/gazette/a/{year:\\d+}/{id:\\d+}", method = RequestMethod.GET)
         public void presentGovernmentGazettePDF(@PathVariable String year, @PathVariable String id, Model model, Locale locale,HttpServletResponse response) throws IOException {
