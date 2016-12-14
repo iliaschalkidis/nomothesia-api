@@ -72,7 +72,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
         legald.setYear(year);
         legald.setDecisionType(decisionType);
         
-        legald.setURI("http://legislation.di.uoa.gr/"+ decisionType + "/" + year + "/" + id);
+        legald.setURI("http://legislation.di.uoa.gr/eli/"+ decisionType + "/" + year + "/" + id);
         String sesameServer ="";
         String repositoryID ="";
         
@@ -115,24 +115,24 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT DISTINCT ?title ?date ?gaztitle ?signername ?views ?place ?htmltitle\n" +
                 "WHERE{\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " eli:datepublication ?date.\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " eli:published_in ?gazette.\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:views ?views.\n" +
                 "?gazette dc:title ?gaztitle.\n" +
                 //"?gazette leg:pdfFile ?pdfile.\n" +
-                "OPTIONAL{<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "OPTIONAL{<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " dc:title ?title.}\n" +
-                "OPTIONAL{<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "OPTIONAL{<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:has_html ?htmltitle.}\n" +
-                "OPTIONAL{ <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +"> leg:place ?place.}"+
+                "OPTIONAL{ <http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +"> leg:place ?place.}"+
                 "FILTER(langMatches(lang(?title), \"el\"))\n"+
                 "}";
                   
@@ -147,7 +147,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         
                         BindingSet bindingSet = result.next(); 
                         Signer sign = new Signer();
-                        legald.setURI("http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id);
+                        legald.setURI("http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id);
                         String title_el = "";
                         if(bindingSet.hasBinding("title")){
                             title_el = bindingSet.getValue("title").toString().replace("@el", "");
@@ -189,12 +189,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT ?tag\n" +
                 "WHERE{\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:tag ?tag.\n" +
                 "FILTER(langMatches(lang(?tag), \"el\"))\n"+    
                 "}";
@@ -227,12 +227,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                         "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                         "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT DISTINCT ?signername ?html\n" +
                 "WHERE{\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " eli:passed_by ?signer.\n" +
                 "?signer foaf:name ?signername.\n" +
                 //"?signer foaf:title ?signertitle.\n" +
@@ -345,12 +345,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT  DISTINCT ?citation ?cittext ?cituri ?cithtml\n" +
                 "WHERE{\n" +
-                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +"> eli:has_part ?citation.\n" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +"> eli:has_part ?citation.\n" +
                 "?citation a metalex:BibliographicCitation.\n" +
                 "?citation leg:context ?cittext.\n"+
                 "OPTIONAL {?citation metalex:BibliographicCitation ?cituri.}.\n" +
@@ -501,12 +501,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-                            "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                            "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
                     "SELECT DISTINCT ?part ?text ?html ?type ?title ?filename\n" +
                     "WHERE{\n" +
-                    "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                     " eli:has_part+  ?part.\n" +
                     "?part rdf:type ?type.\n" +
                     "OPTIONAL{ ?part leg:has_text ?text.}.\n" +
@@ -1435,13 +1435,13 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 //                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
 //                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
 //                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-//                "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+//                "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
 //                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
 //                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
 //                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
 //                "\n" +
 //                "DELETE WHERE {\n" +
-//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+//                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
 //                " <http://legislation.di.uoa.gr/ontology/views>" +
 //                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
 //                "}";
@@ -1456,14 +1456,14 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 //                String queryString3 = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
 //                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
 //                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-//                "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+//                "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
 //                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
 //                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
 //                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
 //                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
 //                "\n" +
 //                "INSERT DATA {\n" +
-//                "<http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+//                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
 //                " <http://legislation.di.uoa.gr/ontology/views>" +
 //                " \"" + view + "\"^^<http://www.w3.org/2001/XMLSchema#integer>\n" +
 //                "}";
@@ -1528,7 +1528,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
            
             try {
                 
-                String queryString = "DESCRIBE <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">";
+                String queryString = "DESCRIBE <http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">";
                 //System.out.println(queryString);
                   
                 try {
@@ -1774,12 +1774,12 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                     "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
                     "SELECT DISTINCT ?mod ?type ?patient ?work ?title ?date ?gaztitle ?part ?type2 ?text\n" +
                     "WHERE{\n" +
-                    " <http://legislation.di.uoa.gr/" + decisionType + "/" + year + "/" + id +">" +
+                    " <http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                     " eli:is_realized_by  ?version.\n" +
                     " ?version metalex:matterOf ?mod.\n" +
                     " ?mod rdf:type ?type.\n" +
@@ -2213,7 +2213,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 //                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
 //                "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
 //                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-//                   "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+//                   "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
 //                "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
 //                "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
 //                "PREFIX dc: <http://purl.org/dc/terms/>\n" +
@@ -2564,7 +2564,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT DISTINCT ?tag \n" +
@@ -2650,7 +2650,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT ?uri ?title ?date ?type ?views ?id\n" +
@@ -2794,7 +2794,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT ?uri ?date ?type\n" +
@@ -2886,7 +2886,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                 "\n" +
                 "SELECT ?uri ?title ?date ?type ?views ?id\n" +
@@ -3030,7 +3030,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                 "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
-                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                 "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                 "SELECT ?gaz ?title ?pdf ?doc ?type ?date (COUNT (?doc) AS ?docs) (COUNT (?part) AS ?issues)\n" +
                 "WHERE{\n" +
@@ -3209,7 +3209,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                                         "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
                                         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                                        "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                                        "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                                         "PREFIX leg: <http://legislation.di.uoa.gr/ontology/>\n" +
                                         "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                                         "SELECT (COUNT (?doc) AS ?sum) ?year\n" +

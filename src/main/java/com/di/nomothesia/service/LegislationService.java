@@ -64,7 +64,7 @@ public class LegislationService {
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                     "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
-                                  "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                                  "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
                     "SELECT ?modification ?type ?version ?competenceground \n" +
@@ -72,7 +72,7 @@ public class LegislationService {
                     "  ?version metalex:matterOf ?modification."+
                     "  ?modification metalex:legislativeCompetenceGround ?competenceground.\n" + 
                     "  ?modification rdf:type ?type.\n" + 
-                    "  <http://legislation.di.uoa.gr/law/2013/4174> eli:is_realized_by ?version.\n"
+                    "  <http://legislation.di.uoa.gr/eli/law/2013/4174> eli:is_realized_by ?version.\n"
                     + "}"
                     
             );
@@ -84,12 +84,12 @@ public class LegislationService {
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                     "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
-                                  "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                                  "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "\n" +
                     "SELECT ?part ?type \n" +
                     "WHERE{\n" +
-                    " <http://legislation.di.uoa.gr/pd/2014/65> eli:has_part+  ?part.\n" +
+                    " <http://legislation.di.uoa.gr/eli/pd/2014/65> eli:has_part+  ?part.\n" +
                     " ?part rdf:type ?type.\n" +
                     "}" +
                     "ORDER BY ?part" 
@@ -103,7 +103,7 @@ public class LegislationService {
                     "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                     "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
                     "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
-                                  "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                                  "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
                     "PREFIX dc: <http://purl.org/dc/terms/>\n" +
                     "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
                     "\n" +
@@ -123,7 +123,7 @@ public class LegislationService {
             "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n" +
             "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> \n" +
             "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/> \n" +
-                                  "PREFIX eli: <http://data.europa.eu/eli/ontology/#>\n" +
+                                  "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
             "PREFIX dc: <http://purl.org/dc/terms/>\n" +
             "\n" +
             "SELECT  ?legaldocumentURI ?title (COUNT(DISTINCT ?version) AS ?versions)\n" +

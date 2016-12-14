@@ -133,6 +133,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#> 
 PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#> 
 PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/> 
+PREFIX eli: <http://data.europa.eu/eli/ontology#>
 PREFIX dc: <http://purl.org/dc/terms/></c:when><c:otherwise>${endpointResults.getQuery()}</c:otherwise></c:choose></textarea>
                                                                     </div>
                                                                     <div class="form-group" style="text-align: right;">
