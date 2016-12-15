@@ -129,7 +129,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "?gazette dc:title ?gaztitle.\n" +
                 //"?gazette leg:pdfFile ?pdfile.\n" +
                 "OPTIONAL{<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
-                " dc:title ?title.}\n" +
+                " eli:title ?title.}\n" +
                 "OPTIONAL{<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " leg:has_html ?htmltitle.}\n" +
                 "OPTIONAL{ <http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +"> leg:place ?place.}"+
@@ -511,7 +511,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "?part rdf:type ?type.\n" +
                     "OPTIONAL{ ?part leg:has_text ?text.}.\n" +
                     "OPTIONAL{ ?part leg:has_html ?html.}.\n" +
-                    "OPTIONAL{ ?part dc:title ?title.}.\n"+
+                    "OPTIONAL{ ?part eli:title ?title.}.\n"+
                     "OPTIONAL{ ?part leg:imageName ?filename.}."+
                     "}\n"+
                     "ORDER BY ?part";
@@ -1790,7 +1790,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     " ?work eli:published_in ?gazette.\n" +
                     " ?work eli:date_publication ?date.\n" +
                     " ?gazette dc:title ?gaztitle.\n" +
-                    " OPTIONAL{?work  dc:title ?title.}\n" ;
+                    " OPTIONAL{?work  eli:title ?title.}\n" ;
                     
                     if (date !=null) {
                         
@@ -2220,7 +2220,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 //                "\n" +
 //                "SELECT DISTINCT ?legaldocument ?title ?type ?date ?id\n" +
 //                "WHERE{\n" +
-//                " ?legaldocument dc:title ?title.\n";
+//                " ?legaldocument eli:title ?title.\n";
 //                  
 //                //search by specific date
 //                if((params.get("date")==null) || (params.get("date").equals(""))){
@@ -2655,7 +2655,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "\n" +
                 "SELECT ?uri ?title ?date ?type ?views ?id\n" +
                 "WHERE{\n" +
-                "?uri dc:title ?title.\n" +
+                "?uri eli:title ?title.\n" +
                 "?uri eli:date_publication ?date.\n" +
                 "?uri leg:views ?views.\n" +
                 "?uri rdf:type ?type.\n" +
@@ -2799,7 +2799,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "\n" +
                 "SELECT ?uri ?date ?type\n" +
                 "WHERE{\n" +
-                "?uri dc:title ?title.\n" +
+                "?uri eli:title ?title.\n" +
                 "?uri eli:date_publication ?date.\n" +
                 "?uri rdf:type ?type.\n" +
                 "FILTER(langMatches(lang(?title), \"el\"))\n" +
@@ -2891,7 +2891,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "\n" +
                 "SELECT ?uri ?title ?date ?type ?views ?id\n" +
                 "WHERE{\n" +
-                "?uri dc:title ?title.\n" +
+                "?uri eli:title ?title.\n" +
                 "?uri eli:date_publication ?date.\n" +
                 "?uri leg:views ?views.\n" +
                 "?uri rdf:type ?type.\n" +
@@ -3035,7 +3035,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "SELECT ?gaz ?title ?pdf ?doc ?type ?date (COUNT (?doc) AS ?docs) (COUNT (?part) AS ?issues)\n" +
                 "WHERE{\n" +
                 "?gaz rdf:type leg:GovernmentGazette.\n" +
-                "?gaz dc:title ?title.\n" +
+                "?gaz eli:title ?title.\n" +
                 "?gaz eli:date_publication ?date.\n" +
                 "?gaz leg:pdfFile ?pdf.\n" +
                 "    OPTIONAL {?doc eli:published_in ?gaz. ?doc rdf:type ?type.}\n" +

@@ -129,7 +129,7 @@ public class LegislationService {
             "SELECT  ?legaldocumentURI ?title (COUNT(DISTINCT ?version) AS ?versions)\n" +
             "WHERE{\n" +
             "?legaldocumentURI eli:is_realized_by ?version.\n" +
-            "?legaldocumentURI dc:title ?title.\n" +
+            "?legaldocumentURI eli:title ?title.\n" +
             "?modification metalex:legislativeCompetenceGround ?work.\n" +
             "?work eli:date_publication ?date.\n" +
             "FILTER (?date >= \"2008-01-01\"^^xsd:date && ?date <= \"2013-01-31\"^^xsd:date)\n" +
