@@ -350,7 +350,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "\n" +
                 "SELECT  DISTINCT ?citation ?cittext ?cituri ?cithtml\n" +
                 "WHERE{\n" +
-                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +"> eli:has_part ?citation.\n" +
+                "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +"> eli:cites ?citation.\n" +
                 "?citation a metalex:BibliographicCitation.\n" +
                 "?citation leg:context ?cittext.\n"+
                 "OPTIONAL {?citation metalex:BibliographicCitation ?cituri.}.\n" +
