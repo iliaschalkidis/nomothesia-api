@@ -109,7 +109,7 @@ public class LegislationService {
                     "\n" +
                     "SELECT DISTINCT ?name (COUNT(?decision) AS ?decisions)\n" +
                     "WHERE{\n" +
-                    " ?decision nomothesia:signer  ?signer.\n" +
+                    " ?decision eli:passed_by  ?signer.\n" +
                     " ?signer foaf:name ?name.\n" +
                     "}" +
                     "GROUP BY ?name\n" +
@@ -131,7 +131,7 @@ public class LegislationService {
             "?legaldocumentURI eli:is_realized_by ?version.\n" +
             "?legaldocumentURI dc:title ?title.\n" +
             "?modification metalex:legislativeCompetenceGround ?work.\n" +
-            "?work eli:datepublication ?date.\n" +
+            "?work eli:date_publication ?date.\n" +
             "FILTER (?date >= \"2008-01-01\"^^xsd:date && ?date <= \"2013-01-31\"^^xsd:date)\n" +
             "} \n" +
             "GROUP BY ?legaldocumentURI ?title\n" +

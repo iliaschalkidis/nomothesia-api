@@ -121,7 +121,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "SELECT DISTINCT ?title ?date ?gaztitle ?signername ?views ?place ?htmltitle\n" +
                 "WHERE{\n" +
                 "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
-                " eli:datepublication ?date.\n" +
+                " eli:date_publication ?date.\n" +
                 "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
                 " eli:published_in ?gazette.\n" +
                 "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id +">" +
@@ -1788,7 +1788,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     " ?part rdf:type ?type2.\n" +
                     " ?mod  metalex:legislativeCompetenceGround ?work.\n" +
                     " ?work eli:published_in ?gazette.\n" +
-                    " ?work eli:datepublication ?date.\n" +
+                    " ?work eli:date_publication ?date.\n" +
                     " ?gazette dc:title ?gaztitle.\n" +
                     " OPTIONAL{?work  dc:title ?title.}\n" ;
                     
@@ -2224,10 +2224,10 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
 //                  
 //                //search by specific date
 //                if((params.get("date")==null) || (params.get("date").equals(""))){
-//                    queryString += "?legaldocument eli:datepublication ?date.\n";
+//                    queryString += "?legaldocument eli:date_publication ?date.\n";
 //                }
 //                else if ((params.get("year")==null) || (params.get("year").equals(""))){
-//                    queryString += "?legaldocument eli:datepublication ?date.\n" +
+//                    queryString += "?legaldocument eli:date_publication ?date.\n" +
 //                    "FILTER (?date = \"" + params.get("date") + "\"^^xsd:date)\n";
 //                }
 //                  
@@ -2656,7 +2656,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "SELECT ?uri ?title ?date ?type ?views ?id\n" +
                 "WHERE{\n" +
                 "?uri dc:title ?title.\n" +
-                "?uri eli:datepublication ?date.\n" +
+                "?uri eli:date_publication ?date.\n" +
                 "?uri leg:views ?views.\n" +
                 "?uri rdf:type ?type.\n" +
                 "?uri eli:id_local ?id.\n" +
@@ -2800,7 +2800,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "SELECT ?uri ?date ?type\n" +
                 "WHERE{\n" +
                 "?uri dc:title ?title.\n" +
-                "?uri eli:datepublication ?date.\n" +
+                "?uri eli:date_publication ?date.\n" +
                 "?uri rdf:type ?type.\n" +
                 "FILTER(langMatches(lang(?title), \"el\"))\n" +
                 "}\n" +
@@ -2892,7 +2892,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "SELECT ?uri ?title ?date ?type ?views ?id\n" +
                 "WHERE{\n" +
                 "?uri dc:title ?title.\n" +
-                "?uri eli:datepublication ?date.\n" +
+                "?uri eli:date_publication ?date.\n" +
                 "?uri leg:views ?views.\n" +
                 "?uri rdf:type ?type.\n" +
                 "?uri eli:id_local ?id.\n" +
@@ -3036,7 +3036,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                 "WHERE{\n" +
                 "?gaz rdf:type leg:GovernmentGazette.\n" +
                 "?gaz dc:title ?title.\n" +
-                "?gaz eli:datepublication ?date.\n" +
+                "?gaz eli:date_publication ?date.\n" +
                 "?gaz leg:pdfFile ?pdf.\n" +
                 "    OPTIONAL {?doc eli:published_in ?gaz. ?doc rdf:type ?type.}\n" +
                 "    OPTIONAL{?doc2 eli:published_in ?gaz. ?doc2 rdf:type ?type. ?doc2eli:has_part+ ?part. ?part rdf:type leg:ParsingIssue.}\n"+
@@ -3215,7 +3215,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                                         "SELECT (COUNT (?doc) AS ?sum) ?year\n" +
                                         "WHERE{\n" +
                                         "?doc rdf:type leg:"+types[i]+".\n" +
-                                        "?doc eli:datepublication ?date.\n" +
+                                        "?doc eli:date_publication ?date.\n" +
                                         "BIND (year(?date) AS ?year).\n" +
                                         "}\n" +
                                         "GROUP BY ?year \n"+
