@@ -136,17 +136,14 @@
                 <a href="/endpoint/query/3" class="btn btn-default"
                    style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
             </div>
-            <div align="center" style="padding:10px;">
-                <a href="/endpoint/query/4" class="btn btn-default"
-                   style="width:100%; text-align: justify;"><spring:message code="endpoint.q4"/></a>
-            </div>
         </div>
         <div class="col-md-9">
             <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ENDPOINT</h3></span>
             <form role="form" action="/endpoint">
                 <div class="form-group">
                             <textarea name="query" class="form-control" rows="15" columns="15"><c:choose><c:when
-                                    test="${empty endpointResults}">PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                                    test="${empty endpointResults}">
+                                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                                 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
                                 PREFIX owl: <http://www.w3.org/2002/07/owl#>
