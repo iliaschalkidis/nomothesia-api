@@ -4,18 +4,18 @@ package com.di.nomothesia.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Chapter implements Fragment{
+public class Chapter implements Fragment {
     
-    private String Title;
+    private String title;
     private int id;
-    private String URI;
-    List<Article> articles;
+    private String uri;
+    private List<Article> articles;
     private int status;
     private String type;
     
     public Chapter() {
         
-        this.articles = new ArrayList<Article>();
+        this.articles = new ArrayList<>();
         status = 0;
     }
     
@@ -24,35 +24,35 @@ public class Chapter implements Fragment{
     public void setType(String t) {
         this.type = t;
     }
-
+    
     @Override
     public String getType() {
         return type;
     }
     
     public String getTitle() {
-        return Title;
+        return title;
     }
     
-    public void setTitle(String Title) {
-        this.Title = Title;
+    public void setTitle(String title) {
+        this.title = title;
     }
     
     public int getId() {
         return id;
     }
-
+    
     public void setId(int id) {
         this.id = id;
     }
     
     @Override
     public String getURI() {
-        return URI;
+        return uri;
     }
     
-    public void setURI(String URI) {
-        this.URI = URI;
+    public void setURI(String uri) {
+        this.uri = uri;
     }
     
     public List<Article> getArticles() {
@@ -62,12 +62,12 @@ public class Chapter implements Fragment{
     public void setArticles(List<Article> articles) {
         this.articles = articles;
     }
-
+    
     @Override
     public int getStatus() {
         return status;
     }
-
+    
     @Override
     public void setStatus(int s) {
         this.status = s;

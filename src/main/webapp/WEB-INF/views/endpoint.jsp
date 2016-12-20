@@ -42,11 +42,24 @@
             bottom: 0;
             width: 100%;
             height: 60px; /* Height of the footer */
-
         }
-        #example {
-            height: 10%;       /* Just for the demo          */
-            overflow-y: scroll;    /* Trigger vertical scroll    */
+
+        thead, tbody {
+            display: block;
+        }
+
+        tbody {
+            height: 200px;       /* Just for the demo          */
+            overflow-y: auto;    /* Trigger vertical scroll    */
+            overflow-x: hidden;  /* Hide the horizontal scroll */
+        }
+
+        table {
+            height:200px;
+        }
+
+        td,tr {
+            width: 100%;
         }
     </style>
 
@@ -54,71 +67,10 @@
 
 <body>
 
-<!-- Navigation Bar -->
-<div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header"><a class="navbar-brand" href="/"><img style="height: 40px; margin-top: -10px;"
-                                                                         src="/resources/images/logo.png"</img></a>
-            <a class="navbar-brand" href="/" style="font-family:'Jura'; font-size: 33px"><spring:message
-                    code="navbar.brand"/></a>
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
+<!-- Include Navbar -->
+<%@ include file="/resources/html/navbar.html" %>
 
-        <div class="collapse navbar-collapse navbar-menubuilder">
-            <ul class="nav navbar-nav navbar-left">
-                <li>
-                    <a href="/" style="font-family: 'Comfortaa', cursive;"><spring:message code="navbar.home"/></a>
-                </li>
-                <li>
-                    <a href="/search" style="font-family: 'Comfortaa', cursive;"><spring:message
-                            code="navbar.search"/></a>
-                </li>
-                <li>
-                    <a href="/endpoint" style="font-family: 'Comfortaa', cursive;">Endpoint</a>
-                </li>
-                <li>
-                    <a href="/statistics" style="font-family: 'Comfortaa', cursive;"><spring:message
-                            code="navbar.statistics"/></a>
-                </li>
-                <li>
-                    <a href="/aboutus" style="font-family: 'Comfortaa', cursive;"><spring:message
-                            code="navbar.aboutus"/></a>
-                </li>
-                <li>
-                    <a href="/developer" style="font-family: 'Comfortaa', cursive;"><spring:message
-                            code="navbar.info"/></a>
-                </li>
-                <li>
-                    <a href="/gazette" style="font-family: 'Comfortaa', cursive;"><spring:message
-                            code="navbar.gazette"/></a>
-                </li>
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <c:set var="localeCode" value="${pageContext.response.locale}"/>
-                <c:choose>
-                    <c:when test="${localeCode == 'en' }">
-                        <li>
-                            <a href="?language=el_GR" style="font-family: 'Comfortaa', cursive;">EL</a>
-                        </li>
-                    </c:when>
-                    <c:when test="${localeCode == 'el_GR' }">
-                        <li>
-                            <a href="?language=en" style="font-family: 'Comfortaa', cursive;">EN</a>
-                        </li>
-                    </c:when>
-                </c:choose>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- Search Form -->
+<!-- Endpoint Page -->
 <div class="container">
     <div class="row">
         <div class="col-md-3">
@@ -126,32 +78,42 @@
                     code="endpoint.ex"/></h3></span>
             <div align="center" style="padding:10px;">
                 <a href="/endpoint/query/1" class="btn btn-default"
-                   style="width:100%; text-align: left;"><spring:message code="endpoint.q1"/></a>
+                   style="margin-bottom:4px;white-space: normal; width:100%; text-align: left;"><spring:message
+                        code="endpoint.q1"/></a>
             </div>
             <div align="center" style="padding:10px;">
                 <a href="/endpoint/query/2" class="btn btn-default"
-                   style="width:100%; text-align: left;"><spring:message code="endpoint.q2"/></a>
+                   style="margin-bottom:4px;white-space: normal; width:100%; text-align: left;"><spring:message
+                        code="endpoint.q2"/></a>
             </div>
             <div align="center" style="padding:10px;">
                 <a href="/endpoint/query/3" class="btn btn-default"
-                   style="width:100%; text-align: justify;"><spring:message code="endpoint.q3"/></a>
+                   style="margin-bottom:4px;white-space: normal; width:100%; text-align: justify;"><spring:message
+                        code="endpoint.q3"/></a>
             </div>
         </div>
         <div class="col-md-9">
             <span style="text-align: center; font-family: 'Comfortaa', cursive;"><h3>ENDPOINT</h3></span>
             <form role="form" action="/endpoint">
                 <div class="form-group">
-                            <textarea name="query" class="form-control" rows="15" columns="15"><c:choose><c:when
-                                    test="${empty endpointResults}">
-                                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                                PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-                                PREFIX owl: <http://www.w3.org/2002/07/owl#>
-                                PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>
-                                PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>
-                                PREFIX eli: <http://data.europa.eu/eli/ontology#>
-                                PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-                                PREFIX dc: <http://purl.org/dc/terms/></c:when><c:otherwise>${endpointResults.getQuery()}</c:otherwise></c:choose></textarea>
+                    <textarea name="query" class="form-control" rows="15" columns="15" style="text-align: justify">
+                        <c:choose>
+                            <c:when test="${empty endpointResults}">
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>
+PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>
+PREFIX eli: <http://data.europa.eu/eli/ontology#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dc: <http://purl.org/dc/terms/>
+                            </c:when>
+                            <c:otherwise>
+${endpointResults.getQuery()}
+                            </c:otherwise>
+                        </c:choose>
+                    </textarea>
                 </div>
                 <div class="form-group" style="text-align: right;">
                     <div class="row">
@@ -185,7 +147,8 @@
         </c:if>
         <c:if test="${not empty endpointResults.getResults()}">
             <div class="table-responsive">
-                <table id="example" class="table table-striped table-bordered" style="text-align: left; font-size: 12px;" cellspacing="0" width="80%">
+                <table id="example" class="table table-striped table-borderedtable table-striped table-bordered"
+                       style="text-align: left; font-size: 12px;" cellspacing="0" width="80%">
                         ${endpointResults.getResults()}
                 </table>
             </div>
@@ -197,9 +160,8 @@
 
 </div>
 
-<div id="footer" style="text-align: center; font-family:'Jura';">
-    <h5><spring:message code="footer"/> - Open Data&#160;&#160; <img src="/resources/images/rdf.png" width="15"/></h5>
-</div>
+<!-- Include Footer -->
+<%@ include file="/resources/html/footer.html"%>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

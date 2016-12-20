@@ -4,24 +4,24 @@ package com.di.nomothesia.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Case implements Fragment{
+public class Case implements Fragment {
     
-    private String URI;
+    private String uri;
     private int id;
     private List<Passage> passages;
     private List<Case> caseList;
     private int status;
     private String type;
     private Modification modification;
-
+    
     public Case() {
         
-        passages = new ArrayList<Passage>();
+        passages = new ArrayList<>();
         //pas.add(new Passage());
-        caseList = new ArrayList<Case>();
+        caseList = new ArrayList<>();
         //casel.add(new Case());
         
-
+        
     }
     
     //Setters-Getters for Case
@@ -29,7 +29,7 @@ public class Case implements Fragment{
     public void setType(String t) {
         this.type = t;
     }
-
+    
     @Override
     public String getType() {
         return type;
@@ -47,33 +47,33 @@ public class Case implements Fragment{
     
     @Override
     public String getURI() {
-        return URI;
+        return uri;
     }
     
-    public void setURI(String URI) {
-        this.URI = URI;
+    public void setURI(String uri) {
+        this.uri = uri;
     }
-
+    
     public int getId() {
         return id;
     }
-
+    
     public void setId(int id) {
         this.id = id;
     }
-
+    
     public List<Passage> getPassages() {
         return passages;
     }
-
+    
     public void setPassages(List<Passage> passages) {
         this.passages = passages;
     }
-
+    
     public List<Case> getCaseList() {
         return caseList;
     }
-
+    
     public void setCaseList(List<Case> caseList) {
         this.caseList = caseList;
     }
@@ -81,10 +81,10 @@ public class Case implements Fragment{
     public Modification getModification() {
         return modification;
     }
-
+    
     public void setModification(Modification modification) {
         this.modification = modification;
     }
- 
+    
     
 }

@@ -4,23 +4,23 @@ package com.di.nomothesia.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Paragraph implements Fragment{
+public class Paragraph implements Fragment {
     
     private List<Passage> passages;
     private List<Case> caseList;
     private List<String> images;
     private String table;
-    private String URI;
+    private String uri;
     private String id;
     private int status;
     private String type;
     
     public Paragraph() {
         
-        this.passages = new ArrayList<Passage>();
+        this.passages = new ArrayList<>();
         //pass.add(new Passage());
-        this.caseList = new ArrayList<Case>();
-        this.images = new ArrayList<String>();
+        this.caseList = new ArrayList<>();
+        this.images = new ArrayList<>();
         //cas.add(new Case());
         
     }
@@ -30,7 +30,7 @@ public class Paragraph implements Fragment{
     public void setType(String t) {
         this.type = t;
     }
-
+    
     @Override
     public String getType() {
         return type;
@@ -53,40 +53,40 @@ public class Paragraph implements Fragment{
     public List<Passage> getPassages() {
         return passages;
     }
-
+    
     public void setPassages(List<Passage> passages) {
         this.passages = passages;
     }
-
+    
     public List<Case> getCaseList() {
         return caseList;
     }
-
+    
     public void setCaseList(List<Case> caseList) {
         this.caseList = caseList;
     }
-
+    
     public String getTable() {
         return table;
     }
-
+    
     public void setTable(String table) {
         this.table = table;
     }
     
     @Override
     public String getURI() {
-        return URI;
+        return uri;
     }
-
+    
     public void setURI(String uri) {
-        this.URI = uri;
+        this.uri = uri;
     }
-
+    
     public String getId() {
         return id;
     }
-
+    
     public void setId(String id) {
         this.id = id;
     }

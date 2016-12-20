@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Citation {
-  
+    
     private String description;
-    private String URI;
+    private String uri;
     private List<String> targetURIs;
     private int id;
     
     public Citation() {
         
-        this.targetURIs = new ArrayList<String>();
-    
+        this.targetURIs = new ArrayList<>();
+        
     }
     
     //Setters-Getters for Citation
@@ -28,11 +28,11 @@ public class Citation {
     }
     
     public String getURI() {
-        return URI;
+        return uri;
     }
     
-    public void setURI(String URI) {
-        this.URI = URI;
+    public void setURI(String uri) {
+        this.uri = uri;
     }
     
     public List<String> gettargetURIs() {
@@ -46,9 +46,9 @@ public class Citation {
     public int getId() {
         return id;
     }
-
+    
     public void setId(int id) {
         this.id = id;
     }
-
+    
 }

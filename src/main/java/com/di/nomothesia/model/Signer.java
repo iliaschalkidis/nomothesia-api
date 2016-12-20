@@ -19,7 +19,7 @@ public class Signer {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
+    
     public String getTitle() {
         return title;
     }

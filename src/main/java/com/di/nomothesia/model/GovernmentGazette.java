@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class GovernmentGazette {
     
-    private String URI;
+    private String uri;
     private int docs;
     private String issue;
     private String year;
@@ -15,6 +15,7 @@ public class GovernmentGazette {
     private ArrayList<LegalDocument> documents;
     private String date;
     private int issues;
+    
     public GovernmentGazette() {
         
     }
@@ -24,7 +25,7 @@ public class GovernmentGazette {
     public String getFileName() {
         return fileName;
     }
-
+    
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
@@ -32,23 +33,23 @@ public class GovernmentGazette {
     public String getIssue() {
         return issue;
     }
-
+    
     public void setIssue(String issue) {
         this.issue = issue;
     }
-
+    
     public String getYear() {
         return year;
     }
-
+    
     public void setYear(String year) {
         this.year = year;
     }
-
+    
     public String getURI() {
-        return URI;
+        return uri;
     }
-
+    
     public int getDocs() {
         return docs;
     }
@@ -56,15 +57,15 @@ public class GovernmentGazette {
     public int getIssues() {
         return issues;
     }
-
+    
     public String getTitle() {
         return title;
     }
-
+    
     public int getId() {
         return id;
     }
-
+    
     public void setId(String id) {
         this.id = Integer.parseInt(id);
     }
@@ -72,12 +73,12 @@ public class GovernmentGazette {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public void setURI(String URI) {
-        this.URI = URI;
+    
+    public void setURI(String uri) {
+        this.uri = uri;
     }
-
-
+    
+    
     public void setDocs(int docs) {
         this.docs = docs;
     }
@@ -85,23 +86,23 @@ public class GovernmentGazette {
     public void setIssues(int issues) {
         this.issues = issues;
     }
-
+    
     public void setList(ArrayList<LegalDocument> lds) {
         this.documents = lds;
     }
     
-     public ArrayList<LegalDocument> getList() {
+    public ArrayList<LegalDocument> getList() {
         return this.documents;
     }
-
+    
     public void setPublicationDate(String publicationDate) {
-        this.date= publicationDate;
+        this.date = publicationDate;
     }
-
+    
     public ArrayList<LegalDocument> getDocuments() {
         return documents;
     }
-
+    
     public String getPublicationDate() {
         return date;
     }

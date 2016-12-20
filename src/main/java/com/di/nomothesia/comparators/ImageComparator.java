@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.di.nomothesia.comparators;
 
-import com.di.nomothesia.model.Article;
 import java.util.Comparator;
 
 /**
- *
  * @author Panagiotis
  */
 public class ImageComparator implements Comparator<String> {

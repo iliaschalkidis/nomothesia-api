@@ -1,53 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xmlns:beans="http://www.springframework.org/schema/beans"
-            xmlns:context="http://www.springframework.org/schema/context"
-            xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:cache="http://www.springframework.org/schema/cache"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	<!-- Enables the Spring MVC @Controller programming model -->
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+    <!-- Enables the Spring MVC @Controller programming model -->
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-        <annotation-driven/>
-	<resources mapping="/resources/**" location="/resources/"/>
-        <resources mapping="/images/**" location="/images/"/>
-        <resources mapping="/css/**" location="/css/"/>
-        <resources mapping="/js/**" location="/js/"/>
-        
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-        <beans:bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-  		<beans:property name="order" value="1"/>
-  		<beans:property name="basename" value="views"/>
-	</beans:bean>
-        
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-                <beans:property name="order" value="2"/>
-		<beans:property name="prefix" value="/WEB-INF/views/" />
-		<beans:property name="suffix" value=".jsp" />
-	</beans:bean>
-        
-        <!-- Resolves Internationalization -->
-        <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-            <beans:property name="basename" value="classpath:messages" />
-            <beans:property name="defaultEncoding" value="UTF-8" />
+    <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+    <annotation-driven/>
+    <resources mapping="/resources/**" location="/resources/"/>
+    <resources mapping="/images/**" location="/images/"/>
+    <resources mapping="/css/**" location="/css/"/>
+    <resources mapping="/js/**" location="/js/"/>
+
+    <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+    <beans:bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <beans:property name="order" value="1"/>
+        <beans:property name="basename" value="views"/>
+    </beans:bean>
+
+    <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="order" value="2"/>
+        <beans:property name="prefix" value="/WEB-INF/views/"/>
+        <beans:property name="suffix" value=".jsp"/>
+    </beans:bean>
+
+    <!-- Switch on the Caching -->
+    <!--<beans:bean id="ehCacheManager"
+          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+          p:configLocation="classpath:ehcache.xml"
+          p:shared="false" />
+
+    <beans:bean id="cacheManager"
+          class="org.springframework.cache.ehcache.EhCacheCacheManager"
+          p:cacheManager-ref="ehCacheManager" />-->
+
+    <!--<cache:annotation-driven cache-manager="cacheManager" proxy-target-class="true"/>-->
+
+    <!-- Resolves Internationalization -->
+    <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basename" value="classpath:messages"/>
+        <beans:property name="defaultEncoding" value="UTF-8"/>
+    </beans:bean>
+
+    <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <beans:property name="defaultLocale" value="el_GR"/>
+        <beans:property name="cookieName" value="myAppLocaleCookie"></beans:property>
+        <beans:property name="cookieMaxAge" value="3600"></beans:property>
+    </beans:bean>
+
+    <interceptors>
+        <beans:bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <beans:property name="paramName" value="language"/>
         </beans:bean>
-        
-        <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-            <beans:property name="defaultLocale" value="el_GR" />
-            <beans:property name="cookieName" value="myAppLocaleCookie"></beans:property>
-            <beans:property name="cookieMaxAge" value="3600"></beans:property>
-        </beans:bean>
- 
-        <interceptors>
-            <beans:bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-                <beans:property name="paramName" value="language" />
-            </beans:bean>
-        </interceptors>
- 
-        <context:component-scan base-package="com.journaldev.spring" />      
-	<context:component-scan base-package="com.di.nomothesia.controller" />	
+    </interceptors>
+
+    <context:component-scan base-package="com.journaldev.spring"/>
+    <context:component-scan base-package="com.di.nomothesia.controller"/>
 
 </beans:beans>

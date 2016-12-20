@@ -2,13 +2,13 @@
 package com.di.nomothesia.model;
 
 public class Modification {
-
+    
     private Fragment fragment;
-    private String URI;
-    private String Type;
+    private String uri;
+    private String type;
     private String patient;
     private LegalDocument competenceGround;
-
+    
     public Modification() {
         this.competenceGround = new LegalDocument();
     }
@@ -18,11 +18,11 @@ public class Modification {
     public LegalDocument getCompetenceGround() {
         return competenceGround;
     }
-
+    
     public String getPatient() {
         return patient;
     }
-
+    
     public void setPatient(String patient) {
         this.patient = patient;
     }
@@ -30,30 +30,30 @@ public class Modification {
     public Fragment getFragment() {
         return fragment;
     }
-
+    
     public void setFragment(Fragment fragment) {
         this.fragment = fragment;
     }
-
+    
     public String getURI() {
-        return URI;
+        return uri;
     }
     
-    public String getTarget(){
-        String target = patient.split("(law|pd|la|rd|con|md|rp|amc)+\\/[0-9]+\\/")[1].split("\\/",2)[1];
+    public String getTarget() {
+        String target = patient.split("(law|pd|la|rd|con|md|rp|amc)+\\/[0-9]+\\/")[1].split("\\/", 2)[1];
         return target;
     }
-
-    public void setURI(String URI) {
-        this.URI = URI;
+    
+    public void setURI(String uri) {
+        this.uri = uri;
     }
-
+    
     public String getType() {
-        return Type;
+        return type;
     }
-
-    public void setType(String Type) {
-        this.Type = Type;
+    
+    public void setType(String type) {
+        this.type = type;
     }
     
 }

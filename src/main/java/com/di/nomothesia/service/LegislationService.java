@@ -1,310 +1,142 @@
 package com.di.nomothesia.service;
 
-import com.di.nomothesia.controller.XMLBuilder;
-import com.di.nomothesia.controller.XMLBuilder2;
-import com.di.nomothesia.dao.LegalDocumentDAO;
-import com.di.nomothesia.model.EndpointResultSet;
-import com.di.nomothesia.model.Fragment;
-import com.di.nomothesia.model.GovernmentGazette;
-import com.di.nomothesia.model.LegalDocument;
-import com.di.nomothesia.model.Modification;
+import com.di.nomothesia.model.*;
+
+import javax.xml.transform.TransformerException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.xml.transform.TransformerException;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class LegislationService {
+/**
+ * Created by psour on 14/11/2016.
+ *
+ */
+public interface LegislationService {
+    /**
+     * Get legal document by id.
+     *
+     * @param decisionType the decisionType
+     * @param year         year
+     * @param id           id
+     * @param request      request
+     * @return LegalDocument
+     */
+    LegalDocument getById(String decisionType, String year, String id, int request);
+
+    /**
+     * Get all modifications by legal document id.
+     *
+     * @param type    the type
+     * @param year    the year
+     * @param id      the id
+     * @param request the request
+     * @param date    the date
+     * @return List<Modification>
+     */
+    List<Modification> getAllModificationsById(String type, String year, String id, int request, String date);
+
+    /**
+     * Get the resultset from sparql query.
+     *
+     * @param query  the query
+     * @param format the format
+     * @return EndpointResultSet
+     */
+    EndpointResultSet sparqlQuery(String query, String format);
+
+    /**
+     * Get rdf graph by id.
+     *
+     * @param type the type
+     * @param year the year
+     * @param id   the id
+     * @return String
+     */
+    String getRDFById(String type, String year, String id);
+
+    /**
+     * Get xml by id.
+     *
+     * @param type    the type
+     * @param year    the year
+     * @param id      the id
+     * @param request the request
+     * @return String
+     */
+    String getXMLById(String type, String year, String id, int request) throws TransformerException;
+
+    /**
+     * Get list of legal documents based on params.
+     *
+     * @param params the params
+     * @return List<LegalDocument>
+     */
+    List<LegalDocument> searchLegislation(Map<String, String> params);
     
-    public LegalDocument getById(String decisionType, String year, String id, int request) {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        //Get Metadata
-        LegalDocument legald = legalDocumentDAO.getMetadataById(decisionType, year, id);
-        
-        //Get Citations
-        legald = legalDocumentDAO.getCitationsById(decisionType, year, id, request, legald);
-        
-        //Get Legal Document
-        return legalDocumentDAO.getById(decisionType, year, id, request, legald);
-    }
-    
-    public List<Modification> getAllModificationsById(String type, String year, String id,int request, String date) {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getAllModifications(type, year, id, date, request);
-        
-        return mods;
-    }
+    /**
+     * Get most viewd legal documents.
+     *
+     * @return List<LegalDocument>
+     */
+    List<LegalDocument> mostViewed();
 
-    @Cacheable(value="NomothesiaCache", key="#query")
-    public EndpointResultSet sparqlQuery(String query, String format) {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        //Set query
-        EndpointResultSet eprs = new EndpointResultSet();
-        if("1".equals(query)) {
-            eprs.setQuery(
-                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                    "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
-                    "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
-                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
-                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                    "\n" +
-                    "SELECT ?doc (COUNT(DISTINCT ?expression) AS ?versions)\n" +
-                      "WHERE{\n" +
-                      "?doc eli:is_realized_by ?expression.\n" +
-                      "?expression metalex:matterOf ?modification.\n" +
-                      "?modification metalex:legislativeCompetenceGround\n" +
-                      "?doc2.\n" +
-                      "?doc2 eli:date_publication ?date.\n" +
-                      "FILTER (?date >= \"2008-01-01\"^^xsd:date\n" +
-                      "&& ?date <= \"2013-01-31\"^^xsd:date)\n" +
-                      "} GROUP BY ?doc ?title\n" +
-                      "ORDER BY DESC(?versions) LIMIT 5"
-            );
-        } else if("2".equals(query)) {
-            eprs.setQuery(
-                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                    "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
-                    "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
-                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
-                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                    "\n" +
-                    "SELECT ?article (COUNT(?passage) as ?passages)\n" +
-                      "WHERE{\n" +
-                      "?doc eli:has_part+ ?article.\n" +
-                      "?doc eli:date_publication ?date.\n" +
-                      "?article rdf:type nomothesia:Article.\n" +
-                      "?article eli:has_part+ ?passage.\n" +
-                      "?passage rdf:type nomothesia:Passage.\n" +
-                      "FILTER (?date >= \"2015-01-01\"^^xsd:date\n" +
-                      "&& ?date <= \"2015-12-31\"^^xsd:date)\n" +
-                      "} GROUP BY ?article\n" +
-                      "ORDER BY DESC(?passages) LIMIT 1"
-            );
-        } else if("3".equals(query)) {
-            eprs.setQuery(
-                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                    "PREFIX metalex:<http://www.metalex.eu/metalex/2008-05-02#>\n" +
-                    "PREFIX nomothesia: <http://legislation.di.uoa.gr/ontology/>\n" +
-                    "PREFIX eli: <http://data.europa.eu/eli/ontology#>\n" +
-                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
-                    "PREFIX dc: <http://purl.org/dc/terms/>\n" +
-                    "\n" +
-                    "SELECT ?signatory_name (COUNT(?doc) AS ?docs)\n" +
-                      "WHERE{\n" +
-                      "?doc eli:passed_by ?signatory.\n" +
-                      "?doc eli:date_publication ?date.\n" +
-                      "?signer foaf:name ?signatory_name.\n" +
-                      "FILTER ( ?date >= \"2008-01-01\"^^xsd:date\n" +
-                      "&& ?date <= \"2015-12-31\"^^xsd:date)\n" +
-                      "} GROUP BY ?signatory_name\n" +
-                      "ORDER BY DESC(?docs) LIMIT 4"
-            );
-        } else{
-            eprs.setQuery(query);
-        }
-        
-        //Get Query Result
-        return legalDocumentDAO.sparqlQuery(eprs,format);
-    }
+    /**
+     * Get most recent legal documents.
+     *
+     * @return List<LegalDocument>
+     */
+    List<LegalDocument> mostRecent();
 
-    public String getRDFById(String type, String year, String id) {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        //Get RDF Metadata
-        return legalDocumentDAO.getRDFById(type, year, id);
-    }
+    /**
+     * Get tags of legal document.
+     *
+     * @return List<String>
+     */
+    List<String> getTags();
 
-    public String getXMLById(String type, String year, String id, int request) throws TransformerException {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        //Get Metadata
-        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
-        
-        //Get Citations
-        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
-        
-        //Get Legal Document
-        legald = legalDocumentDAO.getById(type, year, id, request, legald);
-        
-        // Build XML
-        XMLBuilder xmlbuild = new XMLBuilder();
-        return  xmlbuild.XMLbuilder(legald);
-    }
+    /**
+     * Get updated fragments by id.
+     *
+     * @param legald the legald
+     * @param mods   the mods
+     * @return List<Fragment>
+     */
+    List<Fragment> getUpdatedById(LegalDocument legald, List<Modification> mods);
 
-    public List<LegalDocument> searchLegislation(Map<String, String> params) {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        return legalDocumentDAO.search(params);
-    }
-    
-    public List<LegalDocument> MostViewed() {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        return legalDocumentDAO.getViewed();
-    }
-    
-    public List<LegalDocument> MostRecent() {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        return legalDocumentDAO.getRecent();
-    }
-    
-    public List<String> getTags(){
-          //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        return legalDocumentDAO.getTags();
-    }
+    /**
+     * Get latest version of legal document in xml by id.
+     *
+     * @param type    the type
+     * @param year    the year
+     * @param id      the id
+     * @param request the request
+     * @return String
+     */
+    String getUpdatedXMLById(String type, String year, String id, int request) throws TransformerException;
 
-    public List<Fragment> getUpdatedById(LegalDocument legald, List<Modification> mods) {
-         //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
+    /**
+     * Get latest version of legal document in xml by id and date.
+     *
+     * @param type    the type
+     * @param year    the year
+     * @param id      the id
+     * @param request the request
+     * @param date    the date
+     * @return String
+     */
+    String getUpdatedXMLByIdDate(String type, String year, String id, int request, String date) throws TransformerException;
 
-        //Apply Modifications
-       return legald.applyModifications(mods);
+    /**
+     * Get fek statistics.
+     *
+     * @return List<GovernmentGazette>
+     */
+    List<GovernmentGazette> getFEKStatistics();
 
-    }
-
-    public String getUpdatedXMLById(String type, String year, String id, int request) throws TransformerException {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-        
-        //Get Metadata
-        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
-        
-        //Get Citations
-        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
-        
-        //Get Legal Document
-        legald = legalDocumentDAO.getById(type, year, id, request, legald);
-        
-        //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getAllModifications(type, year, id, null, request);
-        
-        //Apply Modifications
-        legald.applyModifications(mods);
-        
-        // Build XML
-        if(!legald.getChapters().isEmpty()){
-            XMLBuilder2 xmlbuild = new XMLBuilder2();
-            return  xmlbuild.XMLbuilder2(legald);
-        }
-        else{
-            XMLBuilder xmlbuild = new XMLBuilder();
-            return  xmlbuild.XMLbuilder(legald);        
-        }
-    }
-    
-    public String getUpdatedXMLByIdDate(String type, String year, String id, int request, String date) throws TransformerException {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-       
-        //Get Metadata
-        LegalDocument legald = legalDocumentDAO.getMetadataById(type, year, id);
-        
-        //Get Citations
-        legald = legalDocumentDAO.getCitationsById(type, year, id, request, legald);
-        
-        //Get Legal Document
-        legald = legalDocumentDAO.getById(type, year, id, request, legald);
-        
-        //Get all Modifications
-        List<Modification> mods = legalDocumentDAO.getAllModifications(type, year, id, date, request);
-        
-        //Apply Modifications
-        legald.applyModifications(mods);
-        
-        // Build XML
-        if(!legald.getChapters().isEmpty()){
-            XMLBuilder2 xmlbuild = new XMLBuilder2();
-            return  xmlbuild.XMLbuilder2(legald);
-        }
-        else{
-            XMLBuilder xmlbuild = new XMLBuilder();
-            return  xmlbuild.XMLbuilder(legald);        
-        }
-    }
-
-    public List<GovernmentGazette> getFEKStatistics() {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-       
-        //Get gazettes
-        return legalDocumentDAO.getFEKStatistics();
-    }
-
-    public List<ArrayList<String>> getStats() {
-        //Get the Spring Context
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-         
-        //Get the ProductDAO Bean
-        LegalDocumentDAO legalDocumentDAO = ctx.getBean("legalDocumentDAO", LegalDocumentDAO.class);
-       
-        //Get gazettes
-        return legalDocumentDAO.getStatistics();
-    }
-    
+    /**
+     * Get statistics of legal document
+     *
+     * @return List<ArrayListString>
+     */
+    List<ArrayList<String>> getStats();
 }
