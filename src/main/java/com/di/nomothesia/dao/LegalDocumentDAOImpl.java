@@ -129,7 +129,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     "<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id + ">" +
                     " leg:views ?views.\n" +
                     "?gazette dc:title ?gaztitle.\n" +
-                    //"?gazette leg:pdfFile ?pdfile.\n" +
+                    "?gazette leg:pdfFile ?pdfile.\n" +
                     "OPTIONAL{<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id + ">" +
                     " eli:title ?title.}\n" +
                     "OPTIONAL{<http://legislation.di.uoa.gr/eli/" + decisionType + "/" + year + "/" + id + ">" +
@@ -167,8 +167,8 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     legald.setPublicationDate(trimDoubleQuotes(date2));
                     String fek = bindingSet.getValue("gaztitle").toString().replace("^^", "");
                     legald.setFEK(trimDoubleQuotes(fek));
-                    //String fekfile = bindingSet.getValue("pdfile").toString().replace("^^","");
-                    //legald.setFEKfile(trimDoubleQuotes(fekfile));
+                    String fekfile = bindingSet.getValue("pdfile").toString().replace("^^","");
+                    legald.setFEKfile(trimDoubleQuotes(fekfile));
                     String views = bindingSet.getValue("views").toString().replace(
                             "^^<http://www.w3.org/2001/XMLSchema#integer>", "");
                     legald.setViews(trimDoubleQuotes(views));
@@ -1583,9 +1583,9 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             }
                             
                         } else if ((bindingSet.getValue("type").toString().equals(
-                                "http://legislation.di.uoa.gr/ontology/Edit")) ||
+                                "http://legislation.di.uoa.gr/ontology/Substitution")) ||
                                 (bindingSet.getValue("type").toString().equals(
-                                        "http://legislation.di.uoa.gr/ontology/Addition")) ||
+                                        "http://legislation.di.uoa.gr/ontology/Insertion")) ||
                                 (bindingSet.getValue("type").toString().equals(
                                         "http://legislation.di.uoa.gr/ontology/Deletion"))) {
                             
@@ -2096,7 +2096,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             count3 = -1;
                             count4 = -1;
                             fragment = article;
-                            if (mod.getType().contains("Edit")) {
+                            if (mod.getType().contains("Substitution")) {
                                 fragment.setStatus(2);
                             } else {
                                 fragment.setStatus(1);
@@ -2115,7 +2115,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             
                             if (frag == 0) {
                                 fragment = paragraph;
-                                if (mod.getType().contains("Edit")) {
+                                if (mod.getType().contains("Substitution")) {
                                     fragment.setStatus(2);
                                 } else {
                                     fragment.setStatus(1);
@@ -2152,7 +2152,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             
                             if (frag == 0) {
                                 fragment = passage;
-                                if (mod.getType().contains("Edit")) {
+                                if (mod.getType().contains("Substitution")) {
                                     fragment.setStatus(2);
                                 } else {
                                     fragment.setStatus(1);
@@ -2196,7 +2196,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                             
                             if (frag == 0) {
                                 fragment = case1;
-                                if (mod.getType().contains("Edit")) {
+                                if (mod.getType().contains("Substitution")) {
                                     fragment.setStatus(2);
                                 } else {
                                     fragment.setStatus(1);
@@ -3215,7 +3215,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                         "SELECT ?gaz ?title ?pdf ?doc ?type ?date (COUNT (?doc) AS ?docs) (COUNT (?part) AS ?issues)\n" +
                         "WHERE{\n" +
                         "?gaz rdf:type leg:GovernmentGazette.\n" +
-                        "?gaz eli:title ?title.\n" +
+                        "?gaz dc:title ?title.\n" +
                         "?gaz eli:date_publication ?date.\n" +
                         "?gaz leg:pdfFile ?pdf.\n" +
                         "    OPTIONAL {?doc eli:published_in ?gaz. ?doc rdf:type ?type.}\n" +

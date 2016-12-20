@@ -126,7 +126,7 @@ public class LegislationServiceImpl  implements LegislationService {
                       "WHERE{\n" +
                       "?doc eli:passed_by ?signatory.\n" +
                       "?doc eli:date_publication ?date.\n" +
-                      "?signer foaf:name ?signatory_name.\n" +
+                      "?signatory foaf:name ?signatory_name.\n" +
                       "FILTER ( ?date >= \"2008-01-01\"^^xsd:date\n" +
                       "&& ?date <= \"2015-12-31\"^^xsd:date)\n" +
                       "} GROUP BY ?signatory_name\n" +

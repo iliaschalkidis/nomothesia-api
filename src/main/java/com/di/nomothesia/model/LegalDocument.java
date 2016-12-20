@@ -179,7 +179,7 @@ public class LegalDocument {
             String[] hierarchy = mod.getPatient().split("/");
             System.out.println("last" + hierarchy[hierarchy.length - 1]);
             try {
-                if (mod.getType().contains("Edit")) {
+                if (mod.getType().contains("Substitution")) {
                     if (hierarchy[hierarchy.length - 2].equals("passage")) {
                         int count3 = Integer.parseInt(hierarchy[hierarchy.length - 1]) - 1;
                         int count2 = Integer.parseInt(hierarchy[hierarchy.length - 3]) - 1;
@@ -217,7 +217,7 @@ public class LegalDocument {
                         this.articles.get(count1).getParagraphs().get(count2).setURI(URI);
                         mod.setURI(URI);
                     }
-                } else if (mod.getType().contains("Addition")) {
+                } else if (mod.getType().contains("Insertion")) {
                     if (hierarchy[hierarchy.length - 2].equals("paragraph")) {
                         int count2 = Integer.parseInt(hierarchy[hierarchy.length - 1]) - 1;
                         int count1 = Integer.parseInt(hierarchy[hierarchy.length - 3]) - 1;
