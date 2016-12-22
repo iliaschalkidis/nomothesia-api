@@ -106,8 +106,7 @@
                                 <tr>
                                     <td width="45%">
                                         <div class="form-group">
-                                            <label><spring:message
-                                                    code="home.serial"/></label>
+                                            <label><spring:message code="home.serial"/></label>
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <input class="form-control" value="" type="number" name="year"
