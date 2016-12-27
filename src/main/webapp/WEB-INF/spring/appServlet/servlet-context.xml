@@ -32,17 +32,18 @@
         <beans:property name="suffix" value=".jsp"/>
     </beans:bean>
 
+
     <!-- Switch on the Caching -->
-    <!--<beans:bean id="ehCacheManager"
+    <cache:annotation-driven cache-manager="cacheManager" mode="proxy" />
+
+    <beans:bean id="ehCacheManager"
           class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
           p:configLocation="classpath:ehcache.xml"
           p:shared="false" />
 
     <beans:bean id="cacheManager"
           class="org.springframework.cache.ehcache.EhCacheCacheManager"
-          p:cacheManager-ref="ehCacheManager" />-->
-
-    <!--<cache:annotation-driven cache-manager="cacheManager" proxy-target-class="true"/>-->
+          p:cacheManager-ref="ehCacheManager" />
 
     <!-- Resolves Internationalization -->
     <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

@@ -61,6 +61,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.Update;
 import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
+import org.springframework.cache.annotation.Cacheable;
 //import org.openrdf.query.resultio.stSPARQLQueryResultFormat;
 
 

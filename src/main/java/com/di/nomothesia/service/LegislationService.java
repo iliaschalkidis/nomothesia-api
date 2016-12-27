@@ -1,6 +1,7 @@
 package com.di.nomothesia.service;
 
 import com.di.nomothesia.model.*;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.xml.transform.TransformerException;
 import java.util.ArrayList;

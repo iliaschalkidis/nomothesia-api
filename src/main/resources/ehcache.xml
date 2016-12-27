@@ -4,7 +4,7 @@
          monitoring="autodetect"
          dynamicConfig="true">
 
-    <diskStore path="C:/Users/psour/Desktop/lala/"/>
+    <diskStore path="c:\\cache" />
 
     <cache name="movieFindCache"
            maxEntriesLocalHeap="10000"

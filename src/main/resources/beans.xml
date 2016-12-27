@@ -6,4 +6,5 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
     <bean id="legalDocumentDAO" class="com.di.nomothesia.dao.LegalDocumentDAOImpl"></bean>
+    <bean id="myService" class="com.di.nomothesia.service.LegislationServiceImpl"/>
 </beans>
