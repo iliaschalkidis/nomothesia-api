@@ -3,6 +3,7 @@ package com.di.nomothesia.service;
 import com.di.nomothesia.controller.XMLBuilder;
 import com.di.nomothesia.controller.XMLBuilder2;
 import com.di.nomothesia.dao.LegalDocumentDAO;
+import com.di.nomothesia.dao.LegalDocumentDAOImpl;
 import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.GovernmentGazette;

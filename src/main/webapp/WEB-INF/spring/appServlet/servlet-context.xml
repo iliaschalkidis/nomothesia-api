@@ -34,7 +34,7 @@
 
 
     <!-- Switch on the Caching -->
-    <cache:annotation-driven cache-manager="cacheManager" mode="proxy" />
+    <!--<cache:annotation-driven cache-manager="cacheManager" mode="proxy" />
 
     <beans:bean id="ehCacheManager"
           class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
@@ -43,7 +43,7 @@
 
     <beans:bean id="cacheManager"
           class="org.springframework.cache.ehcache.EhCacheCacheManager"
-          p:cacheManager-ref="ehCacheManager" />
+          p:cacheManager-ref="ehCacheManager" />-->
 
     <!-- Resolves Internationalization -->
     <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

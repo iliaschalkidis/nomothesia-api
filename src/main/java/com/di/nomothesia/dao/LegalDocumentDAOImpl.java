@@ -61,10 +61,10 @@ import org.apache.lucene.store.FSDirectory;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.Update;
 import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 //import org.openrdf.query.resultio.stSPARQLQueryResultFormat;
 
-
+@Service
 public class LegalDocumentDAOImpl implements LegalDocumentDAO {
     
     @Override
