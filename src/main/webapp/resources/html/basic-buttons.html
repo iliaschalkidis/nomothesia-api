@@ -1,0 +1,66 @@
+<div class="col-md-3">
+    <div align="left" style="padding:10px;font-family: 'Comfortaa', cursive;">
+        <div align="center">
+            <h4><spring:message code="basic.data"/></h4>
+        </div>
+        <br/>
+        <u style="color:  #1087dd"><spring:message code="basic.code"/></u> <spring:message code="home.${legaldoc.getDecisionType()}"/>/${legaldoc.getYear()}/${legaldoc.getId()} <br/>
+        <u style="color:  #1087dd"><spring:message code="basic.date"/></u> ${legaldoc.getPublicationDate()} <br/>
+        <c:set var="repl" value='"' />
+        <c:choose>
+            <c:when test="${fn:contains(legaldoc.getFEK(),repl)}">
+                <c:set var="str" value="${fn:split(legaldoc.getFEK(),repl)}"/>
+                <c:set var="fek" value="${str[0]}"/>
+            </c:when>
+            <c:when test="${fn:contains(legaldoc.getFEK(),repl)==false}">
+                <c:set var="fek" value="${legaldoc.getFEK()}"/>
+            </c:when>
+        </c:choose>
+        <c:set var="fek2" value="${fn:split(fek, '/')}" />
+        <u style="color:  #1087dd"><spring:message code="basic.fek"/></u> <a href="/search?fek_issue=${fek2[0]}&fek_year=${fek2[1]}&fek_id=${fek2[2]}">${fek}</a> <a href="http://legislation.di.uoa.gr/gazette/a/${fek2[1]}/${fek2[2]}" target="_blank"><img height="15px" src="/resources/images/pdf-icon.jpg" alt="PDF" /></a><br/>
+        <u style="color:  #1087dd"><spring:message code="basic.signer"/></u><br/>
+        <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="0" end="1">
+            ${signer.getFullName()}<br/>
+        </c:forEach>
+        <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><spring:message code="basic.more"/></a>
+        <div class="collapse" id="collapseExample">
+            <c:forEach var="signer" items="${legaldoc.getSigners()}" varStatus="loop" begin="2">
+                ${signer.getFullName()}<br/>
+            </c:forEach>
+        </div>
+        <br/>
+        <c:if test="${not empty legaldoc.getTags()}">
+            <u style="color:  #1087dd"><spring:message code="basic.labels"/></u> <br/>
+            <c:forEach items="${legaldoc.getTags()}" var="tag" varStatus="loop">
+                ${tag}<c:if test="${!loop.last}">,&nbsp;</c:if>
+            </c:forEach>
+        </c:if><br/>
+        <c:if test="${not empty legaldoc.getPlace()}">
+            <u style="color:  #1087dd"><spring:message code="basic.map"/></u><br/> <br/>
+            <div id="map" style="width:200px; height:200px;"></div>
+        </c:if>
+    </div>
+    <div align="center" style="padding:10px;">
+        <c:choose>
+            <c:when test="${fn:contains(requestScope['javax.servlet.forward.request_uri'], '-')}">
+                <c:set var="base" value="${legaldoc.getURI()}" />
+            </c:when>
+            <c:otherwise>
+                <c:set var="base" value="${fn:replace(requestScope['javax.servlet.forward.request_uri'], '/enacted','')}" />
+            </c:otherwise>
+        </c:choose>
+        <a class="btn btn-default btn-lg" href="${base}/enacted" style="width:100%"><spring:message code="basic.enacted"/></a>
+    </div>
+    <div align="center" style="padding:10px;">
+        <a class="btn btn-success btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.xml" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> XML</a>
+    </div>
+    <div align="center" style="padding:10px;">
+        <a class="btn btn-danger btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.pdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> PDF</a>
+    </div>
+    <div align="center" style="padding:10px;">
+        <a class="btn btn-primary btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.rdf" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> RDF</a>
+    </div>
+    <div align="center" style="padding:10px;">
+        <a class="btn btn-warning btn-lg" target="_blank" href="${fn:replace(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath, '')}/data.json" style="width:100%"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> <spring:message code="basic.export"/> JSON</a>
+    </div>
+</div>

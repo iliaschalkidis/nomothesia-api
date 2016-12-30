@@ -3,6 +3,7 @@ package com.di.nomothesia.service;
 import com.di.nomothesia.controller.XMLBuilder;
 import com.di.nomothesia.controller.XMLBuilder2;
 import com.di.nomothesia.dao.LegalDocumentDAO;
+import com.di.nomothesia.dao.LegalDocumentDAOImpl;
 import com.di.nomothesia.model.EndpointResultSet;
 import com.di.nomothesia.model.Fragment;
 import com.di.nomothesia.model.GovernmentGazette;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.xml.transform.TransformerException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
