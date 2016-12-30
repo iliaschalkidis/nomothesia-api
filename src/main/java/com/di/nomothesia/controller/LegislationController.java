@@ -41,7 +41,7 @@ public class LegislationController {
     public void presentGovernmentGazettePDF(@PathVariable String year, @PathVariable String id, Model model,
                                             Locale locale, HttpServletResponse response) throws IOException {
         InputStream fis = null;
-        fis = getClass().getResourceAsStream("/pdf/" + year + "/GG" + year + "_" + id + ".pdf");
+        fis = getClass().getResourceAsStream("file:/storage/nomothesia/resources/pdf/" + year + "/GG" + year + "_" + id + ".pdf");
         org.apache.commons.io.IOUtils.copy(fis, response.getOutputStream());
         response.setContentType("application/pdf");
         response.flushBuffer();

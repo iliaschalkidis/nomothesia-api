@@ -2347,7 +2347,7 @@ public class LegalDocumentDAOImpl implements LegalDocumentDAO {
                     Document document = indexSearcher.doc(scoreDoc.doc);
                     
                     LegalDocument ld = new LegalDocument();
-                    ld.setURI(document.get("uri"));
+                    ld.setURI(document.get("uri").replace("uoa.gr","uoa.gr/eli"));
                     ld.setFEK(document.get("fek"));
                     ld.setPublicationDate(
                             document.get("date").substring(0, 4) + "-" + document.get("date").substring(4, 6) + "-" +
